@@ -15,17 +15,18 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // create new project node
     Project *p = new Project();
+    p->setDescription("Main Project");
+
 //  Project *p1 = new Project();
 //  p1->setDescription("Second Project");
 //  p1->setType("Project2");
-    p->setDescription("Main Project");
 
     // add node to tree view
     m_model.appendRow(p);
 //  m_model.appendRow(p1);
 
-    qDebug() << "m_model columnCount = " << m_model.columnCount();
-    qDebug() << "m_model rowCount = " << m_model.rowCount();
+//  qDebug() << "m_model columnCount = " << m_model.columnCount();
+//  qDebug() << "m_model rowCount = " << m_model.rowCount();
     ui->treeView->setModel(&m_model);
 
     ui->treeView->expandAll();
@@ -42,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //  propertyEditor->setResizeMode();
     propertyEditor->setResizeMode(QtTreePropertyBrowser::ResizeMode(0));
-    qDebug () << "resize mode" << propertyEditor->resizeMode();
+//  qDebug () << "resize mode" << propertyEditor->resizeMode();
     propertyEditor->setFactoryForManager(variantManager, variantFactory);
     ui->scrollArea->setWidget(propertyEditor);
 }
