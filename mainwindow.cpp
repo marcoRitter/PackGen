@@ -42,8 +42,8 @@ MainWindow::MainWindow(QWidget *parent) :
     propertyEditor->setHeaderVisible(true);
 
 //  propertyEditor->setResizeMode();
-    propertyEditor->setResizeMode(QtTreePropertyBrowser::ResizeMode(0));
 //  qDebug () << "resize mode" << propertyEditor->resizeMode();
+    propertyEditor->setResizeMode(QtTreePropertyBrowser::ResizeMode(0));
     propertyEditor->setFactoryForManager(variantManager, variantFactory);
     ui->scrollArea->setWidget(propertyEditor);
 }
