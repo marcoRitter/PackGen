@@ -13,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
 
+    ui->splitter->setCollapsible(0,false);
+    ui->splitter->setCollapsible(1,false);
     // create new project node
     Project *p = new Project();
     p->setDescription("Main Project");
@@ -287,17 +289,24 @@ void MainWindow::resizeEvent(QResizeEvent * event)
 
     QSize treeViewSize;
     QSize propertyViewSize;
+    QSize splitterSize;
 
-    treeViewSize.setHeight(QMainWindow::height()-55);
-    treeViewSize.setWidth(QMainWindow::width()/2-8);
+    splitterSize.setHeight(QMainWindow::height()-55);
+    splitterSize.setWidth(QMainWindow::width()-8);
+    ui->splitter->resize(splitterSize);
+    ui->splitter->move(4,1);
 
-    propertyViewSize.setHeight(QMainWindow::height()-55);
-    propertyViewSize.setWidth(QMainWindow::width()/2-8);
+//  treeViewSize.setHeight(QMainWindow::height()-55);
+//  treeViewSize.setWidth(QMainWindow::width()/2-8);
+//
+//  propertyViewSize.setHeight(QMainWindow::height()-55);
+//  propertyViewSize.setWidth(QMainWindow::width()/2-8);
 
 //  qDebug() << "width = " << QMainWindow::width() << " length = " << QMainWindow::height() << endl;
 
-    ui->treeView->move(3,1);
-    ui->treeView->resize(treeViewSize);
-    ui->scrollArea->move(treeViewSize.width()+15,1);
-    ui->scrollArea->resize(propertyViewSize);
+
+//  ui->treeView->move(3,1);
+//  ui->treeView->resize(treeViewSize);
+//  ui->scrollArea->move(treeViewSize.width()+15,1);
+//  ui->scrollArea->resize(propertyViewSize);
 }
