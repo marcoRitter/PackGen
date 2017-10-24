@@ -31,6 +31,7 @@ class M86_Spartan6 : public Node
 //    Q_PROPERTY(VER_STATE ver_state READ ver_state WRITE setVer_state)
 public:
     M86_Spartan6(QObject *parent = nullptr);
+    ~M86_Spartan6();
 
     QString node_type() {return"M86_Spartan6";}
 
@@ -65,6 +66,11 @@ private:
     QString m_ver_minor = "";
     QString m_ver_subminor = "";
     //VER_STATE m_ver_state = Alpha;
+
+    // menu Actions
+    QAction * pGenerate;
+    QAction * pNewFPGA;
+    QAction * pDelete;
 };
 
 #endif // M86_Spartan6_H
