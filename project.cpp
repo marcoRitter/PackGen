@@ -5,21 +5,28 @@
 Project::Project(QObject *parent) :
     Node(parent, "Project")
 {
+    QIcon iconAct1;
+    iconAct1.addFile("C:/Users/GRPA/Documents/WORK/C_Projects/PackGen/new.png",QSize(100,100));
+    pNewSpartan = new QAction(tr("&New M86 Spartan"), this);
+    pNewSpartan->setIcon(iconAct1);
+    connect(pNewSpartan, SIGNAL(triggered()), this, SLOT(new_M86_Spartan6()));
+    pNewMasterFile = new QAction(tr("&Masterfile"), this);
+    connect(pNewMasterFile, SIGNAL(triggered()), this, SLOT(new_Masterfile()));
+    pNewJadeFile = new QAction(tr("&New JADE Package"), this);
+    connect(pNewJadeFile, SIGNAL(triggered()), this, SLOT(new_JADE_Package()));
 
 }
-#if 0
-Project::Project():
-    Node(null,"Project")
+
+Project::~Project()
 {
+    disconnect(pNewSpartan, SIGNAL(triggered()), this, SLOT(new_M86_Spartan6()));
+    disconnect(pNewMasterFile, SIGNAL(triggered()), this, SLOT(new_Masterfile()));
+    disconnect(pNewJadeFile, SIGNAL(triggered()), this, SLOT(new_JADE_Package()));
 
+    delete pNewSpartan;
+    delete pNewMasterFile;
+    delete pNewJadeFile;
 }
-
-Project::Project (QObject *parent, QString name) :
-    Node(parent, name)
-{
-
-}
-#endif
 
 QString Project::name()
 {
@@ -59,12 +66,13 @@ bool Project::writeJson(QJsonObject *jsonObj)
 
 void Project::new_M86_Spartan6()
 {
-    M86_Spartan6 *m = new M86_Spartan6();
+    M86_Spartan6 *m = new M86_Spartan6(this);//(QObject::parent());
     Model* m_m = Node::getModel();
     m->setModel(m_m);
     m->setDescription("M86 for SCT202");
     //m->setVer_state(Alpha);
     this->setChild(this->rowCount(),m);
+    qDebug() << this->children();
 }
 
 void Project::new_JADE_Package()
@@ -87,21 +95,7 @@ void Project::new_Masterfile()
 
 void Project::node_menue(QMenu *menu)
 {
-    QIcon iconAct1;
-    iconAct1.addFile("C:/Users/GRPA/Documents/WORK/C_Projects/PackGen-NG/new.png",QSize(100,100));
-
-    QAction *newAct1 = new QAction(tr("&New M86 Spartan"), this);
-    newAct1->setIcon(iconAct1);
-    connect(newAct1, SIGNAL(triggered()), this, SLOT(new_M86_Spartan6()));
-    QAction *newAct2 = new QAction(tr("&Masterfile"), this);
-    connect(newAct2, SIGNAL(triggered()), this, SLOT(new_Masterfile()));
-    QAction *newAct3 = new QAction(tr("&New JADE Package"), this);
-//  connect(newAct3, SIGNAL(triggered()), this, SLOT(new_JADE_Package()));
-//  QAction *newProject = new QAction(tr("New Project"),this);
-
-
-//  menu->addAction(newProject);
-    menu->addAction(newAct1);
-    menu->addAction(newAct2);
-    menu->addAction(newAct3);
+    menu->addAction(pNewSpartan);
+    menu->addAction(pNewMasterFile);
+    menu->addAction(pNewJadeFile);
 }

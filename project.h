@@ -20,6 +20,7 @@ class Project : public Node
 
 public:
     explicit Project(QObject *parent = nullptr);
+    ~Project();
 #if 0
     explicit Project();
     explicit Project(QObject *parent = nullptr, QString projectName = "Project");
@@ -47,6 +48,10 @@ private:
     QString projectName;
     QString m_name;
     QString m_Property1;
+
+    QAction *pNewSpartan;
+    QAction *pNewMasterFile;
+    QAction *pNewJadeFile;
 
 };
 
