@@ -59,95 +59,6 @@ void MainWindow::on_treeView_clicked(const QModelIndex &index)
     m_model.set_index(index);
 
     MainWindow::draw_property_browser();
-#if 0
-//    QStandardItem *selected = m_model.itemFromIndex(index);
-    QStandardItem *selected = m_model.itemFromIndex(m_model.get_index());
-
-
-    QtVariantProperty *property;
-    QtBrowserItem *item;
-
-    Node *n = (Node *)selected;
-    m_currentItem = n;
-
-    const QMetaObject *meta = n->metaObject() ;
-    const QObject *x = n;
-    int cnt = meta->propertyCount();
-    qDebug() << "number of properties : " << cnt;
-    propertyEditor->clear();
-
-    // Property Editor aufbauen
-    for ( int i = 1; i < cnt; i++ ) {
-        QMetaProperty prop = meta->property(i);
-
-//        qDebug() << "property " << prop.name() << meta->property(i).read(x);
-#if 1
-        if ( prop.isWritable() ) {
-
-        // only sample. We could separate Set and Enum...
-           QVariant v = prop.read(n);
-           switch ( v.type() ) {
-           case QVariant::String :
-                 property = variantManager->addProperty(QVariant::String, prop.name());
-                 property->setValue(v.toString());
-                 item = propertyEditor->addProperty(property);
-                 propertyEditor->setExpanded(item, false);
-                 break ;
-           case QVariant::UInt :
-               property = variantManager->addProperty(QVariant::Int, prop.name());
-               property->setAttribute(QLatin1String("minimum"), 0);
-               property->setValue(v.toInt());
-               item = propertyEditor->addProperty(property);
-               propertyEditor->setExpanded(item, false);
-                 break ;
-           case QVariant::Int :
-               property = variantManager->addProperty(QVariant::Int, prop.name());
-               property->setAttribute(QLatin1String("minimum"), 0);
-               property->setValue(v.toInt());
-               item = propertyEditor->addProperty(property);
-               propertyEditor->setExpanded(item, false);
-                 break ;
-
-           case QVariant::Bool :
-               property = variantManager->addProperty(QVariant::Bool, prop.name());
-               property->setValue(v.toBool());
-               item = propertyEditor->addProperty(property);
-               propertyEditor->setExpanded(item, false);
-                 break ;
-
-           case QVariant::UserType :
-               if (strcmp(v.typeName(),"FileString") == 0)
-               {
-                   property = variantManager->addProperty(VariantManager::filePathTypeId(), prop.name());
-                   property->setValue(v);
-                   item = propertyEditor->addProperty(property);
-                   propertyEditor->setExpanded(item, false);
-                }
-               if (strcmp(v.typeName(),"HexString") == 0)
-               {
-                   property = variantManager->addProperty(QVariant::String, prop.name());
-                   property->setValue(v.value<HexString>().hexstring);
-                   property->setAttribute("regExp", QRegExp("0x[0-9A-Fa-f]{1,8}"));
-                   property->setToolTip("Enter Address als 0x1324");
-                   item = propertyEditor->addProperty(property);
-                   propertyEditor->setExpanded(item, false);
-                }
-               if (strcmp(v.typeName(),"FlashSize") == 0)
-               {
-                   property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
-                   property->setAttribute("enumNames",v.value<FlashSize>().memorysize);
-                   property->setValue(v.value<FlashSize>().selectedsize);
-                   item = propertyEditor->addProperty(property);
-                   propertyEditor->setExpanded(item, false);
-                }
-                break;
-           default :
-               break;
-           }
-        }
-#endif
-    }
-#endif
 }
 
 
@@ -199,7 +110,7 @@ void MainWindow::on_actionSave_triggered()
 // Menue on right click
 void MainWindow::on_treeView_customContextMenuRequested(const QPoint &pos)
 {
-    qWarning() << "on_treeView_customContextMenuRequested";
+//  qWarning() << "on_treeView_customContextMenuRequested";
 
     QTreeView *tree = ui->treeView;
     QModelIndex index = tree->indexAt(pos);
@@ -221,7 +132,7 @@ void MainWindow::treeMenu()
 
 void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
 {
-    qDebug()<<"valueChanged" << property << val;
+//  qDebug()<<"valueChanged" << property << val;
     if (m_currentItem)
     {
         QVariant v =  m_currentItem->property(property->propertyName().toStdString().c_str());
