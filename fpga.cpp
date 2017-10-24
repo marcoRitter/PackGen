@@ -7,6 +7,7 @@ Fpga::Fpga(QObject *parent) :
     Node(parent,"FPGA")
 {
     m_start_addr.hexstring = "0x";
+    this->setObjectName("FPGA");
 //  m_with_golden_reference ;
 }
 
