@@ -59,6 +59,7 @@ int Node::get_need_redraw()
 
 bool Node::readJson(const QJsonObject *jsonObj)
 {
+    qDebug() << "Read Json";
     QJsonValue jsonVal;
     int cnt = jsonObj->count();
     QStringList keys = jsonObj->keys();
