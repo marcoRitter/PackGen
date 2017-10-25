@@ -2,6 +2,7 @@
 #include "M86_Spartan6.h"
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QMessageBox>
 
 
 M86_Spartan6::M86_Spartan6(QObject *parent) :
@@ -100,6 +101,7 @@ bool M86_Spartan6::generate_package()
 {
     qDebug() << "Generate Spartan M86Package";
     QObjectList childrenOfSpartan = this->children();
+    QString parameters = "";
     for (auto const& childOfSpartan : childrenOfSpartan)
     {
         if (childOfSpartan->objectName()=="FPGA")
@@ -107,9 +109,20 @@ bool M86_Spartan6::generate_package()
             qDebug() << "Object name" << childOfSpartan->objectName();
             qDebug() << "design number" << childOfSpartan->property("designnumber").value<QString>();
             qDebug() << "flash size" << childOfSpartan->property("flash_size").value<FlashSize>().selectedsize;
+            qDebug() << "golden ena" << childOfSpartan->property("dualboot").value<DualBoot>().dualbootena;
             qDebug() << "filename " << childOfSpartan->property("filename").value<FileString>().filestring;
+            parameters += "Design Number = ";
+            parameters += childOfSpartan->property("designnumber").value<QString>();
+            parameters += "\n Flash Size = ";
+            parameters += childOfSpartan->property("flash_size").value<FlashSize>().selectedsize;
         }
     }
+
+    QMessageBox msgBox;
+    msgBox.setText("Generate m86 with following parameters");
+    msgBox.setDetailedText(parameters);
+    msgBox.setIcon(QMessageBox::Information);
+    msgBox.exec();
 
 //  qDebug() << "ver_major : " << this->property("ver_major").toString();
     FileString itsFileName = this->filename();
