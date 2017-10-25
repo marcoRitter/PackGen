@@ -10,11 +10,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
     m_currentItem(nullptr)
 {
+
     ui->setupUi(this);
     ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
 
     ui->splitter->setCollapsible(0,false);
     ui->splitter->setCollapsible(1,false);
+    pMainMenu=new QMenu(this);
     // create new project node
     Project *p = new Project();
     p->setDescription("Main Project");
@@ -122,9 +124,12 @@ void MainWindow::on_treeView_customContextMenuRequested(const QPoint &pos)
         return;
 
     Node *n = (Node *)selected;
-    QMenu *menu=new QMenu(this);
-    n->node_menue(menu);
-    menu->popup(tree->viewport()->mapToGlobal(pos));
+//  QMenu *menu=new QMenu(this);
+//  qDebug() << "new Menu created";
+//  qDebug() << this->children();
+    pMainMenu->clear();
+    n->node_menue(pMainMenu);
+    pMainMenu->popup(tree->viewport()->mapToGlobal(pos));
 }
 
 void MainWindow::treeMenu()
@@ -134,7 +139,7 @@ void MainWindow::treeMenu()
 
 void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
 {
-//  qDebug()<<"valueChanged" << property << val;
+    qDebug()<<"valueChanged" << property << val;
     if (m_currentItem)
     {
         QVariant v =  m_currentItem->property(property->propertyName().toStdString().c_str());
@@ -166,11 +171,24 @@ void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
             }
             if (strcmp(v.typeName(),"DualBoot") == 0)
             {
-                DualBoot d;
-                d.dualbootena = val.toInt();
+                DualBoot d(val.toInt());
+//              d.dualbootena = val.toInt();
                 QVariant a;
+//              qDebug() << "get value " << val.toInt();
+//              qDebug() << "old value " <<m_currentItem->property("dualboot").value<DualBoot>().dualbootena;
+                if (val.toInt() != m_currentItem->property("dualboot").value<DualBoot>().dualbootena)
+                {
+//                  qDebug() << "dual boot changed";
+                    uint selected_flash = m_currentItem->property("flash_size").value<FlashSize>().selectedsize;
+                    HexString offset;
+                    offset.hexstring = d.get_offset(selected_flash);
+                    a.setValue<HexString>(offset);
+                    m_currentItem->setProperty("start_addr",a);
+//                  m_currentItem->set_need_redraw();
+                }
                 a.setValue<DualBoot>(d);
                 m_currentItem->setProperty(property->propertyName().toStdString().c_str(),a);
+//              qDebug() << "new value " <<m_currentItem->property("dualboot").value<DualBoot>().dualbootena;
             }
         }
         else
@@ -195,18 +213,17 @@ void MainWindow::draw_property_browser()
     Node *n = (Node *)selected;
     m_currentItem = n;
 
+
     const QMetaObject *meta = n->metaObject() ;
-    const QObject *x = n;
     int cnt = meta->propertyCount();
-    qDebug() << "number of properties : " << cnt;
+//  qDebug() << "number of properties : " << cnt;
+    qDebug() << "current item " << m_currentItem;
     propertyEditor->clear();
 
     // Property Editor aufbauen
     for ( int i = 1; i < cnt; i++ ) {
         QMetaProperty prop = meta->property(i);
 
-//        qDebug() << "property " << prop.name() << meta->property(i).read(x);
-#if 1
         if ( prop.isWritable() ) {
 
         // only sample. We could separate Set and Enum...
@@ -253,7 +270,7 @@ void MainWindow::draw_property_browser()
                    property = variantManager->addProperty(QVariant::String, prop.name());
                    property->setValue(v.value<HexString>().hexstring);
                    property->setAttribute("regExp", QRegExp("0x[0-9A-Fa-f]{1,8}"));
-                   property->setToolTip("Enter Address als 0x1324");
+                   property->setToolTip("Enter Address as 0x1324");
                    item = propertyEditor->addProperty(property);
                    propertyEditor->setExpanded(item, false);
                 }
@@ -267,7 +284,6 @@ void MainWindow::draw_property_browser()
                 }
                if (strcmp(v.typeName(),"DualBoot") == 0)
                {
-                   qDebug() << "dualboot";
                    property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
                    property->setAttribute("enumNames",v.value<DualBoot>().dualboot);
                    property->setValue(v.value<DualBoot>().dualbootena);
@@ -279,7 +295,6 @@ void MainWindow::draw_property_browser()
                break;
            }
         }
-#endif
     }
 }
 

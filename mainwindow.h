@@ -72,6 +72,7 @@ private:
     QtTreePropertyBrowser *propertyEditor;
 
     Node *m_currentItem;
+    QMenu *pMainMenu;
 };
 
 #endif // MAINWINDOW_H
