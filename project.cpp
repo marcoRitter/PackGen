@@ -6,7 +6,7 @@ Project::Project(QObject *parent) :
     Node(parent, "Project")
 {
     QIcon iconAct1;
-    iconAct1.addFile("C:/Users/GRPA/Documents/WORK/C_Projects/PackGen/new.png",QSize(100,100));
+    iconAct1.addFile("new.png",QSize(20,20));
     pNewSpartan = new QAction(tr("&New M86 Spartan"), this);
     pNewSpartan->setIcon(iconAct1);
     connect(pNewSpartan, SIGNAL(triggered()), this, SLOT(new_M86_Spartan6()));
@@ -72,7 +72,7 @@ void Project::new_M86_Spartan6()
     m->setDescription("M86 for SCT202");
     //m->setVer_state(Alpha);
     this->setChild(this->rowCount(),m);
-    qDebug() << this->children();
+//  qDebug() << this->children();
 }
 
 void Project::new_JADE_Package()
