@@ -17,7 +17,7 @@ class Fpga : public Node
     Q_PROPERTY(QString designnumber READ designnumber WRITE setDesignnumber)
     Q_PROPERTY(QString ver_major READ ver_major WRITE setVer_major)
     Q_PROPERTY(QString ver_minor READ ver_minor WRITE setVer_minor)
-    Q_PROPERTY(bool with_golden_reference READ with_golden_reference WRITE setWith_golden_reference)
+//  Q_PROPERTY(bool with_golden_reference READ with_golden_reference WRITE setWith_golden_reference)
     Q_PROPERTY(DualBoot dualboot READ dualboot WRITE setDualBoot )
 
     Q_PROPERTY(FlashSize flash_size READ flash_size WRITE setFlash_size)
@@ -25,6 +25,7 @@ class Fpga : public Node
 
 public:
     Fpga(QObject *parent = nullptr);
+    ~Fpga();
 
     QString node_type() {return"FPGA";}
 
@@ -46,10 +47,10 @@ public:
     FlashSize flash_size();
     void setFlash_size(FlashSize flashsize);
 
-    bool with_golden_reference();
-    void setWith_golden_reference(bool with_golden_reference);
+//  bool with_golden_reference();
+//  void setWith_golden_reference(bool with_golden_reference);
 
-    DualBoot dualboot(){return m_dualboot;}
+    DualBoot dualboot();
     void setDualBoot (DualBoot dualboot);
 
     void node_menue(QMenu *menu);
@@ -63,9 +64,10 @@ private:
     QString m_ver_minor = "";
     HexString m_start_addr;
     FlashSize m_flashsize;
-    bool m_with_golden_reference;
+//  bool m_with_golden_reference;
     DualBoot m_dualboot;
 
+    QAction *pDeleteFPGA;
 
 };
 
