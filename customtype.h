@@ -27,10 +27,22 @@ public:
 class DualBoot
 {
 public:
-    QStringList dualboot = {"enable", "disable"};
-    uint dualbootena = 0;
-    DualBoot() { }
-    DualBoot(const uint &value) : dualbootena(value) {}
+    QStringList dualboot = {"disable", "enable"};
+    uint dualbootena ;
+    DualBoot() :dualbootena(0){ }
+    DualBoot(const uint &value) :dualbootena(value){}
+    inline QString get_offset (const uint& flash_size)
+    {
+        switch (flash_size)
+        {
+        case 0: return "0x1000"; break;
+        case 1: return "0x2000"; break;
+        case 2: return "0x4000"; break;
+        case 3: return "0x8000"; break;
+        case 4: return "0xF000"; break;
+        default: return "0x0000"; break;
+        }
+    }
 };
 
 class FlashSize
