@@ -4,6 +4,8 @@
 #include "node.h"
 #include <QFileInfo>
 #include <QMenu>
+#include <QDebug>
+#include <QMetaProperty>
 
 #include "customtype.h"
 
@@ -11,7 +13,7 @@ class Fpga : public Node
 {
     Q_OBJECT
     // property to identify the node type
-    Q_PROPERTY(QString node_type READ node_type)
+//  Q_PROPERTY(QString node_type READ node_type)
 
     Q_PROPERTY(FileString filename READ filename WRITE setFilename)
     Q_PROPERTY(QString designnumber READ designnumber WRITE setDesignnumber)
@@ -27,7 +29,7 @@ public:
     Fpga(QObject *parent = nullptr);
     ~Fpga();
 
-    QString node_type() {return"FPGA";}
+//  QString node_type() {return"FPGA";}
 
     FileString filename();
     void setFilename(FileString filename);
@@ -54,6 +56,18 @@ public:
     void setDualBoot (DualBoot dualboot);
 
     void node_menue(QMenu *menu);
+
+    inline int getPropId (const char* propName) {
+        qDebug()<< "row count = " << this->metaObject()->propertyCount();
+        int cnt = this->metaObject()->propertyCount();
+        for (int i = 0; i < cnt; i++)
+        {
+            if (!strcmp(this->metaObject()->property(i).name(), propName))
+                return i;
+        }
+        return 0;
+
+    }
 
 
 private:

@@ -11,6 +11,7 @@ Fpga::Fpga(QObject *parent) :
 
     pDeleteFPGA = new QAction(tr("&Delete"), this);
     connect(pDeleteFPGA, &QAction::triggered, this, &Node::delete_node);
+//  Fpga::getPropId();
 //  m_with_golden_reference ;
 }
 
