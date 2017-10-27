@@ -139,7 +139,7 @@ void MainWindow::treeMenu()
 
 void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
 {
-    qDebug()<<"valueChanged" << property << val;
+//  qDebug()<<"valueChanged" << property << val;
     if (m_currentItem)
     {
         QVariant v =  m_currentItem->property(property->propertyName().toStdString().c_str());
@@ -176,7 +176,7 @@ void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
                 QVariant a;
 //              qDebug() << "get value " << val.toInt();
 //              qDebug() << "old value " <<m_currentItem->property("dualboot").value<DualBoot>().dualbootena;
-                if (val.toInt() != m_currentItem->property("dualboot").value<DualBoot>().dualbootena)
+                if (1);//(val.toInt() != m_currentItem->property("dualboot").value<DualBoot>().dualbootena)
                 {
 //                  qDebug() << "dual boot changed";
                     uint selected_flash = m_currentItem->property("flash_size").value<FlashSize>().selectedsize;
@@ -184,7 +184,20 @@ void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
                     offset.hexstring = d.get_offset(selected_flash);
                     a.setValue<HexString>(offset);
                     m_currentItem->setProperty("start_addr",a);
-//                  m_currentItem->set_need_redraw();
+                    QList<QtProperty*> props = propertyEditor->properties();
+                    qDebug() <<"props size = " << props.size();
+                    int i = 0;
+                    for(auto const& pr : props)
+                    {
+                        qDebug() << "property " << i++ << " " << pr->propertyName();
+                        if (pr->propertyName()=="start_addr")
+                        {
+                            variantManager->setValue(props[3], "34i");
+                            variantManager->setValue(props[i-1],a.value<HexString>().hexstring);
+                        }
+
+                    }
+
                 }
                 a.setValue<DualBoot>(d);
                 m_currentItem->setProperty(property->propertyName().toStdString().c_str(),a);
@@ -214,15 +227,17 @@ void MainWindow::draw_property_browser()
     m_currentItem = n;
 
 
-    const QMetaObject *meta = n->metaObject() ;
+    const QMetaObject *meta = n->metaObject();
     int cnt = meta->propertyCount();
-//  qDebug() << "number of properties : " << cnt;
+    qDebug() << "number of properties : " << cnt;
     qDebug() << "current item " << m_currentItem;
     propertyEditor->clear();
 
     // Property Editor aufbauen
     for ( int i = 1; i < cnt; i++ ) {
         QMetaProperty prop = meta->property(i);
+ //     qDebug() << "property " << i << " = " << prop.name() << "; value = " << prop.read(n);
+
 
         if ( prop.isWritable() ) {
 
@@ -232,29 +247,21 @@ void MainWindow::draw_property_browser()
            case QVariant::String :
                  property = variantManager->addProperty(QVariant::String, prop.name());
                  property->setValue(v.toString());
-                 item = propertyEditor->addProperty(property);
-                 propertyEditor->setExpanded(item, false);
                  break ;
            case QVariant::UInt :
                property = variantManager->addProperty(QVariant::Int, prop.name());
                property->setAttribute(QLatin1String("minimum"), 0);
                property->setValue(v.toInt());
-               item = propertyEditor->addProperty(property);
-               propertyEditor->setExpanded(item, false);
                  break ;
            case QVariant::Int :
                property = variantManager->addProperty(QVariant::Int, prop.name());
                property->setAttribute(QLatin1String("minimum"), 0);
                property->setValue(v.toInt());
-               item = propertyEditor->addProperty(property);
-               propertyEditor->setExpanded(item, false);
                  break ;
 
            case QVariant::Bool :
                property = variantManager->addProperty(QVariant::Bool, prop.name());
                property->setValue(v.toBool());
-               item = propertyEditor->addProperty(property);
-               propertyEditor->setExpanded(item, false);
                  break ;
 
            case QVariant::UserType :
@@ -262,8 +269,6 @@ void MainWindow::draw_property_browser()
                {
                    property = variantManager->addProperty(VariantManager::filePathTypeId(), prop.name());
                    property->setValue(v);
-                   item = propertyEditor->addProperty(property);
-                   propertyEditor->setExpanded(item, false);
                 }
                if (strcmp(v.typeName(),"HexString") == 0)
                {
@@ -271,29 +276,26 @@ void MainWindow::draw_property_browser()
                    property->setValue(v.value<HexString>().hexstring);
                    property->setAttribute("regExp", QRegExp("0x[0-9A-Fa-f]{1,8}"));
                    property->setToolTip("Enter Address as 0x1324");
-                   item = propertyEditor->addProperty(property);
-                   propertyEditor->setExpanded(item, false);
                 }
                if (strcmp(v.typeName(),"FlashSize") == 0)
                {
                    property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
                    property->setAttribute("enumNames",v.value<FlashSize>().memorysize);
                    property->setValue(v.value<FlashSize>().selectedsize);
-                   item = propertyEditor->addProperty(property);
-                   propertyEditor->setExpanded(item, false);
                 }
                if (strcmp(v.typeName(),"DualBoot") == 0)
                {
                    property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
                    property->setAttribute("enumNames",v.value<DualBoot>().dualboot);
                    property->setValue(v.value<DualBoot>().dualbootena);
-                   item = propertyEditor->addProperty(property);
-                   propertyEditor->setExpanded(item, false);
                 }
                 break;
            default :
                break;
            }
+//         item = propertyEditor->addProperty(property);
+           propertyEditor->addProperty(property);
+//         propertyEditor->setExpanded(item, false);
         }
     }
 }
