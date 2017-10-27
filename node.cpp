@@ -8,7 +8,6 @@ Node::Node(QObject *parent, const QString &type)
       QStandardItem(),
       m_type(type)
 {
-
 }
 
 QVariant Node::data(int role) const

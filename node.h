@@ -4,6 +4,8 @@
 #include <QStandardItem>
 #include <QMenu>
 #include "customtype.h"
+#include <QDebug>
+#include <QMetaProperty>
 
 class Model;
 
@@ -18,7 +20,7 @@ public:
     explicit Node(QObject *parent, const QString &type = QString());
 
     virtual QVariant data(int role) const;
-    virtual QString node_type() {return "Node";}
+    virtual QString node_type() {return m_type;}
 
     QString description();
     void setDescription(QString description);
