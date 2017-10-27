@@ -94,6 +94,7 @@ void M86_Spartan6::new_FPGA()
     Model* m_m = Node::getModel();
     m->setModel(m_m);
     m->setDescription("Spartan 6 FPGA");
+    m->setType("FPGA");
     this->setChild(this->rowCount(),m);
 }
 

@@ -22,7 +22,7 @@ class M86_Spartan6 : public Node
 {
     Q_OBJECT
     // property to identify the node type
-    Q_PROPERTY(QString node_type READ node_type)
+//  Q_PROPERTY(QString node_type READ node_type)
 
     Q_PROPERTY(FileString filename READ filename WRITE setFilename)
     Q_PROPERTY(QString ver_major READ ver_major WRITE setVer_major)
