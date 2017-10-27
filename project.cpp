@@ -70,6 +70,7 @@ void Project::new_M86_Spartan6()
     Model* m_m = Node::getModel();
     m->setModel(m_m);
     m->setDescription("M86 for SCT202");
+//  m->setType("FPGA");
     //m->setVer_state(Alpha);
     this->setChild(this->rowCount(),m);
 //  qDebug() << this->children();
