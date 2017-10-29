@@ -49,7 +49,8 @@ SOURCES += main.cpp\
     property_browser/extension/filepathmanager.cpp \
     property_browser/extension/variantfactory.cpp \
     property_browser/extension/variantmanager.cpp \
-    property_browser/extension/decoratedstring.cpp
+    property_browser/extension/decoratedstring.cpp \
+    aboutdialog.cpp
 
 HEADERS  += mainwindow.h \
     node.h \
@@ -75,6 +76,11 @@ HEADERS  += mainwindow.h \
     property_browser/extension/filepathmanager.h \
     property_browser/extension/variantfactory.h \
     property_browser/extension/variantmanager.h \
-    property_browser/extension/decoratedstring.h
+    property_browser/extension/decoratedstring.h \
+    aboutdialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    aboutdialog.ui
+
+RESOURCES += \
+    resources.qrc
