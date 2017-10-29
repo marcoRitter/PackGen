@@ -95,6 +95,14 @@ bool Node::readJson(const QJsonObject *jsonObj)
                         a.setValue<FlashSize>(f);
                         this->setProperty(key.toLatin1().data(),a);
                 }
+                if (strcmp(v.typeName(), "DualBoot") == 0)
+                {
+                        DualBoot d;
+                        d.dualbootena = jsonVal.toInt();
+                        QVariant a;
+                        a.setValue<DualBoot>(d);
+                        this->setProperty(key.toLatin1().data(),a);
+                }
 
             }
             else
@@ -148,6 +156,11 @@ bool Node::writeJson(QJsonObject *jsonObj)
             if (strcmp(v.typeName(),"FlashSize") == 0)
             {
                 QVariant x = v.value<FlashSize>().selectedsize;
+                jsonObj->insert(prop.name(),x.toInt());
+            }
+            if (strcmp(v.typeName(), "DualBoot") == 0)
+            {
+                QVariant x = v.value<DualBoot>().dualbootena;
                 jsonObj->insert(prop.name(),x.toInt());
             }
         }
