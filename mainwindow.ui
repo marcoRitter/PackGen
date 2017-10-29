@@ -28,7 +28,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Pack Gen NG</string>
+   <string>Package Generator v0.4</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QSplitter" name="splitter">
@@ -160,7 +160,7 @@
    <property name="minimumSize">
     <size>
      <width>1000</width>
-     <height>25</height>
+     <height>10</height>
     </size>
    </property>
    <property name="maximumSize">
@@ -181,6 +181,11 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionNew"/>
+   <addaction name="actionSave"/>
+   <addaction name="actionSave_as"/>
+   <addaction name="actionLoad"/>
+   <addaction name="separator"/>
    <addaction name="actionGenerateFpga"/>
   </widget>
   <widget class="QStatusBar" name="statusBar">
@@ -198,6 +203,10 @@
    </property>
   </widget>
   <action name="actionLoad">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/Images/icons8-open.png</normaloff>:/Images/icons8-open.png</iconset>
+   </property>
    <property name="text">
     <string>Load</string>
    </property>
@@ -208,6 +217,10 @@
   <action name="actionSave">
    <property name="enabled">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/Images/icons8-save.png</normaloff>:/Images/icons8-save.png</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -228,6 +241,10 @@
    </property>
   </action>
   <action name="actionNew">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/Images/icons8-file.png</normaloff>:/Images/icons8-file.png</iconset>
+   </property>
    <property name="text">
     <string>New</string>
    </property>
@@ -236,6 +253,10 @@
    </property>
   </action>
   <action name="actionSave_as">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/Images/icons8-save-as.png</normaloff>:/Images/icons8-save-as.png</iconset>
+   </property>
    <property name="text">
     <string>Save as ...</string>
    </property>
@@ -247,9 +268,8 @@
   </action>
   <action name="actionGenerateFpga">
    <property name="icon">
-    <iconset>
-     <normalon>:/Images/new.png</normalon>
-    </iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/Images/integrated-circuit-256.png</normaloff>:/Images/integrated-circuit-256.png</iconset>
    </property>
    <property name="text">
     <string>GenerateFpga</string>
@@ -260,7 +280,9 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>actionQuit</sender>

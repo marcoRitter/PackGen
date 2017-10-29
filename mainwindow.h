@@ -40,6 +40,8 @@ public:
 
     Model m_model;
 
+signals:
+    void generateFpga();
 private slots:
     void on_treeView_clicked(const QModelIndex &index);
 
@@ -68,10 +70,13 @@ private slots:
 
     void testSlot ();
 
+    void on_actionGenerateFpga_triggered();
+
 
 private:
     Ui::MainWindow *ui;
     QString Project_FileName = "";
+    QString m_winTitle = "Package Generator v0.4";
 
     QtVariantPropertyManager *variantManager;
     QtVariantEditorFactory *variantFactory;
