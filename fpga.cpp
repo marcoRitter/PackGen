@@ -20,12 +20,12 @@ Fpga::~Fpga()
     disconnect(pDeleteFPGA, &QAction::triggered, this, &Node::delete_node);
     delete pDeleteFPGA;
 }
+
 FileString Fpga::filename()
 {
     return m_filename;
 }
 
-//void Fpga::setFilename(FileString filename)
 void Fpga::setFilename(FileString filename)
 {
     m_filename = filename;
@@ -109,6 +109,7 @@ DualBoot Fpga::dualboot()
 void Fpga::setDualBoot(DualBoot dualboot)
 {
     m_dualboot = dualboot;
+//  emit dualBootChanged(dualboot);
 }
 
 void Fpga::node_menue(QMenu *menu)

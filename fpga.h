@@ -49,14 +49,13 @@ public:
     FlashSize flash_size();
     void setFlash_size(FlashSize flashsize);
 
-//  bool with_golden_reference();
-//  void setWith_golden_reference(bool with_golden_reference);
-
     DualBoot dualboot();
     void setDualBoot (DualBoot dualboot);
 
     void node_menue(QMenu *menu);
 
+
+    /*
     inline int getPropId (const char* propName) {
         qDebug()<< "row count = " << this->metaObject()->propertyCount();
         int cnt = this->metaObject()->propertyCount();
@@ -68,6 +67,7 @@ public:
         return 0;
 
     }
+    */
 
 
 private:
