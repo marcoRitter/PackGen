@@ -9,12 +9,27 @@ M86_Spartan6::M86_Spartan6(QObject *parent) :
     Node(parent,"M86_Spartan6")
 {
 
+    QIcon GenerateIcon;
+    QIcon NewFpgaIcon;
+    QIcon DeleteIcon;
+
+    GenerateIcon.addFile(":/Images/icons8-robot.png",QSize(25,25));
     pGenerate = new QAction(tr("Generate"), this);
+    pGenerate->setIcon(GenerateIcon);
     connect(pGenerate, SIGNAL(triggered()), this, SLOT(generate_package()));
+
+    NewFpgaIcon.addFile(":/Images/integrated-circuit-256.png",QSize(25,25));
     pNewFPGA = new QAction(tr("&New FPGA"), this);
+    pNewFPGA->setIcon(NewFpgaIcon);
     connect(pNewFPGA, &QAction::triggered, this, &M86_Spartan6::new_FPGA);
+
+    DeleteIcon.addFile(":/Images/icons8-delete.png", QSize(25,25));
     pDelete = new QAction(tr("&Delete"), this);
+    pDelete->setIcon(DeleteIcon);
     connect(pDelete, &QAction::triggered, this, &Node::delete_node);
+
+    connect(parent->parent(), SIGNAL (generateFpga()), this, SLOT(generate_package()));
+    qDebug() << "parent = " << parent->parent();
 
 }
 M86_Spartan6::~M86_Spartan6()
