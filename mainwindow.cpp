@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "aboutdialog.h"
 #include "ui_mainwindow.h"
 
 #include <QDebug>
@@ -82,12 +83,14 @@ void MainWindow::on_actionLoad_triggered()
 {
     qDebug() << "Load";
     Project_FileName = QFileDialog::getOpenFileName(this, tr("Open File"),".",tr("Pack Gen Files (*.pkg)"));
+    qDebug() << "file opened";
     if (Project_FileName != "")
     {
         QStandardItem *project;
         m_model.load(Project_FileName);
         ui->treeView->expandAll();
     }
+    propertyEditor->clear();
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -166,42 +169,29 @@ void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
                 FlashSize f;
                 f.selectedsize = val.toInt();
                 QVariant a;
+                HexString offset;
+                offset.hexstring = offset.get_offset(val.toUInt());
+                a.setValue<HexString>(offset);
+                m_currentItem->setProperty("start_addr",a);
+                this->changeProperty("start_addr",a.value<HexString>().hexstring);
+
                 a.setValue<FlashSize>(f);
                 m_currentItem->setProperty(property->propertyName().toStdString().c_str(), a);
+
             }
             if (strcmp(v.typeName(),"DualBoot") == 0)
             {
-                DualBoot d(val.toInt());
-//              d.dualbootena = val.toInt();
                 QVariant a;
-//              qDebug() << "get value " << val.toInt();
-//              qDebug() << "old value " <<m_currentItem->property("dualboot").value<DualBoot>().dualbootena;
-                if (1);//(val.toInt() != m_currentItem->property("dualboot").value<DualBoot>().dualbootena)
-                {
-//                  qDebug() << "dual boot changed";
-                    uint selected_flash = m_currentItem->property("flash_size").value<FlashSize>().selectedsize;
-                    HexString offset;
-                    offset.hexstring = d.get_offset(selected_flash);
-                    a.setValue<HexString>(offset);
-                    m_currentItem->setProperty("start_addr",a);
-                    QList<QtProperty*> props = propertyEditor->properties();
-                    qDebug() <<"props size = " << props.size();
-                    int i = 0;
-                    for(auto const& pr : props)
-                    {
-                        qDebug() << "property " << i++ << " " << pr->propertyName();
-                        if (pr->propertyName()=="start_addr")
-                        {
-                            variantManager->setValue(props[3], "34i");
-                            variantManager->setValue(props[i-1],a.value<HexString>().hexstring);
-                        }
-
-                    }
-
-                }
-                a.setValue<DualBoot>(d);
+                uint selected_flash = m_currentItem->property("flash_size").value<FlashSize>().selectedsize;
+                HexString offset;
+                DualBoot dualboot;
+                offset.hexstring = offset.get_offset(selected_flash);
+                a.setValue<HexString>(offset);
+                m_currentItem->setProperty("start_addr",a);
+                this->changeProperty("start_addr",a.value<HexString>().hexstring);
+                dualboot.dualbootena = val.toInt();
+                a.setValue<DualBoot>(dualboot);
                 m_currentItem->setProperty(property->propertyName().toStdString().c_str(),a);
-//              qDebug() << "new value " <<m_currentItem->property("dualboot").value<DualBoot>().dualbootena;
             }
         }
         else
@@ -220,6 +210,7 @@ void MainWindow::draw_property_browser()
     QStandardItem *selected = m_model.itemFromIndex(m_model.get_index());
 
 
+    qDebug() << selected;
     QtVariantProperty *property;
     QtBrowserItem *item;
 
@@ -326,4 +317,30 @@ void MainWindow::resizeEvent(QResizeEvent * event)
 //  ui->treeView->resize(treeViewSize);
 //  ui->scrollArea->move(treeViewSize.width()+15,1);
 //  ui->scrollArea->resize(propertyViewSize);
+}
+
+void MainWindow::changeProperty (const QString & name, const QVariant a)
+{
+    QList<QtProperty*> props = propertyEditor->properties();
+    int i = 0;
+    for(auto const& pr : props)
+    {
+        i++;
+        if (pr->propertyName()== name)
+            variantManager->setValue(props[i-1],a);
+    }
+}
+
+void MainWindow::testSlot ()
+{
+    qDebug() << "connected event";
+}
+
+void MainWindow::on_actionProperties_triggered()
+{
+
+    aboutDialog propWin;
+    propWin.exec();
+    qDebug() << "properties started";
+
 }

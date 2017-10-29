@@ -51,6 +51,8 @@ private slots:
 
     void on_actionSave_triggered();
 
+    void on_actionProperties_triggered();
+
     void on_treeView_customContextMenuRequested(const QPoint &pos);
 
     void resizeEvent(QResizeEvent * event);
@@ -61,6 +63,11 @@ private slots:
     void handleValueChanged(QtProperty *property, const QVariant &val);
 
     void draw_property_browser();
+
+    void changeProperty(const QString & name, const QVariant a);
+
+    void testSlot ();
+
 
 private:
     Ui::MainWindow *ui;
