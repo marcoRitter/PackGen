@@ -16,7 +16,7 @@ class Project : public Node
 
     // Properties for this node
     Q_PROPERTY(QString name READ name WRITE setName)
-    Q_PROPERTY(QString Property1 READ Property1 WRITE setProperty1)
+    Q_PROPERTY(FileString tool1 READ tool1 WRITE setTool1)
 
 public:
     explicit Project(QObject *parent = nullptr);
@@ -31,11 +31,11 @@ public:
     QString name();
     void setName(QString name);
 
-    QString Property1();
-    void setProperty1(QString Property1);
+    FileString tool1();
+    void setTool1(FileString filename);
 
-    bool readJson(const QJsonObject *jsonObj);
-    bool writeJson(QJsonObject *jsonObj);
+//  bool readJson(const QJsonObject *jsonObj);
+//  bool writeJson(QJsonObject *jsonObj);
 
     void node_menue(QMenu *menu);
 
@@ -47,7 +47,7 @@ private slots:
 private:
     QString projectName;
     QString m_name;
-    QString m_Property1;
+    FileString m_tool1;
 
     QAction *pNewSpartan;
     QAction *pNewMasterFile;

@@ -5,8 +5,9 @@
 Project::Project(QObject *parent) :
     Node(parent, "Project")
 {
+    Q_INIT_RESOURCE(resources);
     QIcon iconAct1;
-    iconAct1.addFile("new.png",QSize(20,20));
+    iconAct1.addFile(":/Images/new.png",QSize(20,20));
     pNewSpartan = new QAction(tr("&New M86 Spartan"), this);
     pNewSpartan->setIcon(iconAct1);
     connect(pNewSpartan, SIGNAL(triggered()), this, SLOT(new_M86_Spartan6()));
@@ -33,36 +34,37 @@ QString Project::name()
     return m_name;
 }
 
-QString Project::Property1()
+FileString Project::tool1()
 {
-    return Node::getType();
+    return m_tool1;
 }
 
-void Project::setProperty1(QString property1)
+void Project::setTool1(FileString filename)
 {
-    m_Property1 = property1;
+    m_tool1 = filename;
 }
+
 void Project::setName(QString name)
 {
     m_name = name;
 }
 
-bool Project::readJson(const QJsonObject *jsonObj)
-{
-    setName(jsonObj->value("name").toString());
-    setDescription(jsonObj->value("description").toString());
-
-    return true;
-}
-
-bool Project::writeJson(QJsonObject *jsonObj)
-{
-    jsonObj->insert("node_type",node_type());
-    jsonObj->insert("name",name());
-    jsonObj->insert("description",description());
-
-    return true;
-}
+//bool Project::readJson(const QJsonObject *jsonObj)
+//{
+//    setName(jsonObj->value("name").toString());
+//    setDescription(jsonObj->value("description").toString());
+//
+//    return true;
+//}
+//
+//bool Project::writeJson(QJsonObject *jsonObj)
+//{
+//    jsonObj->insert("node_type",node_type());
+//    jsonObj->insert("name",name());
+//    jsonObj->insert("description",description());
+//
+//    return true;
+//}
 
 void Project::new_M86_Spartan6()
 {
