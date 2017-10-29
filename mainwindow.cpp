@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QMetaProperty>
 #include <QFileDialog>
+#include <QRegExp>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->splitter->setCollapsible(1,false);
     pMainMenu=new QMenu(this);
     // create new project node
-    Project *p = new Project();
+    Project *p = new Project(this);
     p->setDescription("Main Project");
 
 //  Project *p1 = new Project();
@@ -51,6 +52,13 @@ MainWindow::MainWindow(QWidget *parent) :
     propertyEditor->setResizeMode(QtTreePropertyBrowser::ResizeMode(0));
     propertyEditor->setFactoryForManager(variantManager, variantFactory);
     ui->scrollArea->setWidget(propertyEditor);
+
+    QString winTitle;
+    winTitle = m_winTitle + " - untitled";
+    QMainWindow::setWindowTitle(winTitle);
+
+    ui->actionGenerateFpga->setDisabled(true);
+
 }
 
 MainWindow::~MainWindow()
@@ -77,6 +85,10 @@ void MainWindow::on_actionSave_as_triggered()
         QStandardItem *project = m_model.item(0,0);
         m_model.save(Project_FileName,project);
     }
+    QStringRef winTitle = Project_FileName.midRef(Project_FileName.lastIndexOf("/")+1,
+                                                  Project_FileName.lastIndexOf(".") - Project_FileName.lastIndexOf("/")-1);
+    setWindowTitle(m_winTitle + " - " + winTitle);
+
 }
 
 void MainWindow::on_actionLoad_triggered()
@@ -91,6 +103,9 @@ void MainWindow::on_actionLoad_triggered()
         ui->treeView->expandAll();
     }
     propertyEditor->clear();
+    QStringRef winTitle = Project_FileName.midRef(Project_FileName.lastIndexOf("/")+1,
+                                                  Project_FileName.lastIndexOf(".") - Project_FileName.lastIndexOf("/")-1);
+    setWindowTitle(m_winTitle + " - " + winTitle);
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -101,6 +116,9 @@ void MainWindow::on_actionNew_triggered()
     Project *p = new Project();
     p->setDescription("Main Project");
     m_model.appendRow(p);
+    propertyEditor->clear();
+    Project_FileName = "";
+    setWindowTitle(m_winTitle + " - untitled*");
 }
 
 void MainWindow::on_actionSave_triggered()
@@ -112,6 +130,9 @@ void MainWindow::on_actionSave_triggered()
         QStandardItem *project = m_model.item(0,0);
         m_model.save(Project_FileName,project);
     }
+    QStringRef winTitle = Project_FileName.midRef(Project_FileName.lastIndexOf("/")+1,
+                                                  Project_FileName.lastIndexOf(".") - Project_FileName.lastIndexOf("/")-1);
+    setWindowTitle(m_winTitle + " - " + winTitle);
 }
 
 // Menue on right click
@@ -221,7 +242,18 @@ void MainWindow::draw_property_browser()
     const QMetaObject *meta = n->metaObject();
     int cnt = meta->propertyCount();
     qDebug() << "number of properties : " << cnt;
-    qDebug() << "current item " << m_currentItem;
+    qDebug() << "current item " << m_currentItem->node_type();
+
+    if (m_currentItem->node_type() == "M86_Spartan6")
+    {
+        ui->actionGenerateFpga->setEnabled(true);
+        qDebug() << "enable button";
+    }
+    else
+    {
+        ui->actionGenerateFpga->setDisabled(true);
+        qDebug() << "disable button";
+    }
     propertyEditor->clear();
 
     // Property Editor aufbauen
@@ -303,20 +335,6 @@ void MainWindow::resizeEvent(QResizeEvent * event)
     splitterSize.setWidth(QMainWindow::width()-8);
     ui->splitter->resize(splitterSize);
     ui->splitter->move(4,1);
-
-//  treeViewSize.setHeight(QMainWindow::height()-55);
-//  treeViewSize.setWidth(QMainWindow::width()/2-8);
-//
-//  propertyViewSize.setHeight(QMainWindow::height()-55);
-//  propertyViewSize.setWidth(QMainWindow::width()/2-8);
-
-//  qDebug() << "width = " << QMainWindow::width() << " length = " << QMainWindow::height() << endl;
-
-
-//  ui->treeView->move(3,1);
-//  ui->treeView->resize(treeViewSize);
-//  ui->scrollArea->move(treeViewSize.width()+15,1);
-//  ui->scrollArea->resize(propertyViewSize);
 }
 
 void MainWindow::changeProperty (const QString & name, const QVariant a)
@@ -325,9 +343,9 @@ void MainWindow::changeProperty (const QString & name, const QVariant a)
     int i = 0;
     for(auto const& pr : props)
     {
-        i++;
         if (pr->propertyName()== name)
-            variantManager->setValue(props[i-1],a);
+            variantManager->setValue(props[i],a);
+        i++;
     }
 }
 
@@ -343,4 +361,10 @@ void MainWindow::on_actionProperties_triggered()
     propWin.exec();
     qDebug() << "properties started";
 
+}
+
+
+void MainWindow::on_actionGenerateFpga_triggered()
+{
+    MainWindow::generateFpga();
 }
