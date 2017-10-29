@@ -22,15 +22,6 @@ public:
 
     HexString() { }
     HexString(const QString &value) : hexstring(value) { }
-};
-
-class DualBoot
-{
-public:
-    QStringList dualboot = {"disable", "enable"};
-    uint dualbootena ;
-    DualBoot() :dualbootena(0){ }
-    DualBoot(const uint &value) :dualbootena(value){}
     inline QString get_offset (const uint& flash_size)
     {
         switch (flash_size)
@@ -43,6 +34,15 @@ public:
         default: return "0x0000"; break;
         }
     }
+};
+
+class DualBoot
+{
+public:
+    QStringList dualboot = {"disable", "enable"};
+    uint dualbootena ;
+    DualBoot() :dualbootena(0){ }
+    DualBoot(const uint &value) :dualbootena(value){}
 };
 
 class FlashSize
