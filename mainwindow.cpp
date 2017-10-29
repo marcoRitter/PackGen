@@ -241,18 +241,18 @@ void MainWindow::draw_property_browser()
 
     const QMetaObject *meta = n->metaObject();
     int cnt = meta->propertyCount();
-    qDebug() << "number of properties : " << cnt;
-    qDebug() << "current item " << m_currentItem->node_type();
+//  qDebug() << "number of properties : " << cnt;
+//  qDebug() << "current item " << m_currentItem->node_type();
 
     if (m_currentItem->node_type() == "M86_Spartan6")
     {
         ui->actionGenerateFpga->setEnabled(true);
-        qDebug() << "enable button";
+//      qDebug() << "enable button";
     }
     else
     {
         ui->actionGenerateFpga->setDisabled(true);
-        qDebug() << "disable button";
+//      qDebug() << "disable button";
     }
     propertyEditor->clear();
 

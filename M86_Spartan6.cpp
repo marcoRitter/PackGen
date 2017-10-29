@@ -116,6 +116,8 @@ void M86_Spartan6::new_FPGA()
 bool M86_Spartan6::generate_package()
 {
     qDebug() << "Generate Spartan M86Package";
+    qDebug() << this;
+
     QObjectList childrenOfSpartan = this->children();
     QString parameters = "";
     for (auto const& childOfSpartan : childrenOfSpartan)

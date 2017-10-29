@@ -6,11 +6,16 @@
 Fpga::Fpga(QObject *parent) :
     Node(parent,"FPGA")
 {
+    QIcon DeleteIcon;
     m_start_addr.hexstring = "0x";
     this->setObjectName("FPGA");
 
+    DeleteIcon.addFile(":/Images/icons8-delete.png",QSize(25,25));
     pDeleteFPGA = new QAction(tr("&Delete"), this);
+    pDeleteFPGA->setIcon(DeleteIcon);
     connect(pDeleteFPGA, &QAction::triggered, this, &Node::delete_node);
+
+    qDebug() << parent->parent();
 //  Fpga::getPropId();
 //  m_with_golden_reference ;
 }
