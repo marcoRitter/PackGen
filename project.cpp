@@ -34,38 +34,30 @@ QString Project::name()
     return m_name;
 }
 
-FileString Project::tool1()
-{
-    return m_tool1;
-}
-
-void Project::setTool1(FileString filename)
-{
-    m_tool1 = filename;
-}
-
 void Project::setName(QString name)
 {
     m_name = name;
 }
 
-//bool Project::readJson(const QJsonObject *jsonObj)
-//{
-//    setName(jsonObj->value("name").toString());
-//    setDescription(jsonObj->value("description").toString());
-//
-//    return true;
-//}
-//
-//bool Project::writeJson(QJsonObject *jsonObj)
-//{
-//    jsonObj->insert("node_type",node_type());
-//    jsonObj->insert("name",name());
-//    jsonObj->insert("description",description());
-//
-//    return true;
-//}
+FileString Project::logichdr()
+{
+    return m_logichdr;
+}
 
+void Project::setLogichdr(FileString filename)
+{
+    m_logichdr = filename;
+}
+
+FileString Project::mbind()
+{
+    return m_mbind;
+}
+
+void Project::setMbind(FileString filename)
+{
+    m_mbind = filename;
+}
 void Project::new_M86_Spartan6()
 {
     M86_Spartan6 *m = new M86_Spartan6(this);//(QObject::parent());

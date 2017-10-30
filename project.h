@@ -16,7 +16,8 @@ class Project : public Node
 
     // Properties for this node
     Q_PROPERTY(QString name READ name WRITE setName)
-    Q_PROPERTY(FileString tool1 READ tool1 WRITE setTool1)
+    Q_PROPERTY(FileString logichdr READ logichdr WRITE setLogichdr)
+    Q_PROPERTY(FileString mbind READ mbind WRITE setMbind)
 
 public:
     explicit Project(QObject *parent = nullptr);
@@ -31,8 +32,11 @@ public:
     QString name();
     void setName(QString name);
 
-    FileString tool1();
-    void setTool1(FileString filename);
+    FileString logichdr();
+    void setLogichdr(FileString filename);
+
+    FileString mbind();
+    void setMbind(FileString filename);
 
 //  bool readJson(const QJsonObject *jsonObj);
 //  bool writeJson(QJsonObject *jsonObj);
@@ -47,7 +51,8 @@ private slots:
 private:
     QString projectName;
     QString m_name;
-    FileString m_tool1;
+    FileString m_logichdr =(QString) "//pc011/tools/utils/logichdr.exe";
+    FileString m_mbind =(QString) "//pc011/tools/utils/mbind.exe";
 
     QAction *pNewSpartan;
     QAction *pNewMasterFile;
