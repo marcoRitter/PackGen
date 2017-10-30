@@ -56,14 +56,15 @@ FileEdit::FileEdit(QWidget *parent)
 void FileEdit::buttonClicked()
 {
 
-    qDebug() << "parent " << p_parent->parent()->parent()->parent()->parent()->parent()->parent()->parent();
-    MainWindow *pWindow =(MainWindow*) p_parent->parent()->parent()->parent()->parent()->parent()->parent()->parent();
-    qDebug() << "selected" << pWindow->getMCurrent();
+    QObject * pObject = getObjectWithName((QObject *) p_parent, "MainWindow");
+    MainWindow *pMainWindow = (MainWindow*) pObject;
 
-    QString filePath = QFileDialog::getOpenFileName(this, tr("Choose a file"), theLineEdit->text(), theFilter);
+    QString filePath;
+    if (pMainWindow->getMCurrent()->node_type() != "M86_Spartan6")
+        filePath = QFileDialog::getOpenFileName(this, tr("Choose a file"), theLineEdit->text(), theFilter);
+    else
+        filePath = QFileDialog::getExistingDirectory(this, tr("Choosa a folder"), theLineEdit->text(), 0);
 
-
-//  QString filePath = QFileDialog::getExistingDirectory(this, tr("Choosa a folder"), theLineEdit->text(), 0);
     if (filePath.isNull())
         return;
     theLineEdit->setText(filePath);
