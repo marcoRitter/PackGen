@@ -20,7 +20,6 @@ class Fpga : public Node
     Q_PROPERTY(QString designnumber READ designnumber WRITE setDesignnumber)
     Q_PROPERTY(QString revision READ revision WRITE setRevision)
     Q_PROPERTY(QString testversion READ testversion WRITE setTestversion)
-//  Q_PROPERTY(bool with_golden_reference READ with_golden_reference WRITE setWith_golden_reference)
     Q_PROPERTY(DualBoot dualboot READ dualboot WRITE setDualBoot )
 
     Q_PROPERTY(FlashSize flash_size READ flash_size WRITE setFlash_size)
