@@ -15,7 +15,10 @@ Fpga::Fpga(QObject *parent) :
     pDeleteFPGA->setIcon(DeleteIcon);
     connect(pDeleteFPGA, &QAction::triggered, this, &Node::delete_node);
 
-    qDebug() << parent->parent();
+    connect(this, SIGNAL(need_redraw(QString ,  QVariant )),
+           parent->parent()->parent(),SLOT(changeProperty ( QString  ,QVariant )));
+    qDebug() << "parent of FPGA = " << parent->parent();
+    qDebug() << "parent of parent of FPGA = " << parent->parent()->parent();
 //  Fpga::getPropId();
 //  m_with_golden_reference ;
 }
@@ -84,28 +87,17 @@ FlashSize Fpga::flash_size()
 void Fpga::setFlash_size(FlashSize flashsize)
 {
     m_flashsize = flashsize;
+    QVariant a;
+    HexString temp;
+    if (m_dualboot.dualbootena)
+        m_start_addr = temp.get_offset(m_flashsize.selectedsize);
+    else
+        m_start_addr = temp.get_offset(255);
+    a.setValue<HexString>(m_start_addr);
+    this->setProperty("start_addr",a);
+    need_redraw("start_addr",a.value<HexString>().hexstring);
 }
 
-//bool Fpga::with_golden_reference()
-//{
-//    return m_with_golden_reference;
-//}
-
-//void Fpga::setWith_golden_reference(bool with_golden_reference)
-//{
-//    qDebug () << "set golden";
-//    if ((with_golden_reference == 0) && (m_with_golden_reference == 1))
-//    {
-//        if (m_flashsize.selectedsize == 0)
-//            m_start_addr.hexstring = "0x2000";
-//        if (m_flashsize.selectedsize == 1)
-//            m_start_addr.hexstring = "0x4000";
-//        if (m_flashsize.selectedsize == 2)
-//            m_start_addr.hexstring = "0x8000";
-////      this->set_need_redraw();
-//    }
-//    m_with_golden_reference = with_golden_reference;
-//}
 DualBoot Fpga::dualboot()
 {
     return m_dualboot;
@@ -114,7 +106,15 @@ DualBoot Fpga::dualboot()
 void Fpga::setDualBoot(DualBoot dualboot)
 {
     m_dualboot = dualboot;
-//  emit dualBootChanged(dualboot);
+    QVariant a;
+    HexString temp;
+    if (m_dualboot.dualbootena)
+        m_start_addr = temp.get_offset(m_flashsize.selectedsize);
+    else
+        m_start_addr = temp.get_offset(255);
+    a.setValue<HexString>(m_start_addr);
+    this->setProperty("start_addr",a);
+    need_redraw("start_addr",a.value<HexString>().hexstring);
 }
 
 void Fpga::node_menue(QMenu *menu)

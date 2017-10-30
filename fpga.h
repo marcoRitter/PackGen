@@ -54,6 +54,9 @@ public:
 
     void node_menue(QMenu *menu);
 
+signals:
+    void need_redraw(const QString &name, const QVariant a);
+
 
     /*
     inline int getPropId (const char* propName) {
@@ -68,7 +71,6 @@ public:
 
     }
     */
-
 
 private:
 //    QFileInfo m_file;
