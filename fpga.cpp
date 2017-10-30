@@ -17,8 +17,6 @@ Fpga::Fpga(QObject *parent) :
 
     connect(this, SIGNAL(need_redraw(QString ,  QVariant )),
            parent->parent()->parent(),SLOT(changeProperty ( QString  ,QVariant )));
-//  qDebug() << "parent of FPGA = " << parent->parent();
-//  qDebug() << "parent of parent of FPGA = " << parent->parent()->parent();
 //  Fpga::getPropId();
 //  m_with_golden_reference ;
 }
