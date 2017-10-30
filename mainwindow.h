@@ -40,6 +40,8 @@ public:
 
     Model m_model;
 
+    Node *getMCurrent () {return m_currentItem;}
+
 signals:
     void generateFpga();
 private slots:
@@ -67,8 +69,6 @@ private slots:
     void draw_property_browser();
 
     void changeProperty(const QString & name, const QVariant a);
-
-    void testSlot ();
 
     void on_actionGenerateFpga_triggered();
 

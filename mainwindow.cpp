@@ -52,6 +52,7 @@ MainWindow::MainWindow(QWidget *parent) :
     propertyEditor->setResizeMode(QtTreePropertyBrowser::ResizeMode(0));
     propertyEditor->setFactoryForManager(variantManager, variantFactory);
     ui->scrollArea->setWidget(propertyEditor);
+    qDebug() << "parent of scrollArea" << ui->scrollArea->parent()->parent()->parent();
 
     QString winTitle;
     winTitle = m_winTitle + " - untitled";
@@ -202,6 +203,15 @@ void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
                 a.setValue<DualBoot>(dualboot);
                 m_currentItem->setProperty(property->propertyName().toStdString().c_str(),a);
             }
+            if (strcmp(v.typeName(),"FpgaType") == 0)
+            {
+                QVariant a;
+                FpgaType fpgatype;
+                fpgatype.selectedfpga = val.toInt();
+                a.setValue<FpgaType>(fpgatype);
+                m_currentItem->setProperty(property->propertyName().toStdString().c_str(),a);
+            }
+
         }
         else
 //          if (v.type() == QVariant::Bool)
@@ -294,6 +304,12 @@ void MainWindow::draw_property_browser()
                    property->setAttribute("enumNames",v.value<DualBoot>().dualboot);
                    property->setValue(v.value<DualBoot>().dualbootena);
                 }
+               if (strcmp(v.typeName(),"FpgaType") == 0)
+               {
+                   property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
+                   property->setAttribute("enumNames",v.value<FpgaType>().fpgatype);
+                   property->setValue(v.value<FpgaType>().selectedfpga);
+                }
                 break;
            default :
                break;
@@ -330,11 +346,6 @@ void MainWindow::changeProperty (const QString & name, const QVariant a)
             variantManager->setValue(props[i],a);
         i++;
     }
-}
-
-void MainWindow::testSlot ()
-{
-    qDebug() << "connected event";
 }
 
 void MainWindow::on_actionProperties_triggered()
