@@ -3,6 +3,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QMessageBox>
+#include <QProcess>
 
 
 M86_Spartan6::M86_Spartan6(QObject *parent) :
@@ -119,6 +120,9 @@ bool M86_Spartan6::generate_package()
 {
     qDebug() << "Generate Spartan M86Package";
     qDebug() << this;
+    QString logichdrProg = m_parent->property("logichdr").value<FileString>().filestring;
+    qDebug() << logichdrProg;
+
 
     QObjectList childrenOfSpartan = this->children();
     QString parameters = "";
@@ -133,15 +137,31 @@ bool M86_Spartan6::generate_package()
             qDebug() << "filename " << childOfSpartan->property("filename").value<FileString>().filestring;
             parameters += "Design Number = ";
             parameters += childOfSpartan->property("designnumber").value<QString>();
-            parameters += "\n Flash Size = ";
-            parameters += childOfSpartan->property("flash_size").value<FlashSize>().selectedsize;
+            parameters += "\n start addr = ";
+            parameters += childOfSpartan->property("start_addr").value<HexString>().hexstring;
         }
     }
+
+    qDebug() << "start logichdr";
+    QProcess *process = new QProcess(this);
+    process->start(logichdrProg, QIODevice::ReadWrite);
+
+    if (!process->waitForStarted())
+        qDebug() << "error by starting logichdr.exe";
+    if (!process->waitForFinished())
+        qDebug() << "logichdr.exe failed";
+
+    QByteArray stdoutResults = process->readAllStandardOutput();
+
+    parameters += stdoutResults;
+//  qDebug() << "logichdr returned value" << stdoutResults;
+
 
     QMessageBox msgBox;
     msgBox.setText("Generate m86 with following parameters");
     msgBox.setDetailedText(parameters);
-    msgBox.setIcon(QMessageBox::Information);
+//  msgBox.setIcon(QMessageBox::Information);
+    msgBox.setStyleSheet("QLabel{min-width: 500px}");
     msgBox.exec();
 
 //  qDebug() << "ver_major : " << this->property("ver_major").toString();
