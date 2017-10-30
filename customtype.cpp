@@ -6,5 +6,6 @@ void CustomType::setup()
     CustomTypeFile = qRegisterMetaType<HexString>("HexString");
     CustomTypeFile = qRegisterMetaType<DualBoot>("DualBoot");
     CustomTypeFile = qRegisterMetaType<FlashSize>("FlashSize");
+    CustomTypeFile = qRegisterMetaType<FpgaType>("FpgaType");
 }
 
