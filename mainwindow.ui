@@ -269,7 +269,7 @@
   <action name="actionGenerateFpga">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/Images/integrated-circuit-256.png</normaloff>:/Images/integrated-circuit-256.png</iconset>
+     <normaloff>:/Images/icons8-robot.png</normaloff>:/Images/icons8-robot.png</iconset>
    </property>
    <property name="text">
     <string>GenerateFpga</string>
