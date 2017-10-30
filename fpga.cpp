@@ -17,8 +17,8 @@ Fpga::Fpga(QObject *parent) :
 
     connect(this, SIGNAL(need_redraw(QString ,  QVariant )),
            parent->parent()->parent(),SLOT(changeProperty ( QString  ,QVariant )));
-    qDebug() << "parent of FPGA = " << parent->parent();
-    qDebug() << "parent of parent of FPGA = " << parent->parent()->parent();
+//  qDebug() << "parent of FPGA = " << parent->parent();
+//  qDebug() << "parent of parent of FPGA = " << parent->parent()->parent();
 //  Fpga::getPropId();
 //  m_with_golden_reference ;
 }
@@ -27,6 +27,17 @@ Fpga::~Fpga()
 {
     disconnect(pDeleteFPGA, &QAction::triggered, this, &Node::delete_node);
     delete pDeleteFPGA;
+}
+
+FpgaType Fpga::fpgatype()
+{
+    return m_fpgatype;
+}
+
+void Fpga::setFpgatype(FpgaType fpgatype)
+{
+    m_fpgatype = fpgatype;
+    need_redraw("start_addr",Fpga::updateStartAddress());
 }
 
 FileString Fpga::filename()
@@ -49,24 +60,24 @@ void Fpga::setDesignnumber(QString name)
     m_designnumber = name;
 }
 
-QString Fpga::ver_major()
+QString Fpga::revision()
 {
-   return m_ver_major;
+   return m_revision;
 }
 
-void Fpga::setVer_major(QString ver_major)
+void Fpga::setRevision(QString revision)
 {
-    m_ver_major = ver_major;
+    m_revision = revision;
 }
 
-QString Fpga::ver_minor()
+QString Fpga::testversion()
 {
-    return m_ver_minor;
+    return m_testversion;
 }
 
-void Fpga::setVer_minor(QString ver_minor)
+void Fpga::setTestversion(QString testversion)
 {
-    m_ver_minor = ver_minor;
+    m_testversion = testversion;
 }
 
 HexString Fpga::start_addr()
@@ -87,15 +98,19 @@ FlashSize Fpga::flash_size()
 void Fpga::setFlash_size(FlashSize flashsize)
 {
     m_flashsize = flashsize;
+    /*
     QVariant a;
     HexString temp;
-    if (m_dualboot.dualbootena)
+    if (m_dualboot.dualbootena && !m_fpgatype.selectedfpga)
         m_start_addr = temp.get_offset(m_flashsize.selectedsize);
     else
         m_start_addr = temp.get_offset(255);
     a.setValue<HexString>(m_start_addr);
     this->setProperty("start_addr",a);
     need_redraw("start_addr",a.value<HexString>().hexstring);
+    */
+    need_redraw("start_addr",Fpga::updateStartAddress());
+
 }
 
 DualBoot Fpga::dualboot()
@@ -106,15 +121,18 @@ DualBoot Fpga::dualboot()
 void Fpga::setDualBoot(DualBoot dualboot)
 {
     m_dualboot = dualboot;
+    /*
     QVariant a;
     HexString temp;
-    if (m_dualboot.dualbootena)
+    if (m_dualboot.dualbootena && !m_fpgatype.selectedfpga)
         m_start_addr = temp.get_offset(m_flashsize.selectedsize);
     else
         m_start_addr = temp.get_offset(255);
     a.setValue<HexString>(m_start_addr);
     this->setProperty("start_addr",a);
     need_redraw("start_addr",a.value<HexString>().hexstring);
+    */
+    need_redraw("start_addr",Fpga::updateStartAddress());
 }
 
 void Fpga::node_menue(QMenu *menu)
@@ -122,3 +140,14 @@ void Fpga::node_menue(QMenu *menu)
     menu->addAction(pDeleteFPGA);
 }
 
+QVariant Fpga::updateStartAddress()
+{
+    QVariant a;
+    HexString temp;
+    if (m_dualboot.dualbootena && !m_fpgatype.selectedfpga)
+        m_start_addr = temp.get_offset(m_flashsize.selectedsize);
+    else
+        m_start_addr = temp.get_offset(255);
+    a.setValue<HexString>(m_start_addr);
+    return a.value<HexString>().hexstring;
+}

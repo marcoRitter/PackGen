@@ -16,6 +16,7 @@ class Project : public Node
 
     // Properties for this node
     Q_PROPERTY(QString name READ name WRITE setName)
+    Q_PROPERTY(FileString srec_cat READ srec_cat WRITE setSrec_cat)
     Q_PROPERTY(FileString logichdr READ logichdr WRITE setLogichdr)
     Q_PROPERTY(FileString mbind READ mbind WRITE setMbind)
 
@@ -31,6 +32,9 @@ public:
 
     QString name();
     void setName(QString name);
+
+    FileString srec_cat();
+    void setSrec_cat(FileString filename);
 
     FileString logichdr();
     void setLogichdr(FileString filename);
@@ -51,7 +55,9 @@ private slots:
 private:
     QString projectName;
     QString m_name;
-    FileString m_logichdr =(QString) "//pc011/tools/utils/logichdr.exe";
+//  FileString m_logichdr =(QString) "//pc011/tools/utils/logichdr.exe";
+    FileString m_srecCat = (QString) "/srec_cat.exe";
+    FileString m_logichdr =(QString) "/logichdr.exe";
     FileString m_mbind =(QString) "//pc011/tools/utils/mbind.exe";
 
     QAction *pNewSpartan;

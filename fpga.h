@@ -15,10 +15,11 @@ class Fpga : public Node
     // property to identify the node type
 //  Q_PROPERTY(QString node_type READ node_type)
 
+    Q_PROPERTY(FpgaType fpgatype READ fpgatype WRITE setFpgatype)
     Q_PROPERTY(FileString filename READ filename WRITE setFilename)
     Q_PROPERTY(QString designnumber READ designnumber WRITE setDesignnumber)
-    Q_PROPERTY(QString ver_major READ ver_major WRITE setVer_major)
-    Q_PROPERTY(QString ver_minor READ ver_minor WRITE setVer_minor)
+    Q_PROPERTY(QString revision READ revision WRITE setRevision)
+    Q_PROPERTY(QString testversion READ testversion WRITE setTestversion)
 //  Q_PROPERTY(bool with_golden_reference READ with_golden_reference WRITE setWith_golden_reference)
     Q_PROPERTY(DualBoot dualboot READ dualboot WRITE setDualBoot )
 
@@ -31,17 +32,20 @@ public:
 
 //  QString node_type() {return"FPGA";}
 
+    FpgaType fpgatype();
+    void setFpgatype (FpgaType fpgatype);
+
     FileString filename();
     void setFilename(FileString filename);
 
     QString designnumber();
     void setDesignnumber(QString filename);
 
-    QString ver_major();
-    void setVer_major(QString ver_major);
+    QString revision();
+    void setRevision(QString revision);
 
-    QString ver_minor();
-    void setVer_minor(QString ver_minor);
+    QString testversion();
+    void setTestversion(QString testversion);
 
     HexString start_addr();
     void setStart_addr(HexString start_addr);
@@ -52,6 +56,7 @@ public:
     DualBoot dualboot();
     void setDualBoot (DualBoot dualboot);
 
+    QVariant updateStartAddress();
     void node_menue(QMenu *menu);
 
 signals:
@@ -74,10 +79,11 @@ signals:
 
 private:
 //    QFileInfo m_file;
+    FpgaType m_fpgatype;
     FileString m_filename;
     QString m_designnumber = "";
-    QString m_ver_major = "";
-    QString m_ver_minor = "";
+    QString m_revision = "";
+    QString m_testversion = "";
     HexString m_start_addr;
     FlashSize m_flashsize;
 //  bool m_with_golden_reference;
