@@ -57,7 +57,7 @@ MainWindow::MainWindow(QWidget *parent) :
     winTitle = m_winTitle + " - untitled";
     QMainWindow::setWindowTitle(winTitle);
 
-    ui->actionGenerateFpga->setDisabled(true);
+//  ui->actionGenerateFpga->setDisabled(true);
 
 }
 
@@ -99,7 +99,7 @@ void MainWindow::on_actionLoad_triggered()
     if (Project_FileName != "")
     {
         QStandardItem *project;
-        m_model.load(Project_FileName);
+        m_model.load(Project_FileName, this);
         ui->treeView->expandAll();
     }
     propertyEditor->clear();
@@ -190,12 +190,6 @@ void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
                 FlashSize f;
                 f.selectedsize = val.toInt();
                 QVariant a;
-                HexString offset;
-                offset.hexstring = offset.get_offset(val.toUInt());
-                a.setValue<HexString>(offset);
-                m_currentItem->setProperty("start_addr",a);
-                this->changeProperty("start_addr",a.value<HexString>().hexstring);
-
                 a.setValue<FlashSize>(f);
                 m_currentItem->setProperty(property->propertyName().toStdString().c_str(), a);
 
@@ -203,22 +197,16 @@ void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
             if (strcmp(v.typeName(),"DualBoot") == 0)
             {
                 QVariant a;
-                uint selected_flash = m_currentItem->property("flash_size").value<FlashSize>().selectedsize;
-                HexString offset;
                 DualBoot dualboot;
-                offset.hexstring = offset.get_offset(selected_flash);
-                a.setValue<HexString>(offset);
-                m_currentItem->setProperty("start_addr",a);
-                this->changeProperty("start_addr",a.value<HexString>().hexstring);
                 dualboot.dualbootena = val.toInt();
                 a.setValue<DualBoot>(dualboot);
                 m_currentItem->setProperty(property->propertyName().toStdString().c_str(),a);
             }
         }
         else
-            if (v.type() == QVariant::Bool)
-                m_currentItem->setProperty(property->propertyName().toStdString().c_str(), val.toBool());
-            else
+//          if (v.type() == QVariant::Bool)
+//              m_currentItem->setProperty(property->propertyName().toStdString().c_str(), val.toBool());
+//          else
                 m_currentItem->setProperty(property->propertyName().toStdString().c_str(), val);
     }
 
@@ -230,8 +218,6 @@ void MainWindow::draw_property_browser()
 {
     QStandardItem *selected = m_model.itemFromIndex(m_model.get_index());
 
-
-    qDebug() << selected;
     QtVariantProperty *property;
     QtBrowserItem *item;
 
@@ -243,17 +229,13 @@ void MainWindow::draw_property_browser()
     int cnt = meta->propertyCount();
 //  qDebug() << "number of properties : " << cnt;
 //  qDebug() << "current item " << m_currentItem->node_type();
-
+/*
     if (m_currentItem->node_type() == "M86_Spartan6")
-    {
         ui->actionGenerateFpga->setEnabled(true);
-//      qDebug() << "enable button";
-    }
     else
-    {
         ui->actionGenerateFpga->setDisabled(true);
-//      qDebug() << "disable button";
-    }
+*/
+
     propertyEditor->clear();
 
     // Property Editor aufbauen
@@ -337,6 +319,7 @@ void MainWindow::resizeEvent(QResizeEvent * event)
     ui->splitter->move(4,1);
 }
 
+// this function emits event by changing parameters in property editor
 void MainWindow::changeProperty (const QString & name, const QVariant a)
 {
     QList<QtProperty*> props = propertyEditor->properties();
