@@ -78,7 +78,7 @@ QModelIndex Model::get_index()
 }
 
 
-bool Model::load(const QString &filename)
+bool Model::load(const QString &filename, QObject *parent)
 {
     QString projectConfig;
     QFile projectFile(filename);
@@ -97,7 +97,7 @@ bool Model::load(const QString &filename)
     delete old;
 
     clear();
-    Node *root = loadTreeNode(&jsonObj, nullptr);
+    Node *root = loadTreeNode(&jsonObj, (Node *)parent);
 
     root->dumpObjectTree();
 
@@ -112,7 +112,7 @@ bool Model::load(const QString &filename)
 
      QJsonValue jsonVal = jsonObj->value("node_type");
      QString node_type = jsonVal.toString();
-     qDebug() << "  node_type : " << node_type;
+//   qDebug() << "  node_type : " << node_type;
      if (node_type == "Project")
      {
          n = new Project(parent);

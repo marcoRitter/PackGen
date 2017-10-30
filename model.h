@@ -16,7 +16,7 @@ class Model : public QStandardItemModel
 public:
     Model(QObject *parent = nullptr);
 
-    bool load(const QString &filename);
+    bool load(const QString &filename, QObject *parent);
     bool save(const QString &filename, QStandardItem *n);
     bool delete_item (int row,int col);
 
