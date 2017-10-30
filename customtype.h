@@ -30,10 +30,10 @@ public:
         case 1: return "0x2000"; break;
         case 2: return "0x4000"; break;
         case 3: return "0x8000"; break;
-        case 4: return "0xC000"; break;
-        case 5: return "0xE000"; break;
-        case 6: return "0xF000"; break;
-        default: return "0x0000"; break;
+        case 4: return "0x10000"; break;
+        case 5: return "0x20000"; break;
+        case 6: return "0x40000"; break;
+        default: return "0x0"; break;
         }
     }
 };
@@ -56,10 +56,20 @@ public:
     FlashSize(const uint &value) : selectedsize(value) { }
 };
 
+class FpgaType
+{
+public:
+    QStringList fpgatype = {"Xilinx", "Lattice"};
+    uint selectedfpga = 0;
+    FpgaType() { }
+    FpgaType(const uint &value): selectedfpga(value) { }
+};
+
 Q_DECLARE_METATYPE(FileString)
 Q_DECLARE_METATYPE(HexString)
 Q_DECLARE_METATYPE(FlashSize)
 Q_DECLARE_METATYPE(DualBoot)
+Q_DECLARE_METATYPE(FpgaType)
 
 
 
