@@ -52,7 +52,6 @@ MainWindow::MainWindow(QWidget *parent) :
     propertyEditor->setResizeMode(QtTreePropertyBrowser::ResizeMode(0));
     propertyEditor->setFactoryForManager(variantManager, variantFactory);
     ui->scrollArea->setWidget(propertyEditor);
-    qDebug() << "parent of scrollArea" << ui->scrollArea->parent()->parent()->parent();
 
     QString winTitle;
     winTitle = m_winTitle + " - untitled";
@@ -361,4 +360,24 @@ void MainWindow::on_actionProperties_triggered()
 void MainWindow::on_actionGenerateFpga_triggered()
 {
     MainWindow::generateFpga();
+}
+
+
+QObject * getObjectWithName (const QObject * pobject,const QString &name)
+{
+    QObject * pointer =(QObject *) pobject;
+    if (pointer->objectName() == name)
+        return pointer;
+    else
+    {
+        if (pointer == 0)
+            return 0;
+        else
+        {
+            pointer = pointer->parent();
+            return getObjectWithName(pointer, name);
+        }
+
+    }
+    return pointer;
 }

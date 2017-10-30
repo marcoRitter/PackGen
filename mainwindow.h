@@ -87,4 +87,5 @@ private:
     QMenu *pMainMenu;
 };
 
+QObject * getObjectWithName (const QObject * pobject,const QString &name);
 #endif // MAINWINDOW_H
