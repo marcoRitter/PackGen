@@ -103,6 +103,14 @@ bool Node::readJson(const QJsonObject *jsonObj)
                         a.setValue<DualBoot>(d);
                         this->setProperty(key.toLatin1().data(),a);
                 }
+                if (strcmp(v.typeName(), "FpgaType") == 0)
+                {
+                        FpgaType d;
+                        d.selectedfpga = jsonVal.toInt();
+                        QVariant a;
+                        a.setValue<FpgaType>(d);
+                        this->setProperty(key.toLatin1().data(),a);
+                }
 
             }
             else
@@ -142,6 +150,11 @@ bool Node::writeJson(QJsonObject *jsonObj)
             if (strcmp(v.typeName(), "DualBoot") == 0)
             {
                 QVariant x = v.value<DualBoot>().dualbootena;
+                jsonObj->insert(prop.name(),x.toInt());
+            }
+            if (strcmp(v.typeName(), "FpgaType") == 0)
+            {
+                QVariant x = v.value<FpgaType>().selectedfpga;
                 jsonObj->insert(prop.name(),x.toInt());
             }
         }
