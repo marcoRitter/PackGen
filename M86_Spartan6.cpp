@@ -29,7 +29,8 @@ M86_Spartan6::M86_Spartan6(QObject *parent) :
     connect(pDelete, &QAction::triggered, this, &Node::delete_node);
 
     connect(parent->parent(), SIGNAL (generateFpga()), this, SLOT(generate_package()));
-    qDebug() << "parent = " << parent->parent();
+    qDebug() << "parent of M86_Spartan = " << parent->parent();
+    m_parent = parent;
 
 }
 M86_Spartan6::~M86_Spartan6()
@@ -37,6 +38,7 @@ M86_Spartan6::~M86_Spartan6()
     disconnect(pGenerate, SIGNAL (triggered()),this, SLOT(generate_package()));
     disconnect(pNewFPGA, &QAction::triggered, this, &M86_Spartan6::new_FPGA);
     disconnect(pDelete, &QAction::triggered, this, &Node::delete_node);
+    disconnect(m_parent->parent(), SIGNAL (generateFpga()), this, SLOT(generate_package()));
     delete pGenerate;
     delete pNewFPGA;
     delete pDelete;

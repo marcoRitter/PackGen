@@ -71,6 +71,8 @@ private:
     QAction * pGenerate;
     QAction * pNewFPGA;
     QAction * pDelete;
+
+    QObject * m_parent;
 };
 
 #endif // M86_Spartan6_H
