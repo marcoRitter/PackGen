@@ -58,11 +58,11 @@ int Node::get_need_redraw()
 
 bool Node::readJson(const QJsonObject *jsonObj)
 {
-    qDebug() << "Read Json";
+//  qDebug() << "Read Json";
     QJsonValue jsonVal;
     int cnt = jsonObj->count();
     QStringList keys = jsonObj->keys();
-    qDebug() << keys;
+//  qDebug() << keys;
     foreach (QString key, keys)
     {
         if (key != "childes")
@@ -107,35 +107,16 @@ bool Node::readJson(const QJsonObject *jsonObj)
             }
             else
             {
-
-                if (v.type() == QVariant::String)
-                    this->setProperty(key.toLatin1().data(),jsonVal.toString());
-                if (v.type() == QVariant::UInt)
-                    this->setProperty(key.toLatin1().data(),jsonVal.toInt());
-                if (v.type() == QVariant::Bool)
-                    this->setProperty(key.toLatin1().data(),jsonVal.toBool());
+                    if (v.type() == QVariant::String)
+                        this->setProperty(key.toLatin1().data(),jsonVal.toString());
+                    if (v.type() == QVariant::UInt)
+                        this->setProperty(key.toLatin1().data(),jsonVal.toInt());
+                    if (v.type() == QVariant::Bool)
+                        this->setProperty(key.toLatin1().data(),jsonVal.toBool());
             }
-            qDebug() << key;
-
+//          qDebug() << key;
         }
     }
-//    setDescription(jsonObj->value("description").toString());
-
-//    jsonVal = jsonObj->value("filename");
-//    FileString s;
-//    s.filestring = jsonVal.toString();
-//    setFilename(s);
-
-//    setDesignnumber(jsonObj->value("designnumber").toString());
-//    setVer_major(jsonObj->value("ver_major").toString());
-//    setVer_minor(jsonObj->value("ver_minor").toString());
-
-//    jsonVal = jsonObj->value("start_addr");
-//    HexString h;
-//    h.hexstring = jsonVal.toString();
-//    setStart_addr(h);
-
-
     return true;
 }
 
