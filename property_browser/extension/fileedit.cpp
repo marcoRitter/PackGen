@@ -26,6 +26,9 @@
 #include <QToolButton>
 #include <QFileDialog>
 #include <QFocusEvent>
+#include <QDebug>
+#include <customtype.h>
+#include <mainwindow.h>
 
 FileEdit::FileEdit(QWidget *parent)
     : QWidget(parent)
@@ -47,11 +50,20 @@ FileEdit::FileEdit(QWidget *parent)
                 this, SIGNAL(filePathChanged(const QString &)));
     connect(button, SIGNAL(clicked()),
                 this, SLOT(buttonClicked()));
+    p_parent = parent;
 }
 
 void FileEdit::buttonClicked()
 {
+
+    qDebug() << "parent " << p_parent->parent()->parent()->parent()->parent()->parent()->parent()->parent();
+    MainWindow *pWindow =(MainWindow*) p_parent->parent()->parent()->parent()->parent()->parent()->parent()->parent();
+    qDebug() << "selected" << pWindow->getMCurrent();
+
     QString filePath = QFileDialog::getOpenFileName(this, tr("Choose a file"), theLineEdit->text(), theFilter);
+
+
+//  QString filePath = QFileDialog::getExistingDirectory(this, tr("Choosa a folder"), theLineEdit->text(), 0);
     if (filePath.isNull())
         return;
     theLineEdit->setText(filePath);

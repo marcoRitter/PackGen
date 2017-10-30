@@ -47,6 +47,8 @@ private slots:
 private:
     QLineEdit *theLineEdit;
     QString theFilter;
+
+    QWidget *p_parent;
 };
 
 #endif
