@@ -30,7 +30,9 @@ public:
         case 1: return "0x2000"; break;
         case 2: return "0x4000"; break;
         case 3: return "0x8000"; break;
-        case 4: return "0xF000"; break;
+        case 4: return "0xC000"; break;
+        case 5: return "0xE000"; break;
+        case 6: return "0xF000"; break;
         default: return "0x0000"; break;
         }
     }
