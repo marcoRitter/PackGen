@@ -44,14 +44,24 @@ M86_Spartan6::~M86_Spartan6()
     delete pDelete;
 }
 
-FileString M86_Spartan6::filename()
+FileString M86_Spartan6::location()
 {
-    return m_filename;
+    return m_location;
 }
 
-void M86_Spartan6::setFilename(FileString name)
+void M86_Spartan6::setLocation(FileString foldername)
 {
-    m_filename = name;
+    m_location = foldername;
+}
+
+QString M86_Spartan6::pkgName()
+{
+    return m_pkgName;
+}
+
+void M86_Spartan6::setPkgName(QString pkgname)
+{
+    m_pkgName = pkgname;
 }
 
 QString M86_Spartan6::ver_major()
@@ -83,17 +93,6 @@ void M86_Spartan6::setVer_subminor(QString ver_subminor)
 {
     m_ver_subminor = ver_subminor;
 }
-/*
-VER_STATE M86_Spartan6::ver_state()
-{
-    return m_ver_state;
-}
-
-void M86_Spartan6::setVer_state(VER_STATE ver_state)
-{
-    m_ver_state = ver_state;
-}
-*/
 
 void M86_Spartan6::node_menue(QMenu *menu)
 {
@@ -164,7 +163,7 @@ bool M86_Spartan6::generate_package()
     msgBox.exec();
 
 //  qDebug() << "ver_major : " << this->property("ver_major").toString();
-    FileString itsFileName = this->filename();
+    FileString itsFileName = this->location();
 //  qDebug() << "file_name = " << itsFileName.filestring;
 
     return true;

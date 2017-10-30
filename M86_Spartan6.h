@@ -24,7 +24,8 @@ class M86_Spartan6 : public Node
     // property to identify the node type
 //  Q_PROPERTY(QString node_type READ node_type)
 
-    Q_PROPERTY(FileString filename READ filename WRITE setFilename)
+    Q_PROPERTY(QString pkgName READ pkgName WRITE setPkgName)
+    Q_PROPERTY(FileString location READ location WRITE setLocation)
     Q_PROPERTY(QString ver_major READ ver_major WRITE setVer_major)
     Q_PROPERTY(QString ver_minor READ ver_minor WRITE setVer_minor)
     Q_PROPERTY(QString ver_subminor READ ver_subminor WRITE setVer_subminor)
@@ -35,8 +36,11 @@ public:
 
     QString node_type() {return"M86_Spartan6";}
 
-    FileString filename();
-    void setFilename(FileString filename);
+    FileString location();
+    void setLocation(FileString filename);
+
+    QString pkgName();
+    void setPkgName (QString pkgname);
 
     QString ver_major();
     void setVer_major(QString ver_major);
@@ -61,7 +65,8 @@ private slots:
 
 private:
 //    QFileInfo m_file;
-    FileString m_filename;
+    QString m_pkgName;
+    FileString m_location;
     QString m_ver_major = "";
     QString m_ver_minor = "";
     QString m_ver_subminor = "";
