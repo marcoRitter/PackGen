@@ -12,7 +12,7 @@ public:
     void setSrecExe (QString filename);
     QString getSrecExe () {return m_srecExe;}
 
-    int runSrec (const QMap<QString, QString>& srecParams, QString *output);
+    int runSrec (const QStringList & parameters, QString *output);
 
 private:
     QString m_srecExe;
