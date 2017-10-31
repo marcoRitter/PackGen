@@ -114,6 +114,7 @@ void M86_Spartan6::new_FPGA()
     this->setChild(this->rowCount(),m);
 }
 
+
 bool M86_Spartan6::generate_package()
 {
     qDebug() << "Generate Spartan M86Package";

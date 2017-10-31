@@ -248,8 +248,7 @@ void MainWindow::draw_property_browser()
     // Property Editor aufbauen
     for ( int i = 1; i < cnt; i++ ) {
         QMetaProperty prop = meta->property(i);
- //     qDebug() << "property " << i << " = " << prop.name() << "; value = " << prop.read(n);
-
+//      qDebug() << "property " << i << " = " << prop.name() << "; value = " << prop.read(n);
 
         if ( prop.isWritable() ) {
 
@@ -259,6 +258,8 @@ void MainWindow::draw_property_browser()
            case QVariant::String :
                  property = variantManager->addProperty(QVariant::String, prop.name());
                  property->setValue(v.toString());
+                 property->setToolTip(setTipForProperty(prop));
+                 property->setAttribute("regExp", setRegExpForProperty(prop));
                  break ;
            case QVariant::UInt :
                property = variantManager->addProperty(QVariant::Int, prop.name());
@@ -378,4 +379,35 @@ QObject * getObjectWithName (const QObject * pobject,const QString &name)
 
     }
     return pointer;
+}
+
+QString MainWindow::setTipForProperty(const QMetaProperty & prop)
+{
+    QString toolTip = "defalut";
+    if (strcmp(prop.name(), "description") == 0)
+        toolTip = "description";
+    if (strcmp(prop.name(), "pkgName") == 0)
+        toolTip = "Output filename";
+    if (strcmp(prop.name(), "ver_major") == 0)
+        toolTip = "Major version of project (0x..)";
+    if (strcmp(prop.name(), "ver_minor") == 0)
+        toolTip = "Minor version of project(0x..)";
+    if (strcmp(prop.name(), "ver_subminor") == 0)
+        toolTip = "Minor subversion of project(0x..)";
+    return toolTip;
+}
+
+QRegExp MainWindow::setRegExpForProperty(const QMetaProperty &prop)
+{
+    QRegExp regexp;
+    regexp.setPattern(".*");
+    if (strcmp(prop.name(), "ver_major") == 0 ||
+        strcmp(prop.name(), "ver_minor") == 0 ||
+        strcmp(prop.name(), "ver_subminor") == 0 ||
+        strcmp(prop.name(), "revision") == 0 ||
+        strcmp(prop.name(), "testversion") == 0 )
+            regexp.setPattern("0x[0-9A-Fa-f]{1,2}");
+    if (strcmp(prop.name(), "designnumber") == 0)
+        regexp.setPattern("0x[0-9A-Fa-f]{1,4}");
+    return regexp;
 }

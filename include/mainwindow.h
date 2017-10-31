@@ -72,6 +72,8 @@ private slots:
 
     void on_actionGenerateFpga_triggered();
 
+    QString setTipForProperty (const QMetaProperty & prop);
+    QRegExp setRegExpForProperty (const QMetaProperty &prop);
 
 private:
     Ui::MainWindow *ui;

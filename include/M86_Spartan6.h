@@ -50,6 +50,7 @@ public:
 
     QString ver_subminor();
     void setVer_subminor(QString ver_subminor);
+
 /*
     VER_STATE ver_state();
     void setVer_state(VER_STATE ver_state);
