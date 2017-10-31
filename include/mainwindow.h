@@ -9,18 +9,18 @@
 
 #include <QMainWindow>
 
-#include "./property_browser/qtvariantproperty.h"
-#include "./property_browser/qttreepropertybrowser.h"
-#include "./property_browser/qtpropertymanager.h"
-#include "./property_browser/qteditorfactory.h"
-#include "./property_browser/qttreepropertybrowser.h"
-#include "./property_browser/qtbuttonpropertybrowser.h"
-#include "./property_browser/qtgroupboxpropertybrowser.h"
-#include "./property_browser/extension/variantmanager.h"
-#include "./property_browser/extension/variantfactory.h"
-#include "./property_browser/extension/filepathmanager.h"
-#include "./property_browser/extension/fileeditfactory.h"
-#include "./property_browser/extension/fileedit.h"
+#include "qtvariantproperty.h"
+#include "qttreepropertybrowser.h"
+#include "qtpropertymanager.h"
+#include "qteditorfactory.h"
+#include "qttreepropertybrowser.h"
+#include "qtbuttonpropertybrowser.h"
+#include "qtgroupboxpropertybrowser.h"
+#include "variantmanager.h"
+#include "variantfactory.h"
+#include "filepathmanager.h"
+#include "fileeditfactory.h"
+#include "fileedit.h"
 
 
 

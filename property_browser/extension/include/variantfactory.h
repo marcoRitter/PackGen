@@ -21,45 +21,37 @@
 **
 ****************************************************************************/
 
-#ifndef FILEPATHMANAGER_H
-#define FILEPATHMANAGER_H
+#ifndef VARIANTFACTORY_H
+#define VARIANTFACTORY_H
 
-#include "../qtpropertybrowser.h"
-#include "customtype.h"
+#include "qtvariantproperty.h"
 
-#include <QMap>
+class FileEdit;
 
-class FilePathManager : public QtAbstractPropertyManager
+class VariantFactory : public QtVariantEditorFactory
 {
     Q_OBJECT
 public:
-    FilePathManager(QObject *parent = 0)
-        : QtAbstractPropertyManager(parent)
+    VariantFactory(QObject *parent = 0)
+        : QtVariantEditorFactory(parent)
             { }
 
-    QString value(const QtProperty *property) const;
-    QString filter(const QtProperty *property) const;
-
-public slots:
-    void setValue(QtProperty *property, const QString &val);
-    void setFilter(QtProperty *property, const QString &fil);
-signals:
-    void valueChanged(QtProperty *property, const QString &val);
-    void filterChanged(QtProperty *property, const QString &fil);
+    virtual ~VariantFactory();
 protected:
-    virtual QString valueText(const QtProperty *property) const { return value(property); }
-    virtual void initializeProperty(QtProperty *property) { theValues[property] = Data(); }
-    virtual void uninitializeProperty(QtProperty *property) { theValues.remove(property); }
+    virtual void connectPropertyManager(QtVariantPropertyManager *manager);
+    virtual QWidget *createEditor(QtVariantPropertyManager *manager, QtProperty *property,
+                QWidget *parent);
+    virtual void disconnectPropertyManager(QtVariantPropertyManager *manager);
+private slots:
+    void slotPropertyChanged(QtProperty *property, const QVariant &value);
+    void slotPropertyAttributeChanged(QtProperty *property, const QString &attribute, const QVariant &value);
+    void slotSetValue(const QString &value);
+    void slotEditorDestroyed(QObject *object);
 private:
-
-    struct Data
-    {
-        QString value;
-        QString filter;
-    };
-
-    QMap<const QtProperty *, Data> theValues;
+    QMap<QtProperty *, QList<FileEdit *> > theCreatedEditors;
+    QMap<FileEdit *, QtProperty *> theEditorToProperty;
 };
+
 
 
 #endif

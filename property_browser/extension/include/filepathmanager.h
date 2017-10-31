@@ -21,47 +21,45 @@
 **
 ****************************************************************************/
 
-#ifndef VARIANTMANAGER_H
-#define VARIANTMANAGER_H
+#ifndef FILEPATHMANAGER_H
+#define FILEPATHMANAGER_H
 
-#include "../qtvariantproperty.h"
+#include "qtpropertybrowser.h"
 #include "customtype.h"
 
+#include <QMap>
 
-class VariantManager : public QtVariantPropertyManager
+class FilePathManager : public QtAbstractPropertyManager
 {
     Q_OBJECT
 public:
-    VariantManager(QObject *parent = 0)
-        : QtVariantPropertyManager(parent)
+    FilePathManager(QObject *parent = 0)
+        : QtAbstractPropertyManager(parent)
             { }
 
-    virtual QVariant value(const QtProperty *property) const;
-    virtual int valueType(int propertyType) const;
-    virtual bool isPropertyTypeSupported(int propertyType) const;
+    QString value(const QtProperty *property) const;
+    QString filter(const QtProperty *property) const;
 
-    virtual QStringList attributes(int propertyType) const;
-    virtual int attributeType(int propertyType, const QString &attribute) const;
-    virtual QVariant attributeValue(const QtProperty *property, const QString &attribute);
-
-
-    static int filePathTypeId();
 public slots:
-    virtual void setValue(QtProperty *property, const QVariant &val);
-    virtual void setAttribute(QtProperty *property,
-                const QString &attribute, const QVariant &value);
+    void setValue(QtProperty *property, const QString &val);
+    void setFilter(QtProperty *property, const QString &fil);
+signals:
+    void valueChanged(QtProperty *property, const QString &val);
+    void filterChanged(QtProperty *property, const QString &fil);
 protected:
-    virtual QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    virtual QString valueText(const QtProperty *property) const { return value(property); }
+    virtual void initializeProperty(QtProperty *property) { theValues[property] = Data(); }
+    virtual void uninitializeProperty(QtProperty *property) { theValues.remove(property); }
 private:
-    struct Data {
+
+    struct Data
+    {
         QString value;
         QString filter;
     };
+
     QMap<const QtProperty *, Data> theValues;
 };
-
 
 
 #endif

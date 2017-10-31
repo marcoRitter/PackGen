@@ -31,7 +31,7 @@
    <string>Package Generator v0.4</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset>
     <normaloff>:/Images/icons8-robot.png</normaloff>:/Images/icons8-robot.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -209,7 +209,7 @@
   <action name="actionLoad">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/Images/icons8-open.png</normaloff>:/Images/icons8-open.png</iconset>
+     <normaloff>:/Images/images/icons8-open.png</normaloff>:/Images/images/icons8-open.png</iconset>
    </property>
    <property name="text">
     <string>Load</string>
@@ -224,7 +224,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/Images/icons8-save.png</normaloff>:/Images/icons8-save.png</iconset>
+     <normaloff>:/Images/images/icons8-save.png</normaloff>:/Images/images/icons8-save.png</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -247,7 +247,7 @@
   <action name="actionNew">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/Images/icons8-file.png</normaloff>:/Images/icons8-file.png</iconset>
+     <normaloff>:/Images/images/icons8-file.png</normaloff>:/Images/images/icons8-file.png</iconset>
    </property>
    <property name="text">
     <string>New</string>
@@ -259,7 +259,7 @@
   <action name="actionSave_as">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/Images/icons8-save-as.png</normaloff>:/Images/icons8-save-as.png</iconset>
+     <normaloff>:/Images/images/icons8-save-as.png</normaloff>:/Images/images/icons8-save-as.png</iconset>
    </property>
    <property name="text">
     <string>Save as ...</string>
@@ -273,7 +273,7 @@
   <action name="actionGenerateFpga">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/Images/icons8-robot.png</normaloff>:/Images/icons8-robot.png</iconset>
+     <normaloff>:/Images/images/icons8-robot.png</normaloff>:/Images/images/icons8-robot.png</iconset>
    </property>
    <property name="text">
     <string>GenerateFpga</string>

@@ -2,9 +2,9 @@
 #define DECORATEDSTRING_H
 
 #include <QMap>
-#include "../qtpropertybrowser.h"
-#include "../qteditorfactory.h"
-#include "../qttreepropertybrowser.h"
+#include "qtpropertybrowser.h"
+#include "qteditorfactory.h"
+#include "qttreepropertybrowser.h"
 
 
 class DecoratedStringPropertyManager : public QtStringPropertyManager

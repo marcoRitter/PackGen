@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/Images">
+        <file>images/icons8-circuit.png</file>
+        <file>images/icons8-delete.png</file>
+        <file>images/icons8-electronics.png</file>
+        <file>images/icons8-engineering.png</file>
+        <file>images/icons8-file.png</file>
+        <file>images/icons8-open.png</file>
+        <file>images/icons8-processor.png</file>
+        <file>images/icons8-robot.png</file>
+        <file>images/icons8-save.png</file>
+        <file>images/icons8-save-as.png</file>
+        <file>images/icons8-transistor.png</file>
+        <file>images/integrated-circuit-256.png</file>
+        <file>images/new.png</file>
+    </qresource>
+</RCC>
