@@ -31,8 +31,6 @@ MainWindow::MainWindow(QWidget *parent) :
     m_model.appendRow(p);
 //  m_model.appendRow(p1);
 
-//  qDebug() << "m_model columnCount = " << m_model.columnCount();
-//  qDebug() << "m_model rowCount = " << m_model.rowCount();
     ui->treeView->setModel(&m_model);
 
     ui->treeView->expandAll();
