@@ -53,7 +53,8 @@ SOURCES += source/main.cpp\
     property_browser/extension/source/variantfactory.cpp \
     property_browser/extension/source/variantmanager.cpp \
     property_browser/extension/source/decoratedstring.cpp \
-    source/aboutdialog.cpp
+    source/aboutdialog.cpp \
+    source/srec_wrapper.cpp
 
 HEADERS  += include/mainwindow.h \
     include/node.h \
@@ -80,7 +81,8 @@ HEADERS  += include/mainwindow.h \
     property_browser/extension/include/variantfactory.h \
     property_browser/extension/include/variantmanager.h \
     property_browser/extension/include/decoratedstring.h \
-    include/aboutdialog.h
+    include/aboutdialog.h \
+    include/srec_wrapper.h
 
 FORMS    += resource/mainwindow.ui \
     resource/aboutdialog.ui
