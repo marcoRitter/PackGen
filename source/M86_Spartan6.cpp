@@ -4,6 +4,7 @@
 #include <QJsonDocument>
 #include <QMessageBox>
 #include <QProcess>
+#include "srec_wrapper.h"
 
 
 M86_Spartan6::M86_Spartan6(QObject *parent) :
@@ -117,11 +118,13 @@ void M86_Spartan6::new_FPGA()
 
 bool M86_Spartan6::generate_package()
 {
-    qDebug() << "Generate Spartan M86Package";
-    qDebug() << this;
-    QString logichdrProg = m_parent->property("logichdr").value<FileString>().filestring;
-    qDebug() << logichdrProg;
-
+//  qDebug() << "Generate Spartan M86Package";
+//  QString logichdrProg = m_parent->property("logichdr").value<FileString>().filestring;
+//  qDebug() << logichdrProg;
+    srec_wrapper srecRun;
+    QMap<QString,QString> srecParams;
+    srecRun.setSrecExe(m_parent->property("srec_cat").value<FileString>().filestring);
+    srecParams.insert("--output", this->property("location").value<FileString>().filestring + "/" + this->property("pkgName").value<QString>() + ".hex");
 
     QObjectList childrenOfSpartan = this->children();
     QString parameters = "";
@@ -129,11 +132,16 @@ bool M86_Spartan6::generate_package()
     {
         if (childOfSpartan->objectName()=="FPGA")
         {
-            qDebug() << "Object name" << childOfSpartan->objectName();
-            qDebug() << "design number" << childOfSpartan->property("designnumber").value<QString>();
-            qDebug() << "flash size" << childOfSpartan->property("flash_size").value<FlashSize>().selectedsize;
-            qDebug() << "golden ena" << childOfSpartan->property("dualboot").value<DualBoot>().dualbootena;
-            qDebug() << "filename " << childOfSpartan->property("filename").value<FileString>().filestring;
+            srecParams.insert("input", childOfSpartan->property("filename").value<FileString>().filestring);
+            srecParams.insert("--offset", childOfSpartan->property("start_addr").value<HexString>().hexstring);
+            if (childOfSpartan->property("fpgatype").value<FpgaType>().selectedfpga)
+                srecParams.insert("--bit_reverse","");
+
+//          qDebug() << "Object name" << childOfSpartan->objectName();
+//          qDebug() << "design number" << childOfSpartan->property("designnumber").value<QString>();
+//          qDebug() << "flash size" << childOfSpartan->property("flash_size").value<FlashSize>().selectedsize;
+//          qDebug() << "golden ena" << childOfSpartan->property("dualboot").value<DualBoot>().dualbootena;
+//          qDebug() << "filename " << childOfSpartan->property("filename").value<FileString>().filestring;
             parameters += "Design Number = ";
             parameters += childOfSpartan->property("designnumber").value<QString>();
             parameters += "\n start addr = ";
@@ -141,30 +149,33 @@ bool M86_Spartan6::generate_package()
         }
     }
 
-    qDebug() << "start logichdr";
-    QProcess *process = new QProcess(this);
-    process->start(logichdrProg, QIODevice::ReadWrite);
+    QString * out;
+    qDebug() << "Srec status " << srecRun.runSrec(srecParams, out);
 
-    if (!process->waitForStarted())
-        qDebug() << "error by starting logichdr.exe";
-    if (!process->waitForFinished())
-        qDebug() << "logichdr.exe failed";
+//  qDebug() << "start logichdr";
+//  QProcess *process = new QProcess(this);
+//  process->start(logichdrProg, QIODevice::ReadWrite);
 
-    QByteArray stdoutResults = process->readAllStandardOutput();
-
-    parameters += stdoutResults;
+//  if (!process->waitForStarted())
+//      qDebug() << "error by starting logichdr.exe";
+//  if (!process->waitForFinished())
+//      qDebug() << "logichdr.exe failed";
+//
+//  QByteArray stdoutResults = process->readAllStandardOutput();
+//
+//  parameters += stdoutResults;
 //  qDebug() << "logichdr returned value" << stdoutResults;
 
 
-    QMessageBox msgBox;
-    msgBox.setText("Generate m86 with following parameters");
-    msgBox.setDetailedText(parameters);
+//  QMessageBox msgBox;
+//  msgBox.setText("Generate m86 with following parameters");
+//  msgBox.setDetailedText(parameters);
 //  msgBox.setIcon(QMessageBox::Information);
-    msgBox.setStyleSheet("QLabel{min-width: 500px}");
-    msgBox.exec();
+//  msgBox.setStyleSheet("QLabel{min-width: 500px}");
+//  msgBox.exec();
 
 //  qDebug() << "ver_major : " << this->property("ver_major").toString();
-    FileString itsFileName = this->location();
+//  FileString itsFileName = this->location();
 //  qDebug() << "file_name = " << itsFileName.filestring;
 
     return true;
