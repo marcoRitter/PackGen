@@ -18,10 +18,10 @@ void saveTreeNode(QStandardItem * pItem, QJsonObject *jsonObj)
     Node *n = (Node *)pItem;
 //    QJsonObject jsonObj;
 
-    qDebug() << "Nodename : " << n->description();
+//  qDebug() << "Nodename : " << n->description();
     const QMetaObject *meta = n->metaObject() ;
     int cnt = meta->propertyCount();
-    qDebug() << "number of properties : " << cnt;
+//  qDebug() << "number of properties : " << cnt;
 //    for ( int i = 0; i < cnt; i++ )
 //    {
 //        QMetaProperty prop = meta->property(i);

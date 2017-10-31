@@ -91,9 +91,9 @@ void MainWindow::on_actionSave_as_triggered()
 
 void MainWindow::on_actionLoad_triggered()
 {
-    qDebug() << "Load";
+//  qDebug() << "Load";
     Project_FileName = QFileDialog::getOpenFileName(this, tr("Open File"),".",tr("Pack Gen Files (*.pkg)"));
-    qDebug() << "file opened";
+//  qDebug() << "file opened";
     if (Project_FileName != "")
     {
         QStandardItem *project;
