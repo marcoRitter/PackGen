@@ -118,31 +118,24 @@ void M86_Spartan6::new_FPGA()
 
 bool M86_Spartan6::generate_package()
 {
-//  qDebug() << "Generate Spartan M86Package";
-//  QString logichdrProg = m_parent->property("logichdr").value<FileString>().filestring;
-//  qDebug() << logichdrProg;
-
     srec_wrapper srecRun;
     QStringList parameters;
     srecRun.setSrecExe(m_parent->property("srec_cat").value<FileString>().filestring);
 
     QObjectList childrenOfSpartan = this->children();
-//  QString parameters = "";
     for (auto const& childOfSpartan : childrenOfSpartan)
     {
         if (childOfSpartan->objectName()=="FPGA")
         {
             parameters.append(childOfSpartan->property("filename").value<FileString>().filestring);
-            parameters.append(" --binary ");
-//          parameters.append(" --offset ");
-//          parameters.append(childOfSpartan->property("start_addr").value<HexString>().hexstring);
+            parameters.append("--binary");
+            parameters.append("--offset");
+            parameters.append(childOfSpartan->property("start_addr").value<HexString>().hexstring);
             if (childOfSpartan->property("fpgatype").value<FpgaType>().selectedfpga)
-                parameters.append(" --bit_reverse ");
-            parameters.append(" --output ");
+                parameters.append("--bit_reverse");
+            parameters.append("--output");
             parameters.append(this->property("location").value<FileString>().filestring + "/" + this->property("pkgName").value<QString>() + ".hex");
-            parameters.append(" --intel");
-
-
+            parameters.append("--intel");
 //          qDebug() << "Object name" << childOfSpartan->objectName();
 //          qDebug() << "design number" << childOfSpartan->property("designnumber").value<QString>();
 //          qDebug() << "flash size" << childOfSpartan->property("flash_size").value<FlashSize>().selectedsize;
@@ -155,30 +148,19 @@ bool M86_Spartan6::generate_package()
         }
     }
 
-    QString * out;
-    qDebug() << "Srec status " << srecRun.runSrec(parameters, out);
+    QString dlgOut;
+    qDebug() << "Srec status " << srecRun.runSrec(parameters);
 
-//  qDebug() << "start logichdr";
-//  QProcess *process = new QProcess(this);
-//  process->start(logichdrProg, QIODevice::ReadWrite);
+    dlgOut.append(srecRun.getRuncmd());
+    dlgOut.append(srecRun.getOutput());
+    qDebug() << dlgOut;
 
-//  if (!process->waitForStarted())
-//      qDebug() << "error by starting logichdr.exe";
-//  if (!process->waitForFinished())
-//      qDebug() << "logichdr.exe failed";
-//
-//  QByteArray stdoutResults = process->readAllStandardOutput();
-//
-//  parameters += stdoutResults;
-//  qDebug() << "logichdr returned value" << stdoutResults;
-
-
-//  QMessageBox msgBox;
-//  msgBox.setText("Generate m86 with following parameters");
-//  msgBox.setDetailedText(parameters);
-//  msgBox.setIcon(QMessageBox::Information);
+    QMessageBox msgBox;
+    msgBox.setText("Generate m86 with following parameters");
+    msgBox.setDetailedText(dlgOut);
+    msgBox.setIcon(QMessageBox::Information);
 //  msgBox.setStyleSheet("QLabel{min-width: 500px}");
-//  msgBox.exec();
+    msgBox.exec();
 
 //  qDebug() << "ver_major : " << this->property("ver_major").toString();
 //  FileString itsFileName = this->location();
