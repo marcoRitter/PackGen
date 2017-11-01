@@ -1,6 +1,7 @@
 #include <QDebug>
 #include <QString>
 #include <QProcess>
+#include <QTextCodec>
 #include "srec_wrapper.h"
 
 
@@ -19,24 +20,31 @@ void srec_wrapper::setSrecExe(QString filename)
     m_srecExe = filename;
 }
 
-int srec_wrapper::runSrec(const QStringList & parameters, QString *output)
+QString srec_wrapper::getOutputFileName(const QString &inFile)
 {
-    qDebug() << "srec_exe " << m_srecExe;
+    QString a = "a";
+    return a;
+}
 
-        qDebug() << parameters;
-
+int srec_wrapper::runSrec(const QStringList & parameters)
+{
     QProcess *process = new QProcess(0);
-//  process->start(m_srecExe, parameters, QIODevice::ReadWrite);
-//  process->start("echo ", parameters, QIODevice::ReadWrite);
-    process->start("echo ", parameters, QIODevice::ReadWrite);
+    m_runcmd.append(m_srecExe);
+    for (const auto & p : parameters)
+    {
+        m_runcmd.append(" ");
+        m_runcmd.append(p);
+    }
 
+    process->start(m_srecExe, parameters, QIODevice::ReadWrite);
+//  process->start("echo", parameters, QIODevice::ReadWrite);
 
-  if (!process->waitForStarted())
-      qDebug() << "error by executing srec_cat";
-  if (!process->waitForFinished())
-      qDebug() << "srec_cat failed";
+    if (!process->waitForStarted())
+        qDebug() << "error by executing srec_cat";
+    if (!process->waitForFinished())
+        qDebug() << "srec_cat failed";
 
-   QByteArray result = process->readAllStandardOutput();
-   qDebug() << result;
-   return process->exitStatus();
+    int ret = process->exitCode();
+    delete process;
+    return ret;
 }
