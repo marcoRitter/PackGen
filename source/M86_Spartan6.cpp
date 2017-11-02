@@ -123,33 +123,10 @@ bool M86_Spartan6::generate_package()
     srecRun.setSrecExe(m_parent->property("srec_cat").value<FileString>().filestring);
 
     QObjectList childrenOfSpartan = this->children();
-    for (auto const& childOfSpartan : childrenOfSpartan)
-    {
-        if (childOfSpartan->objectName()=="FPGA")
-        {
-            parameters.append(childOfSpartan->property("filename").value<FileString>().filestring);
-            parameters.append("--binary");
-            parameters.append("--offset");
-            parameters.append(childOfSpartan->property("start_addr").value<HexString>().hexstring);
-            if (childOfSpartan->property("fpgatype").value<FpgaType>().selectedfpga)
-                parameters.append("--bit_reverse");
-            parameters.append("--output");
-            parameters.append(this->property("location").value<FileString>().filestring + "/" + this->property("pkgName").value<QString>() + ".hex");
-            parameters.append("--intel");
-//          qDebug() << "Object name" << childOfSpartan->objectName();
-//          qDebug() << "design number" << childOfSpartan->property("designnumber").value<QString>();
-//          qDebug() << "flash size" << childOfSpartan->property("flash_size").value<FlashSize>().selectedsize;
-//          qDebug() << "golden ena" << childOfSpartan->property("dualboot").value<DualBoot>().dualbootena;
-//          qDebug() << "filename " << childOfSpartan->property("filename").value<FileString>().filestring;
-//          parameters += "Design Number = ";
-//          parameters += childOfSpartan->property("designnumber").value<QString>();
-//          parameters += "\n start addr = ";
-//          parameters += childOfSpartan->property("start_addr").value<HexString>().hexstring;
-        }
-    }
+    srecRun.setParametersForSrec(childrenOfSpartan);
 
     QString dlgOut;
-    qDebug() << "Srec status " << srecRun.runSrec(parameters);
+    qDebug() << "Srec status " << srecRun.runSrec();
 
     dlgOut.append(srecRun.getRuncmd());
     dlgOut.append(srecRun.getOutput());
