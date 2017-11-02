@@ -1,7 +1,9 @@
 #ifndef SREC_WRAPPER_H
 #define SREC_WRAPPER_H
 #include <QString>
+#include <QStringList>
 #include <QMap>
+#include <QObject>
 
 class srec_wrapper
 {
@@ -12,16 +14,20 @@ public:
     void setSrecExe (QString filename);
     QString getSrecExe () {return m_srecExe;}
 
-    int runSrec (const QStringList & parameters);
+    int runSrec ();
 
     QString getOutput () {return m_output;}
     QString getRuncmd () {return m_runcmd;}
-    QString getOutputFileName (const QString& inFile);
+    QString getOutputFileName(const QFile &inFile);
+
+    int setParametersForSrec (const QObjectList & parametersParent);
 
 private:
     QString m_srecExe;
     QString m_output;
     QString m_runcmd;
+    QStringList m_parameters;
+
 
     QMap<QString, QString> m_inputKeys;
 
