@@ -36,7 +36,14 @@ int srec_wrapper::setParametersForSrec (const QObjectList & parametersParent)
     {
         if (childOfFpga->objectName()=="FPGA")
         {
-            m_parameters.append(childOfFpga->property("filename").value<FileString>().filestring);
+            QFileInfo bitFile = childOfFpga->property("filename").value<FileString>().filestring;
+            if (!(bitFile.exists() && bitFile.isFile()))
+            {
+                qDebug() << bitFile.filePath() << "file doesn't exist";
+                m_output = bitFile.filePath() + " file doesn't exist";
+                return 0;
+            }
+            m_parameters.append(bitFile.filePath());
             m_parameters.append("--binary");
             m_parameters.append("--offset");
             m_parameters.append(childOfFpga->property("start_addr").value<HexString>().hexstring);
@@ -47,25 +54,34 @@ int srec_wrapper::setParametersForSrec (const QObjectList & parametersParent)
             outputFile.append(childOfFpga->property("filename").value<FileString>().filestring);
             // TODO:
             // replace childOfFpga->parent()->property...
-            m_parameters.append(childOfFpga->parent()->property("location").value<FileString>().filestring + "/" +
+            outputFile.append(childOfFpga->parent()->property("location").value<FileString>().filestring + "/" +
                               getOutputFileName((QFile)outputFile) + ".hex");
+
+            m_parameters.append(outputFile);
             m_parameters.append("--intel");
         }
     }
     return 1;
 }
 
-int srec_wrapper::runSrec()
+int srec_wrapper::runSrec(const QObjectList & parametersParent)
 {
+
+    if (setParametersForSrec(parametersParent))
+    {
+        m_output.append(m_runcmd);
+    }
+    else
+        return 0;
+
     QProcess *process = new QProcess(0);
     m_runcmd.append(m_srecExe);
-/*
+
     for (const auto & p : m_parameters)
     {
         m_runcmd.append(" ");
         m_runcmd.append(p);
     }
-*/
 
     process->start(m_srecExe, m_parameters, QIODevice::ReadWrite);
 //  process->start("echo", parameters, QIODevice::ReadWrite);

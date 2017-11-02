@@ -14,7 +14,7 @@ public:
     void setSrecExe (QString filename);
     QString getSrecExe () {return m_srecExe;}
 
-    int runSrec ();
+    int runSrec (const QObjectList & parametersParent);
 
     QString getOutput () {return m_output;}
     QString getRuncmd () {return m_runcmd;}
