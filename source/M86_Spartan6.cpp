@@ -123,19 +123,27 @@ bool M86_Spartan6::generate_package()
     srecRun.setSrecExe(m_parent->property("srec_cat").value<FileString>().filestring);
 
     QObjectList childrenOfSpartan = this->children();
-    srecRun.setParametersForSrec(childrenOfSpartan);
-
     QString dlgOut;
-    qDebug() << "Srec status " << srecRun.runSrec();
-
-    dlgOut.append(srecRun.getRuncmd());
-    dlgOut.append(srecRun.getOutput());
-    qDebug() << dlgOut;
-
     QMessageBox msgBox;
-    msgBox.setText("Generate m86 with following parameters");
+
+        if (srecRun.runSrec(childrenOfSpartan))
+        {
+            dlgOut.append(srecRun.getRuncmd());
+            dlgOut.append(srecRun.getOutput());
+            qDebug() << dlgOut;
+            msgBox.setText("Generate m86 with following parameters");
+            msgBox.setIcon(QMessageBox::Information);
+        }
+        else
+        {
+            dlgOut.append("error by generating hex file: ");
+            dlgOut.append(srecRun.getOutput());
+            msgBox.setText("error by generating hex file");
+            msgBox.setIcon(QMessageBox::Critical);
+        }
+
+
     msgBox.setDetailedText(dlgOut);
-    msgBox.setIcon(QMessageBox::Information);
 //  msgBox.setStyleSheet("QLabel{min-width: 500px}");
     msgBox.exec();
 
