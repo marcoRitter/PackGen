@@ -126,7 +126,7 @@ bool M86_Spartan6::generate_package()
     QString dlgOut;
     QMessageBox msgBox;
 
-        if (srecRun.runSrec(childrenOfSpartan))
+        if (!srecRun.runSrec(childrenOfSpartan))
         {
             dlgOut.append(srecRun.getRuncmd());
             dlgOut.append(srecRun.getOutput());
@@ -137,6 +137,7 @@ bool M86_Spartan6::generate_package()
         else
         {
             dlgOut.append("error by generating hex file: ");
+            dlgOut.append(srecRun.getRuncmd());
             dlgOut.append(srecRun.getOutput());
             msgBox.setText("error by generating hex file");
             msgBox.setIcon(QMessageBox::Critical);

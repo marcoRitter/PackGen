@@ -26,6 +26,7 @@ QString srec_wrapper::getOutputFileName(const QFile &inFile)
 {
     QFileInfo fileinfo(inFile.fileName());
     QString fileName = (QString)fileinfo.fileName();
+    qDebug() << "file name = " << fileName.section(".", 0,0);
     return fileName.section(".",0,0);
 }
 
@@ -54,10 +55,8 @@ int srec_wrapper::setParametersForSrec (const QObjectList & parametersParent)
             outputFile.append(childOfFpga->property("filename").value<FileString>().filestring);
             // TODO:
             // replace childOfFpga->parent()->property...
-            outputFile.append(childOfFpga->parent()->property("location").value<FileString>().filestring + "/" +
+            m_parameters.append(childOfFpga->parent()->property("location").value<FileString>().filestring + "/" +
                               getOutputFileName((QFile)outputFile) + ".hex");
-
-            m_parameters.append(outputFile);
             m_parameters.append("--intel");
         }
     }
@@ -72,7 +71,7 @@ int srec_wrapper::runSrec(const QObjectList & parametersParent)
         m_output.append(m_runcmd);
     }
     else
-        return 0;
+        return 1;
 
     QProcess *process = new QProcess(0);
     m_runcmd.append(m_srecExe);
