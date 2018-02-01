@@ -40,6 +40,7 @@ M86_Spartan6::~M86_Spartan6()
     disconnect(pNewFPGA, &QAction::triggered, this, &M86_Spartan6::new_FPGA);
     disconnect(pDelete, &QAction::triggered, this, &Node::delete_node);
     disconnect(m_parent->parent(), SIGNAL (generateFpga()), this, SLOT(generate_package()));
+//  qDebug()<< "M86_Spartan object removed";
     delete pGenerate;
     delete pNewFPGA;
     delete pDelete;

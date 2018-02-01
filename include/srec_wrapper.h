@@ -24,6 +24,8 @@ public:
 
 private:
     QString m_srecExe;
+    QString m_inputFile;
+    QString m_outputFile;
     QString m_output;
     QString m_runcmd;
     QStringList m_parameters;

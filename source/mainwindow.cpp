@@ -111,7 +111,7 @@ void MainWindow::on_actionNew_triggered()
     auto *old = m_model.takeItem(0,0);
     delete old;
     m_model.clear();
-    Project *p = new Project();
+    Project *p = new Project(this);
     p->setDescription("Main Project");
     m_model.appendRow(p);
     propertyEditor->clear();
