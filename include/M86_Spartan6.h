@@ -67,6 +67,7 @@ private slots:
 private:
 //    QFileInfo m_file;
     QString m_pkgName;
+    QString m_outPkgName;
     FileString m_location;
     QString m_ver_major = "";
     QString m_ver_minor = "";

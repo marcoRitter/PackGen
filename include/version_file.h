@@ -1,17 +1,14 @@
 #ifndef VERSION_FILE_H
 #define VERSION_FILE_H
 
+#include <QString>
+#include <QStringList>
+#include <QMap>
 #include <QObject>
+#include <QFile>
+#include <QTextStream>
 
-class version_file : public QObject
-{
-    Q_OBJECT
-public:
-    explicit version_file(QObject *parent = nullptr);
 
-signals:
-
-public slots:
-};
+int versionFileCreate (QString fileName, QString versionString);
 
 #endif // VERSION_FILE_H

@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QProcess>
 #include "srec_wrapper.h"
+#include "version_file.h"
 
 
 M86_Spartan6::M86_Spartan6(QObject *parent) :
@@ -122,6 +123,8 @@ bool M86_Spartan6::generate_package()
     srec_wrapper srecRun;
     QStringList parameters;
     srecRun.setSrecExe(m_parent->property("srec_cat").value<FileString>().filestring);
+    setLocation(this->property("location").value<FileString>().filestring);
+    qDebug() << (QString)location().filestring;
 
     QObjectList childrenOfSpartan = this->children();
     QString dlgOut;
@@ -144,6 +147,7 @@ bool M86_Spartan6::generate_package()
             msgBox.setIcon(QMessageBox::Critical);
         }
 
+//      if (versionFileCreate())
 
     msgBox.setDetailedText(dlgOut);
 //  msgBox.setStyleSheet("QLabel{min-width: 500px}");

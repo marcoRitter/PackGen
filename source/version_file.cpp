@@ -1,6 +1,14 @@
 #include "version_file.h"
 
-version_file::version_file(QObject *parent) : QObject(parent)
+int versionFileCreate(QString fileName, QString versionString)
 {
+    QFile versionFile (fileName);
 
+    if (versionFile.open(QIODevice::ReadWrite))
+    {
+        QTextStream stream(&versionFile);
+        stream << versionString << endl;
+    return 1;
+    }
+    return 0;
 }
