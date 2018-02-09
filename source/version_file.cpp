@@ -6,8 +6,10 @@ int versionFileCreate(QString fileName, QString versionString)
 
     if (versionFile.open(QIODevice::ReadWrite))
     {
+        versionFile.resize(0);
         QTextStream stream(&versionFile);
-        stream << versionString << endl;
+        stream << versionString;
+        versionFile.close();
     return 1;
     }
     return 0;
