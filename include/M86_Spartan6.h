@@ -65,6 +65,7 @@ public:
     {
         return m_verFileName;
     }
+
     QString getVerString();
     void setVerFileName()
     {
@@ -73,6 +74,21 @@ public:
         filenm.append("/");
         filenm.append(pkgName());
         filenm.append(".ver");
+        m_verFileName = filenm;
+    }
+
+    QString getScrFileName ()
+    {
+        return m_scriptFileName;
+    }
+
+    void setScrFileName()
+    {
+        FileString fn = location();
+        QString filenm = (fn.filestring);
+        filenm.append("/");
+        filenm.append(pkgName());
+        filenm.append(".mbs");
         m_verFileName = filenm;
     }
 
@@ -94,6 +110,7 @@ private:
     QString m_ver_subminor = "";
     VerState m_verstate;
     QString m_verFileName;
+    QString m_scriptFileName;
 
     // menu Actions
     QAction * pGenerate;

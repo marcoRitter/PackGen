@@ -10,5 +10,5 @@
 
 
 int versionFileCreate (QString fileName, QString versionString);
-
+int scriptFileCreate (QString fileName, QString dataToWrite, bool rewrite);
 #endif // VERSION_FILE_H
