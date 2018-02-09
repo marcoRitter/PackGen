@@ -4,6 +4,9 @@
 #include <QStringList>
 #include <QMap>
 #include <QObject>
+#include "fpga.h"
+#include "firmware.h"
+#include "version_file.h"
 
 class srec_wrapper
 {
