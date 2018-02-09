@@ -111,12 +111,21 @@ bool Node::readJson(const QJsonObject *jsonObj)
                         a.setValue<FpgaType>(d);
                         this->setProperty(key.toLatin1().data(),a);
                 }
+                if (strcmp(v.typeName(), "VerState") == 0)
+                {
+                        VerState d;
+                        d.selectedVersion = jsonVal.toInt();
+                        QVariant a;
+                        a.setValue<VerState>(d);
+                        this->setProperty(key.toLatin1().data(),a);
+                }
 
             }
             else
             {
                     if (v.type() == QVariant::String)
-                        this->setProperty(key.toLatin1().data(),jsonVal.toString());
+                        if (strcmp(key.toLatin1().data(), "node_type"))
+                            this->setProperty(key.toLatin1().data(),jsonVal.toString());
                     if (v.type() == QVariant::UInt)
                         this->setProperty(key.toLatin1().data(),jsonVal.toInt());
                     if (v.type() == QVariant::Bool)
@@ -157,6 +166,12 @@ bool Node::writeJson(QJsonObject *jsonObj)
                 QVariant x = v.value<FpgaType>().selectedfpga;
                 jsonObj->insert(prop.name(),x.toInt());
             }
+            if (strcmp(v.typeName(), "VerState") == 0)
+            {
+                QVariant x = v.value<VerState>().selectedVersion;
+                jsonObj->insert(prop.name(),x.toInt());
+            }
+
         }
         else
         {

@@ -119,7 +119,7 @@ bool Model::load(const QString &filename, QObject *parent)
          Project *x = (Project *)n;
          x->readJson(jsonObj);
      }
-     if (node_type == "M86_Spartan6")
+     if (node_type == "M86")
      {
          n = new M86_Spartan6(parent);
          M86_Spartan6 *x = (M86_Spartan6 *)n;
@@ -129,6 +129,12 @@ bool Model::load(const QString &filename, QObject *parent)
      {
          n = new Fpga(parent);
          Fpga *x = (Fpga *)n;
+         x->readJson(jsonObj);
+     }
+     if (node_type == "firmware")
+     {
+         n = new firmware(parent);
+         firmware *x = (firmware *)n;
          x->readJson(jsonObj);
      }
      if (node_type == "JADE_Package")
