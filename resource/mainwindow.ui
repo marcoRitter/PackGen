@@ -31,8 +31,8 @@
    <string>Package Generator v0.4</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/Images/icons8-robot.png</normaloff>:/Images/icons8-robot.png</iconset>
+   <iconset resource="resources.qrc">
+    <normaloff>:/Images/images/icons8-robot.png</normaloff>:/Images/images/icons8-robot.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QSplitter" name="splitter">
@@ -134,7 +134,7 @@
      <x>0</x>
      <y>0</y>
      <width>500</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

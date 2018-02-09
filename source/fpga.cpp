@@ -7,7 +7,7 @@ Fpga::Fpga(QObject *parent) :
     Node(parent,"FPGA")
 {
     QIcon DeleteIcon;
-    m_start_addr.hexstring = "0x";
+//  m_start_addr.hexstring = "0x";
     this->setObjectName("FPGA");
 
     DeleteIcon.addFile(":/Images/icons8-delete.png",QSize(25,25));
@@ -76,12 +76,12 @@ void Fpga::setTestversion(QString testversion)
     m_testversion = testversion;
 }
 
-HexString Fpga::start_addr()
+QString Fpga::start_addr()
 {
     return m_start_addr;
 }
 
-void Fpga::setStart_addr(HexString start_addr)
+void Fpga::setStart_addr(QString start_addr)
 {
     m_start_addr = start_addr;
 }
@@ -141,9 +141,34 @@ QVariant Fpga::updateStartAddress()
     QVariant a;
     HexString temp;
     if (m_dualboot.dualbootena && !m_fpgatype.selectedfpga)
-        m_start_addr = temp.get_offset(m_flashsize.selectedsize);
-    else
-        m_start_addr = temp.get_offset(255);
-    a.setValue<HexString>(m_start_addr);
-    return a.value<HexString>().hexstring;
+    {
+        switch (m_flashsize.selectedsize)
+        {
+            case 0: m_start_addr = "0x1000"; break;
+            case 1: m_start_addr = "0x2000"; break;
+            case 2: m_start_addr = "0x4000"; break;
+            case 3: m_start_addr = "0x8000"; break;
+            case 4: m_start_addr = "0x10000"; break;
+            case 5: m_start_addr = "0x20000"; break;
+            case 6: m_start_addr = "0x40000"; break;
+        }
+    }
+//      m_start_addr = temp.get_offset(m_flashsize.selectedsize);
+//  else
+//      m_start_addr = "0x0";//temp.get_offset(255);
+    a.setValue(m_start_addr);
+    return a;
+}
+
+QString Fpga::getVerString()
+{
+    QString ver = "";
+    ver.append("\"V");
+    ver.append(designnumber().section("",3,4));
+    ver.append(".");
+    ver.append(designnumber().section("",5,6));
+    ver.append(".");
+    ver.append(revision().section("",3,4));
+    ver.append('"');
+    return ver;
 }

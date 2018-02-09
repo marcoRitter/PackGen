@@ -23,7 +23,7 @@ class Fpga : public Node
     Q_PROPERTY(DualBoot dualboot READ dualboot WRITE setDualBoot )
 
     Q_PROPERTY(FlashSize flash_size READ flash_size WRITE setFlash_size)
-    Q_PROPERTY(HexString start_addr READ start_addr WRITE setStart_addr)
+    Q_PROPERTY(QString start_addr READ start_addr WRITE setStart_addr)
 
 public:
     Fpga(QObject *parent = nullptr);
@@ -46,8 +46,11 @@ public:
     QString testversion();
     void setTestversion(QString testversion);
 
-    HexString start_addr();
-    void setStart_addr(HexString start_addr);
+//  HexString start_addr();
+//  void setStart_addr(HexString start_addr);
+
+    QString start_addr();
+    void setStart_addr(QString start_addr);
 
     FlashSize flash_size();
     void setFlash_size(FlashSize flashsize);
@@ -57,6 +60,31 @@ public:
 
     QVariant updateStartAddress();
     void node_menue(QMenu *menu);
+
+    QString getVerString();
+
+    QString getVerFileName()
+    {
+        return m_verFileName;
+    }
+    void setVerFileName()
+    {
+        FileString fn = filename();
+        QString filenm = fn.filestring.section(".",0,0).append("_FPGA.ver");
+        m_verFileName = filenm;
+    }
+
+    QString getHexFileName()
+    {
+        return m_hexFileName;
+    }
+    void setHexFileName()
+    {
+        FileString fn = filename();
+        QString filenm = fn.filestring.section(".",0,0).append("_FPGA.h86");
+        m_hexFileName = filenm;
+    }
+
 
 signals:
     void need_redraw(const QString &name, const QVariant a);
@@ -83,11 +111,14 @@ private:
     QString m_designnumber = "";
     QString m_revision = "";
     QString m_testversion = "";
-    HexString m_start_addr;
+//  HexString m_start_addr;
+    QString m_start_addr;
     FlashSize m_flashsize;
 //  bool m_with_golden_reference;
     DualBoot m_dualboot;
 
+    QString m_verFileName;
+    QString m_hexFileName;
     QAction *pDeleteFPGA;
 
 };

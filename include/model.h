@@ -5,6 +5,7 @@
 #include <QtWidgets>
 #include "node.h"
 #include "fpga.h"
+#include "firmware.h"
 #include "project.h"
 #include "M86_Spartan6.h"
 #include "JADE_Moduledescription.h"

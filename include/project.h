@@ -12,7 +12,7 @@ class Project : public Node
 {
     Q_OBJECT
     // property to identify the node type
-//  Q_PROPERTY(QString node_type READ node_type)
+//  Q_PROPERTY(QString node_type READ node_type WRITE setNode_type)
 
     // Properties for this node
     Q_PROPERTY(QString name READ name WRITE setName)
@@ -29,6 +29,10 @@ public:
 #endif
 
     QString node_type() {return"Project";}
+//  void setNode_type(QString setNodeType)
+//  {
+//
+//  };
 
     QString name();
     void setName(QString name);

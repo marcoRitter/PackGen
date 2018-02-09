@@ -5,6 +5,7 @@
 #include <QMenu>
 #include "node.h"
 #include "fpga.h"
+#include "firmware.h"
 #include "customtype.h"
 
 /*
@@ -29,12 +30,13 @@ class M86_Spartan6 : public Node
     Q_PROPERTY(QString ver_major READ ver_major WRITE setVer_major)
     Q_PROPERTY(QString ver_minor READ ver_minor WRITE setVer_minor)
     Q_PROPERTY(QString ver_subminor READ ver_subminor WRITE setVer_subminor)
+    Q_PROPERTY(VerState verstate READ verstate WRITE setVerstate)
 //    Q_PROPERTY(VER_STATE ver_state READ ver_state WRITE setVer_state)
 public:
     M86_Spartan6(QObject *parent = nullptr);
     ~M86_Spartan6();
 
-    QString node_type() {return"M86_Spartan6";}
+    QString node_type() {return"M86";}
 
     FileString location();
     void setLocation(FileString filename);
@@ -51,16 +53,34 @@ public:
     QString ver_subminor();
     void setVer_subminor(QString ver_subminor);
 
+    VerState verstate();
+    void setVerstate (VerState verstate);
+
 /*
     VER_STATE ver_state();
     void setVer_state(VER_STATE ver_state);
 */
 
+    QString getVerFileName()
+    {
+        return m_verFileName;
+    }
+    QString getVerString();
+    void setVerFileName()
+    {
+        FileString fn = location();
+        QString filenm = (fn.filestring);
+        filenm.append("/");
+        filenm.append(pkgName());
+        filenm.append(".ver");
+        m_verFileName = filenm;
+    }
 
     void node_menue(QMenu *menu);
 
 private slots:
     void new_FPGA();
+    void new_Firmware();
     bool generate_package();
 
 
@@ -72,11 +92,13 @@ private:
     QString m_ver_major = "";
     QString m_ver_minor = "";
     QString m_ver_subminor = "";
-    //VER_STATE m_ver_state = Alpha;
+    VerState m_verstate;
+    QString m_verFileName;
 
     // menu Actions
     QAction * pGenerate;
     QAction * pNewFPGA;
+    QAction * pNewFirmware;
     QAction * pDelete;
 
     QObject * m_parent;
