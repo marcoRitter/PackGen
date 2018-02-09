@@ -7,5 +7,6 @@ void CustomType::setup()
     CustomTypeFile = qRegisterMetaType<DualBoot>("DualBoot");
     CustomTypeFile = qRegisterMetaType<FlashSize>("FlashSize");
     CustomTypeFile = qRegisterMetaType<FpgaType>("FpgaType");
+    CustomTypeFile = qRegisterMetaType<VerState>("VerState");
 }
 

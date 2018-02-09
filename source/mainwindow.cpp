@@ -208,6 +208,14 @@ void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
                 a.setValue<FpgaType>(fpgatype);
                 m_currentItem->setProperty(property->propertyName().toStdString().c_str(),a);
             }
+            if (strcmp(v.typeName(),"VerState") == 0)
+            {
+                QVariant a;
+                VerState verstate;
+                verstate.selectedVersion = val.toInt();
+                a.setValue<VerState>(verstate);
+                m_currentItem->setProperty(property->propertyName().toStdString().c_str(),a);
+            }
 
         }
         else
@@ -307,6 +315,12 @@ void MainWindow::draw_property_browser()
                    property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
                    property->setAttribute("enumNames",v.value<FpgaType>().fpgatype);
                    property->setValue(v.value<FpgaType>().selectedfpga);
+                }
+               if (strcmp(v.typeName(),"VerState") == 0)
+               {
+                   property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
+                   property->setAttribute("enumNames",v.value<VerState>().verstate);
+                   property->setValue(v.value<VerState>().selectedVersion);
                 }
                 break;
            default :
@@ -409,5 +423,7 @@ QRegExp MainWindow::setRegExpForProperty(const QMetaProperty &prop)
             regexp.setPattern("0x[0-9A-Fa-f]{1,2}");
     if (strcmp(prop.name(), "designnumber") == 0)
         regexp.setPattern("0x[0-9A-Fa-f]{1,4}");
+    if (strcmp(prop.name(), "start_addr") == 0)
+        regexp.setPattern("0x[0-9A-Fa-f]{1,8}");
     return regexp;
 }

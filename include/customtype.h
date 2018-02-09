@@ -65,11 +65,22 @@ public:
     FpgaType(const uint &value): selectedfpga(value) { }
 };
 
+class VerState
+{
+public:
+    QStringList verstate = {"Alpha", "Beta"};
+    uint selectedVersion = 0;
+    VerState() {}
+    VerState(const uint &value): selectedVersion(value) {}
+};
+
+
 Q_DECLARE_METATYPE(FileString)
 Q_DECLARE_METATYPE(HexString)
 Q_DECLARE_METATYPE(FlashSize)
 Q_DECLARE_METATYPE(DualBoot)
 Q_DECLARE_METATYPE(FpgaType)
+Q_DECLARE_METATYPE(VerState)
 
 
 
