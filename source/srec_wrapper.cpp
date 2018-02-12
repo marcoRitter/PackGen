@@ -41,6 +41,7 @@ int srec_wrapper::setParametersForSrec (const QObjectList & parametersParent)
 //          qDebug() <<"fpga ver string = " << fpga->getVerString();
             fpga->setVerFileName();
             fpga->setHexFileName();
+            fpga->setSrecParameters();
 //          qDebug() << "ver filename = " << fpga->getVerFileName();
 //          qDebug() << "h86 file = " << fpga->getHexFileName();
             if (!versionFileCreate(fpga->getVerFileName(),fpga->getVerString()))

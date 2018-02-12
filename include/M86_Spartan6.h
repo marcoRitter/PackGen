@@ -89,7 +89,7 @@ public:
         filenm.append("/");
         filenm.append(pkgName());
         filenm.append(".mbs");
-        m_verFileName = filenm;
+        m_scriptFileName = filenm;
     }
 
     void node_menue(QMenu *menu);

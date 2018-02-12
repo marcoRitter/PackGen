@@ -167,6 +167,8 @@ bool M86_Spartan6::generate_package()
 //  qDebug() << (QString)location().filestring;
 //  qDebug () << this->getVerString();
     this->setVerFileName();
+    this->setScrFileName();
+//  qDebug() << "Script file name is" << this->getScrFileName();
 //  qDebug() <<"M86 ver file name is " << this->getVerFileName();
 
     if (!versionFileCreate(this->getVerFileName(), this->getVerString()))
@@ -175,6 +177,29 @@ bool M86_Spartan6::generate_package()
         return 0;
     }
 
+    scriptFileCreate(this->getScrFileName(), "ModuleType    = IOFW\n", true);
+    QString scriptLine = "Version   = ";
+    scriptLine.append(this->getVerFileName());
+    scriptLine.append("\n");
+    scriptFileCreate(this->getScrFileName(), scriptLine, false);
+
+    for (auto const & childsOfM86 : this->children())
+    {
+        if (childsOfM86->objectName()=="FPGA")
+        {
+            Fpga *fpga = (Fpga*) childsOfM86;
+            fpga->setVerFileName();
+            fpga->setHexFileName();
+            fpga->setSrecParameters();
+            if (!versionFileCreate(fpga->getVerFileName(),fpga->getVerString()))
+            {
+                qDebug() << "error by ver file creating";
+                return 0;
+            }
+            fpga->runSrec();
+        }
+    }
+    /*
     QObjectList childrenOfSpartan = this->children();
     QString dlgOut;
     QMessageBox msgBox;
@@ -201,6 +226,7 @@ bool M86_Spartan6::generate_package()
     msgBox.setDetailedText(dlgOut);
 //  msgBox.setStyleSheet("QLabel{min-width: 500px}");
     msgBox.exec();
+    */
 
 //  qDebug() << "ver_major : " << this->property("ver_major").toString();
 //  FileString itsFileName = this->location();

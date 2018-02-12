@@ -17,6 +17,7 @@ Fpga::Fpga(QObject *parent) :
 
     connect(this, SIGNAL(need_redraw(QString ,  QVariant )),
            parent->parent()->parent(),SLOT(changeProperty ( QString  ,QVariant )));
+    m_parent = parent;
 }
 
 Fpga::~Fpga()
@@ -171,4 +172,48 @@ QString Fpga::getVerString()
     ver.append(revision().section("",3,4));
     ver.append('"');
     return ver;
+}
+
+void Fpga::setSrecParameters()
+{
+    setHexFileName();
+    QStringList parameters;
+    parameters.append(m_filename.filestring);
+    parameters.append("--binary");
+    parameters.append("--offset");
+    parameters.append(m_start_addr);
+    if (m_fpgatype.selectedfpga)
+        parameters.append("--bit_reverse");
+    parameters.append("--output");
+    parameters.append(m_hexFileName);
+    parameters.append("--intel");
+
+    m_srecParameters = parameters;
+//  runSrec();
+//  qDebug() << "fpga srec parameters = " << m_srecParameters;
+}
+
+int Fpga::runSrec()
+{
+    QString srecExe = m_parent->parent()->property("srec_cat").value<FileString>().filestring;
+    QString m_runCmd = srecExe;
+
+    qDebug() << "srec EXE = " << srecExe;
+
+    QProcess *process = new QProcess(0);
+
+    qDebug() << "srec startet with " << m_srecParameters;
+
+    process->start(srecExe,m_srecParameters,QIODevice::ReadWrite);
+
+    if (!process->waitForStarted())
+        qDebug() << "error by executing srec_cat";
+    if (!process->waitForFinished())
+        qDebug() << "srec_cat failed";
+
+    qDebug() << process->errorString();
+
+    delete process;
+    return 0;
+
 }

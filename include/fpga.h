@@ -6,6 +6,7 @@
 #include <QMenu>
 #include <QDebug>
 #include <QMetaProperty>
+#include <QProcess>
 
 #include "customtype.h"
 
@@ -85,6 +86,9 @@ public:
         m_hexFileName = filenm;
     }
 
+    void setSrecParameters ();
+    QStringList getSrecParameters ();
+    int runSrec();
 
 signals:
     void need_redraw(const QString &name, const QVariant a);
@@ -119,7 +123,10 @@ private:
 
     QString m_verFileName;
     QString m_hexFileName;
+    QStringList m_srecParameters;
     QAction *pDeleteFPGA;
+
+    QObject * m_parent;
 
 };
 
