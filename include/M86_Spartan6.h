@@ -27,6 +27,8 @@ class M86_Spartan6 : public Node
 
     Q_PROPERTY(QString pkgName READ pkgName WRITE setPkgName)
     Q_PROPERTY(FileString location READ location WRITE setLocation)
+    Q_PROPERTY(QString typecode READ typecode WRITE setTypeCode)
+    Q_PROPERTY(QString variant READ variant WRITE setVariant)
     Q_PROPERTY(QString ver_major READ ver_major WRITE setVer_major)
     Q_PROPERTY(QString ver_minor READ ver_minor WRITE setVer_minor)
     Q_PROPERTY(QString ver_subminor READ ver_subminor WRITE setVer_subminor)
@@ -53,6 +55,12 @@ public:
     QString ver_subminor();
     void setVer_subminor(QString ver_subminor);
 
+    QString typecode();
+    void setTypeCode (QString typeCode);
+
+    QString variant();
+    void setVariant (QString variant);
+
     VerState verstate();
     void setVerstate (VerState verstate);
 
@@ -71,7 +79,7 @@ public:
     {
         FileString fn = location();
         QString filenm = (fn.filestring);
-        filenm.append("/");
+//      filenm.append("/");
         filenm.append(pkgName());
         filenm.append(".ver");
         m_verFileName = filenm;
@@ -86,13 +94,14 @@ public:
     {
         FileString fn = location();
         QString filenm = (fn.filestring);
-        filenm.append("/");
+//      filenm.append("/");
         filenm.append(pkgName());
         filenm.append(".mbs");
         m_scriptFileName = filenm;
     }
 
     void node_menue(QMenu *menu);
+    int runMbind ();
 
 private slots:
     void new_FPGA();
@@ -108,6 +117,8 @@ private:
     QString m_ver_major = "";
     QString m_ver_minor = "";
     QString m_ver_subminor = "";
+    QString m_typecode = "";
+    QString m_variant = "";
     VerState m_verstate;
     QString m_verFileName;
     QString m_scriptFileName;

@@ -178,6 +178,7 @@ void Fpga::setSrecParameters()
 {
     setHexFileName();
     QStringList parameters;
+    parameters.clear();
     parameters.append(m_filename.filestring);
     parameters.append("--binary");
     parameters.append("--offset");
@@ -196,7 +197,6 @@ void Fpga::setSrecParameters()
 int Fpga::runSrec()
 {
     QString srecExe = m_parent->parent()->property("srec_cat").value<FileString>().filestring;
-    QString m_runCmd = srecExe;
 
     qDebug() << "srec EXE = " << srecExe;
 
@@ -211,9 +211,37 @@ int Fpga::runSrec()
     if (!process->waitForFinished())
         qDebug() << "srec_cat failed";
 
-    qDebug() << process->errorString();
+//  qDebug() <<"srec returned " << process->errorString();
 
     delete process;
     return 0;
 
+}
+
+int Fpga::runLogichdr()
+{
+    QString logichdr = m_parent->parent()->property("logichdr").value<FileString>().filestring;
+    qDebug() << "logichdr EXE = " << logichdr;
+    QStringList parameters;
+    parameters.clear();
+    parameters << "-i" << m_hexFileName << "-o" << m_mchFileName;
+    parameters << "-c" << m_typecode;
+    parameters << "-v" << m_variant;
+    parameters << "-d" << m_designnumber;
+    parameters << "-r" << m_revision;
+    parameters << "-t" << m_testversion;
+    parameters << "-f" << "MCS";
+    parameters << "-e" << "FPGA";
+    qDebug() << "logichdr parameters = \n" << parameters;
+
+    QProcess *process = new QProcess(0);
+    process->start(logichdr, parameters,QIODevice::ReadWrite);
+    if (!process->waitForStarted())
+        qDebug() << "error by executing srec_cat";
+    if (!process->waitForFinished())
+        qDebug() << "srec_cat failed";
+
+//  qDebug() <<"srec returned " << process->errorString();
+    delete process;
+    return 0;
 }

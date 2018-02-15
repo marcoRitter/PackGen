@@ -87,6 +87,24 @@ QString M86_Spartan6::ver_minor()
     return m_ver_minor;
 }
 
+QString M86_Spartan6::typecode()
+{
+    return m_typecode;
+}
+
+void M86_Spartan6::setTypeCode(QString typeCode)
+{
+    m_typecode = typeCode;
+}
+
+void M86_Spartan6::setVariant(QString variant)
+{
+    m_variant = variant;
+}
+QString M86_Spartan6::variant()
+{
+    return m_variant;
+}
 void M86_Spartan6::setVer_minor(QString ver_minor)
 {
     m_ver_minor = ver_minor;
@@ -117,7 +135,7 @@ QString M86_Spartan6::getVerString()
     ver.append(".");
     ver.append(ver_subminor().section("",3,4));
     ver.append(" ");
-    ver.append(m_verstate.verstate.takeAt(verstate().selectedVersion));
+    ver.append(verstate().verstate.takeAt(verstate().selectedVersion));
     ver.append('"');
     return ver;
 }
@@ -177,8 +195,8 @@ bool M86_Spartan6::generate_package()
         return 0;
     }
 
-    scriptFileCreate(this->getScrFileName(), "ModuleType    = IOFW\n", true);
-    QString scriptLine = "Version   = ";
+    scriptFileCreate(this->getScrFileName(), "ModuleType = IOFW\n", true);
+    QString scriptLine = "Version = ";
     scriptLine.append(this->getVerFileName());
     scriptLine.append("\n");
     scriptFileCreate(this->getScrFileName(), scriptLine, false);
@@ -189,49 +207,81 @@ bool M86_Spartan6::generate_package()
         {
             Fpga *fpga = (Fpga*) childsOfM86;
             fpga->setVerFileName();
-            fpga->setHexFileName();
             fpga->setSrecParameters();
+            fpga->setVariant(this->variant());
+            fpga->setTypecode(this->typecode());
             if (!versionFileCreate(fpga->getVerFileName(),fpga->getVerString()))
             {
                 qDebug() << "error by ver file creating";
                 return 0;
             }
-            fpga->runSrec();
+            if (!fpga->runSrec())
+                fpga->runLogichdr();
+
+            scriptFileCreate(this->getScrFileName(), "ObjectType = LOGIC\n", false);
+            QString fpgaScriptLine = "Version = ";
+            fpgaScriptLine.append(fpga->getVerFileName());
+            fpgaScriptLine.append("\n");
+            scriptFileCreate(this->getScrFileName(),fpgaScriptLine,false);
+            fpgaScriptLine = "ObjectName = ";
+            fpgaScriptLine.append(fpga->getMchFileName());
+            fpgaScriptLine.append("\n");
+            scriptFileCreate(this->getScrFileName(),fpgaScriptLine,false);
+        }
+        if (childsOfM86->objectName()=="firmware")
+        {
+            firmware *fw = (firmware*)childsOfM86;
+            fw->setVerFileName();
+            fw->setVariant(this->variant());
+            fw->setTypecode(this->typecode());
+            if (!versionFileCreate(fw->getVerFileName(),fw->getVerString()))
+            {
+                qDebug() << "error by ver file creating";
+                return 0;
+            }
+            fw->runLogichdr();
+            scriptFileCreate(this->getScrFileName(), "ObjectType = FIRMWARE\n", false);
+            QString sfirmware = "Version = ";
+            sfirmware.append(fw->getVerFileName());
+            sfirmware.append("\n");
+            scriptFileCreate(this->getScrFileName(),sfirmware,false);
+            sfirmware = "ObjectName = ";
+            sfirmware.append(fw->getMchFileName());
+            sfirmware.append("\n");
+            scriptFileCreate(this->getScrFileName(),sfirmware,false);
         }
     }
-    /*
-    QObjectList childrenOfSpartan = this->children();
-    QString dlgOut;
-    QMessageBox msgBox;
 
-        if (!srecRun.runSrec(childrenOfSpartan))
-        {
-            dlgOut.append(srecRun.getRuncmd());
-            dlgOut.append(srecRun.getOutput());
-            qDebug() << dlgOut;
-            msgBox.setText("Generate m86 with following parameters");
-            msgBox.setIcon(QMessageBox::Information);
-        }
-        else
-        {
-            dlgOut.append("error by generating hex file: ");
-            dlgOut.append(srecRun.getRuncmd());
-            dlgOut.append(srecRun.getOutput());
-            msgBox.setText("error by generating hex file");
-            msgBox.setIcon(QMessageBox::Critical);
-        }
-
-//      if (versionFileCreate())
-
-    msgBox.setDetailedText(dlgOut);
-//  msgBox.setStyleSheet("QLabel{min-width: 500px}");
-    msgBox.exec();
-    */
-
-//  qDebug() << "ver_major : " << this->property("ver_major").toString();
-//  FileString itsFileName = this->location();
-//  qDebug() << "file_name = " << itsFileName.filestring;
-
+    this->runMbind();
     return true;
+}
+
+int M86_Spartan6::runMbind()
+{
+    QString mbindExe = m_parent->property("mbind").value<FileString>().filestring;
+    qDebug() << "path to mbind" << mbindExe;
+
+    QString outfilename = m_location.filestring;
+    outfilename.append(m_pkgName);
+//  outfilename.append(".m86");
+    QStringList parameters;
+    parameters.clear();
+    parameters << outfilename;
+    parameters << "/c";
+    parameters << m_scriptFileName;
+
+    qDebug() << "mbind parameters = " << parameters;
+
+    QProcess *process = new QProcess(0);
+    process->start(mbindExe, parameters,QIODevice::ReadWrite);
+    if (!process->waitForStarted())
+        qDebug() << "error by executing srec_cat";
+    if (!process->waitForFinished())
+        qDebug() << "srec_cat failed";
+    qDebug() << "end mbind";
+
+    delete process;
+
+    return 0;
 }
 

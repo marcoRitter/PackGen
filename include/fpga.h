@@ -79,16 +79,44 @@ public:
     {
         return m_hexFileName;
     }
+    QString getMchFileName()
+    {
+        return m_mchFileName;
+    }
     void setHexFileName()
     {
         FileString fn = filename();
         QString filenm = fn.filestring.section(".",0,0).append("_FPGA.h86");
+        QString mchfilenm = fn.filestring.section("/",0,-2);
+        mchfilenm.append("/");
+        mchfilenm.append(fn.filestring.section("/",-1,-1).section(".",0,0).left(8).append(".mch"));
+
+        qDebug() << "mch file = " << mchfilenm;
+
         m_hexFileName = filenm;
+        m_mchFileName = mchfilenm;
+    }
+    QString getVariant ()
+    {
+        return m_variant;
+    }
+    QString getTypecode ()
+    {
+        return m_typecode;
+    }
+    void setVariant (QString var)
+    {
+        m_variant = var;
+    }
+    void setTypecode (QString typeCode)
+    {
+        m_typecode = typeCode;
     }
 
     void setSrecParameters ();
     QStringList getSrecParameters ();
     int runSrec();
+    int runLogichdr();
 
 signals:
     void need_redraw(const QString &name, const QVariant a);
@@ -111,18 +139,26 @@ signals:
 private:
 //    QFileInfo m_file;
     FpgaType m_fpgatype;
+    // input fpga bit file
     FileString m_filename;
     QString m_designnumber = "";
     QString m_revision = "";
     QString m_testversion = "";
+    QString m_typecode;
+    QString m_variant;
 //  HexString m_start_addr;
     QString m_start_addr;
     FlashSize m_flashsize;
 //  bool m_with_golden_reference;
     DualBoot m_dualboot;
 
+    // version file name to create
     QString m_verFileName;
+    // output file name for srec
     QString m_hexFileName;
+    // output file name for logichdr
+    QString m_mchFileName;
+
     QStringList m_srecParameters;
     QAction *pDeleteFPGA;
 

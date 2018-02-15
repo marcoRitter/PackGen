@@ -48,25 +48,55 @@ public:
     {
         return m_verFileName;
     }
+    QString getMchFileName()
+    {
+        return m_mchFileName;
+    }
     QString getVerString();
     void setVerFileName()
     {
         FileString fn = filename();
         QString filenm = fn.filestring.section(".",0,0).append("_FW.ver");
+        QString mchfilenm = fn.filestring.section("/",0,-2);
+        mchfilenm.append("/");
+        mchfilenm.append(fn.filestring.section("/",-1,-1).section(".",0,0).left(8).append(".mch"));
         m_verFileName = filenm;
+        m_mchFileName = mchfilenm;
     }
     void node_menue(QMenu *menu);
+    int runLogichdr();
 
+    QString getVariant ()
+    {
+        return m_variant;
+    }
+    QString getTypecode ()
+    {
+        return m_typecode;
+    }
+    void setVariant (QString var)
+    {
+        m_variant = var;
+    }
+    void setTypecode (QString typeCode)
+    {
+        m_typecode = typeCode;
+    }
 private:
 
     FileString m_filename;
     QString m_ver_major = "";
     QString m_ver_minor = "";
     QString m_ver_subminor = "";
+    QString m_typecode;
+    QString m_variant;
     VerState m_verstate;
 
     QString m_verFileName;
+    QString m_mchFileName;
     QAction *pDeleteFirmware;
+
+    QObject * m_parent;
 };
 
 #endif // FIRMWARE_H

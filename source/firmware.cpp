@@ -14,6 +14,8 @@ firmware::firmware(QObject *parent) :
     pDeleteFirmware->setIcon(DeleteIcon);
     connect(pDeleteFirmware, &QAction::triggered, this, &Node::delete_node);
 
+    m_parent = parent;
+
 }
 
 firmware::~firmware()
@@ -87,7 +89,37 @@ QString firmware::getVerString()
     ver.append(".");
     ver.append(ver_subminor().section("",3,4));
     ver.append(" ");
-    ver.append(m_verstate.verstate.takeAt(verstate().selectedVersion));
+    ver.append(verstate().verstate.takeAt(verstate().selectedVersion));
     ver.append('"');
     return ver;
+}
+
+int firmware::runLogichdr()
+{
+    QString logichdr = m_parent->parent()->property("logichdr").value<FileString>().filestring;
+    qDebug() << "logichdr EXE = " << logichdr;
+    QStringList parameters;
+    parameters.clear();
+    parameters << "-i" << m_filename.filestring << "-o" << m_mchFileName;
+    parameters << "-c" << m_typecode;
+    parameters << "-v" << m_variant;
+    QString ver_major_tmp = m_ver_major;
+    ver_major_tmp.append(m_ver_minor.section("x",1,1));
+    parameters << "-d" << ver_major_tmp;
+    parameters << "-r" << m_ver_subminor;
+    parameters << "-t" << "0x01";
+    parameters << "-f" << "H86";
+    parameters << "-e" << "FW1";
+    qDebug() << "logichdr parameters = \n" << parameters;
+
+    QProcess *process = new QProcess(0);
+    process->start(logichdr, parameters,QIODevice::ReadWrite);
+    if (!process->waitForStarted())
+        qDebug() << "error by executing srec_cat";
+    if (!process->waitForFinished())
+        qDebug() << "srec_cat failed";
+
+//  qDebug() <<"srec returned " << process->errorString();
+    delete process;
+    return 0;
 }

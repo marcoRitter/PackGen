@@ -408,6 +408,10 @@ QString MainWindow::setTipForProperty(const QMetaProperty & prop)
         toolTip = "Minor version of project(0x..)";
     if (strcmp(prop.name(), "ver_subminor") == 0)
         toolTip = "Minor subversion of project(0x..)";
+    if (strcmp(prop.name(), "typecode") == 0)
+        toolTip = "Variant (0x..)";
+    if (strcmp(prop.name(), "typecode") == 0)
+        toolTip = "Variant (0x..)";
     return toolTip;
 }
 
@@ -419,7 +423,9 @@ QRegExp MainWindow::setRegExpForProperty(const QMetaProperty &prop)
         strcmp(prop.name(), "ver_minor") == 0 ||
         strcmp(prop.name(), "ver_subminor") == 0 ||
         strcmp(prop.name(), "revision") == 0 ||
-        strcmp(prop.name(), "testversion") == 0 )
+        strcmp(prop.name(), "testversion") == 0 ||
+        strcmp(prop.name(), "variant") == 0 ||
+        strcmp(prop.name(), "typecode") == 0)
             regexp.setPattern("0x[0-9A-Fa-f]{1,2}");
     if (strcmp(prop.name(), "designnumber") == 0)
         regexp.setPattern("0x[0-9A-Fa-f]{1,4}");
