@@ -53,8 +53,10 @@ public:
 
 private slots:
     void new_M86_Spartan6();
+    /*
     void new_JADE_Package();
     void new_Masterfile();
+    */
 
 private:
     QString projectName;
