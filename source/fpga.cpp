@@ -176,7 +176,6 @@ QString Fpga::getVerString()
 
 void Fpga::setSrecParameters()
 {
-    setHexFileName();
     QStringList parameters;
     parameters.clear();
     parameters.append(m_filename.filestring);
@@ -214,6 +213,13 @@ int Fpga::runSrec()
 //  qDebug() <<"srec returned " << process->errorString();
 
     delete process;
+    QFileInfo hexFile = m_hexFileName;
+    if (!(hexFile.exists() && hexFile.isFile()))
+    {
+        qDebug() << "error by hex file";
+        return 1;
+    }
+
     return 0;
 
 }

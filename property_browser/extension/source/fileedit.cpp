@@ -60,7 +60,7 @@ void FileEdit::buttonClicked()
     MainWindow *pMainWindow = (MainWindow*) pObject;
 
     QString filePath;
-    if (pMainWindow->getMCurrent()->node_type() != "M86_Spartan6")
+    if (pMainWindow->getMCurrent()->node_type() != "M86")
         filePath = QFileDialog::getOpenFileName(this, tr("Choose a file"), theLineEdit->text(), theFilter);
     else
         filePath = QFileDialog::getExistingDirectory(this, tr("Choosa a folder"), theLineEdit->text(), 0);

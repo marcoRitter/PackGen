@@ -68,12 +68,6 @@ public:
     {
         return m_verFileName;
     }
-    void setVerFileName()
-    {
-        FileString fn = filename();
-        QString filenm = fn.filestring.section(".",0,0).append("_FPGA.ver");
-        m_verFileName = filenm;
-    }
 
     QString getHexFileName()
     {
@@ -83,18 +77,25 @@ public:
     {
         return m_mchFileName;
     }
-    void setHexFileName()
+    void setHexFileName(QString &path)
     {
+        /*
         FileString fn = filename();
         QString filenm = fn.filestring.section(".",0,0).append("_FPGA.h86");
         QString mchfilenm = fn.filestring.section("/",0,-2);
         mchfilenm.append("/");
         mchfilenm.append(fn.filestring.section("/",-1,-1).section(".",0,0).left(8).append(".mch"));
+        */
+        QString h86FileName = path + "/" + this->description() + ".h86";
+        QString mchFileName = path + "/" + this->description() + ".mch";
+        QString verFileName = path + "/" + this->description() + ".ver";
 
-        qDebug() << "mch file = " << mchfilenm;
+        qDebug() << "h86 file = " << h86FileName;
+        qDebug() << "mch file = " << mchFileName;
 
-        m_hexFileName = filenm;
-        m_mchFileName = mchfilenm;
+        m_hexFileName = h86FileName;
+        m_mchFileName = mchFileName;
+        m_verFileName = verFileName;
     }
     QString getVariant ()
     {

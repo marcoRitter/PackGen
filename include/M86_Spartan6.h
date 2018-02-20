@@ -79,7 +79,7 @@ public:
     {
         FileString fn = location();
         QString filenm = (fn.filestring);
-//      filenm.append("/");
+        filenm.append("/");
         filenm.append(pkgName());
         filenm.append(".ver");
         m_verFileName = filenm;
@@ -93,10 +93,13 @@ public:
     void setScrFileName()
     {
         FileString fn = location();
-        QString filenm = (fn.filestring);
-//      filenm.append("/");
+        QString filenm = "";
+        filenm.append('"');
+        filenm.append(fn.filestring);
+        filenm.append("/");
         filenm.append(pkgName());
         filenm.append(".mbs");
+        filenm.append('"');
         m_scriptFileName = filenm;
     }
 

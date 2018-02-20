@@ -2,6 +2,7 @@
 #define ABOUTDIALOG_H
 
 #include <QDialog>
+#include <QStringList>
 
 namespace Ui {
 class aboutDialog;
@@ -17,6 +18,8 @@ public:
 
 private:
     Ui::aboutDialog *ui;
+
+    QStringList outputText;
 };
 
 #endif // ABOUTDIALOG_H

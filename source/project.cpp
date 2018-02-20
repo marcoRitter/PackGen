@@ -8,7 +8,7 @@ Project::Project(QObject *parent) :
     Q_INIT_RESOURCE(resources);
     QIcon iconAct1;
     iconAct1.addFile(":/Images/icons8-processor.png",QSize(25,25));
-    pNewSpartan = new QAction(tr("&New M86"), this);
+    pNewSpartan = new QAction("&New M86", this);
     pNewSpartan->setIcon(iconAct1);
     connect(pNewSpartan, SIGNAL(triggered()), this, SLOT(new_M86_Spartan6()));
     /*

@@ -53,15 +53,19 @@ public:
         return m_mchFileName;
     }
     QString getVerString();
-    void setVerFileName()
+    void setVerFileName(QString &path)
     {
+        /*
         FileString fn = filename();
         QString filenm = fn.filestring.section(".",0,0).append("_FW.ver");
         QString mchfilenm = fn.filestring.section("/",0,-2);
         mchfilenm.append("/");
         mchfilenm.append(fn.filestring.section("/",-1,-1).section(".",0,0).left(8).append(".mch"));
-        m_verFileName = filenm;
-        m_mchFileName = mchfilenm;
+        */
+        QString verFileName = path + "/" + this->description() + ".ver";
+        QString mchFileName = path + "/" + this->description() + ".mch";
+        m_verFileName = verFileName;
+        m_mchFileName = mchFileName;
     }
     void node_menue(QMenu *menu);
     int runLogichdr();

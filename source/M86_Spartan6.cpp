@@ -4,7 +4,7 @@
 #include <QJsonDocument>
 #include <QMessageBox>
 #include <QProcess>
-#include "srec_wrapper.h"
+#include <output.h>
 #include "version_file.h"
 
 
@@ -178,16 +178,13 @@ void M86_Spartan6::new_Firmware()
 
 bool M86_Spartan6::generate_package()
 {
-    srec_wrapper srecRun;
     QStringList parameters;
-    srecRun.setSrecExe(m_parent->property("srec_cat").value<FileString>().filestring);
+
+
+
     setLocation(this->property("location").value<FileString>().filestring);
-//  qDebug() << (QString)location().filestring;
-//  qDebug () << this->getVerString();
     this->setVerFileName();
     this->setScrFileName();
-//  qDebug() << "Script file name is" << this->getScrFileName();
-//  qDebug() <<"M86 ver file name is " << this->getVerFileName();
 
     if (!versionFileCreate(this->getVerFileName(), this->getVerString()))
     {
@@ -206,7 +203,7 @@ bool M86_Spartan6::generate_package()
         if (childsOfM86->objectName()=="FPGA")
         {
             Fpga *fpga = (Fpga*) childsOfM86;
-            fpga->setVerFileName();
+            fpga->setHexFileName(m_location.filestring);
             fpga->setSrecParameters();
             fpga->setVariant(this->variant());
             fpga->setTypecode(this->typecode());
@@ -231,7 +228,7 @@ bool M86_Spartan6::generate_package()
         if (childsOfM86->objectName()=="firmware")
         {
             firmware *fw = (firmware*)childsOfM86;
-            fw->setVerFileName();
+            fw->setVerFileName(m_location.filestring);
             fw->setVariant(this->variant());
             fw->setTypecode(this->typecode());
             if (!versionFileCreate(fw->getVerFileName(),fw->getVerString()))
@@ -253,6 +250,10 @@ bool M86_Spartan6::generate_package()
     }
 
     this->runMbind();
+
+    output outputWin;
+    outputWin.exec();
+
     return true;
 }
 
@@ -261,9 +262,12 @@ int M86_Spartan6::runMbind()
     QString mbindExe = m_parent->property("mbind").value<FileString>().filestring;
     qDebug() << "path to mbind" << mbindExe;
 
-    QString outfilename = m_location.filestring;
+    QString outfilename = "";
+    outfilename.append('"');
+    outfilename.append(m_location.filestring + "/");
     outfilename.append(m_pkgName);
-//  outfilename.append(".m86");
+    outfilename.append(".m86");
+    outfilename.append('"');
     QStringList parameters;
     parameters.clear();
     parameters << outfilename;

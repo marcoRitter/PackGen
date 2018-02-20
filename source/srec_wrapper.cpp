@@ -39,7 +39,7 @@ int srec_wrapper::setParametersForSrec (const QObjectList & parametersParent)
         {
             Fpga *fpga = (Fpga*)childOfFpga;
 //          qDebug() <<"fpga ver string = " << fpga->getVerString();
-            fpga->setVerFileName();
+//          fpga->setVerFileName();
             fpga->setHexFileName();
             fpga->setSrecParameters();
 //          qDebug() << "ver filename = " << fpga->getVerFileName();

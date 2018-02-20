@@ -431,5 +431,7 @@ QRegExp MainWindow::setRegExpForProperty(const QMetaProperty &prop)
         regexp.setPattern("0x[0-9A-Fa-f]{1,4}");
     if (strcmp(prop.name(), "start_addr") == 0)
         regexp.setPattern("0x[0-9A-Fa-f]{1,8}");
+    if (strcmp(prop.name(),"description") == 0)
+        regexp.setPattern("[0-9A-Za-z_-]{1,8}");
     return regexp;
 }
