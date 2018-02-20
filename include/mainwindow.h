@@ -70,6 +70,8 @@ private slots:
 
     void changeProperty(const QString & name, const QVariant a);
 
+    void printOutInfo (const QString & textToOut, const QColor &color);
+
     void on_actionGenerateFpga_triggered();
 
     QString setTipForProperty (const QMetaProperty & prop);

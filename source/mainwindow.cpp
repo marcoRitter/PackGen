@@ -13,30 +13,29 @@ MainWindow::MainWindow(QWidget *parent) :
     m_currentItem(nullptr)
 {
 
+//  ui->outScrollArea->setWidget(outInfo);
+
     ui->setupUi(this);
     ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    ui->splitter->setCollapsible(0,false);
-    ui->splitter->setCollapsible(1,false);
+    ui->vSplitter->setCollapsible(0,false);
+    ui->vSplitter->setCollapsible(1,false);
+    ui->hSplitter->setCollapsible(0,false);
+    ui->hSplitter->setCollapsible(1,false);
     pMainMenu=new QMenu(this);
     // create new project node
+
     Project *p = new Project(this);
     p->setDescription("Main Project");
 
-//  Project *p1 = new Project();
-//  p1->setDescription("Second Project");
-//  p1->setType("Project2");
 
     // add node to tree view
     m_model.appendRow(p);
-//  m_model.appendRow(p1);
 
     ui->treeView->setModel(&m_model);
 
     ui->treeView->expandAll();
 
-//    variantManager = new QtVariantPropertyManager();
-//    variantFactory = new QtVariantEditorFactory(this);
     variantManager = new VariantManager();
     variantFactory = new VariantFactory(this);
 
@@ -45,17 +44,15 @@ MainWindow::MainWindow(QWidget *parent) :
     propertyEditor = new QtTreePropertyBrowser(ui->scrollArea);
     propertyEditor->setHeaderVisible(true);
 
-//  propertyEditor->setResizeMode();
-//  qDebug () << "resize mode" << propertyEditor->resizeMode();
     propertyEditor->setResizeMode(QtTreePropertyBrowser::ResizeMode(0));
     propertyEditor->setFactoryForManager(variantManager, variantFactory);
     ui->scrollArea->setWidget(propertyEditor);
+    ui->outInfo->setReadOnly(true);
 
     QString winTitle;
     winTitle = m_winTitle + " - untitled";
     QMainWindow::setWindowTitle(winTitle);
 
-//  ui->actionGenerateFpga->setDisabled(true);
 
 }
 
@@ -91,9 +88,7 @@ void MainWindow::on_actionSave_as_triggered()
 
 void MainWindow::on_actionLoad_triggered()
 {
-//  qDebug() << "Load";
     Project_FileName = QFileDialog::getOpenFileName(this, tr("Open File"),".",tr("Pack Gen Files (*.pkg)"));
-//  qDebug() << "file opened";
     if (Project_FileName != "")
     {
         QStandardItem *project;
@@ -133,10 +128,9 @@ void MainWindow::on_actionSave_triggered()
     setWindowTitle(m_winTitle + " - " + winTitle);
 }
 
-// Menue on right click
+// Menu on right click
 void MainWindow::on_treeView_customContextMenuRequested(const QPoint &pos)
 {
-//  qWarning() << "on_treeView_customContextMenuRequested";
 
     QTreeView *tree = ui->treeView;
     QModelIndex index = tree->indexAt(pos);
@@ -146,9 +140,6 @@ void MainWindow::on_treeView_customContextMenuRequested(const QPoint &pos)
         return;
 
     Node *n = (Node *)selected;
-//  QMenu *menu=new QMenu(this);
-//  qDebug() << "new Menu created";
-//  qDebug() << this->children();
     pMainMenu->clear();
     n->node_menue(pMainMenu);
     pMainMenu->popup(tree->viewport()->mapToGlobal(pos));
@@ -161,7 +152,6 @@ void MainWindow::treeMenu()
 
 void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
 {
-//  qDebug()<<"valueChanged" << property << val;
     if (m_currentItem)
     {
         QVariant v =  m_currentItem->property(property->propertyName().toStdString().c_str());
@@ -219,9 +209,6 @@ void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
 
         }
         else
-//          if (v.type() == QVariant::Bool)
-//              m_currentItem->setProperty(property->propertyName().toStdString().c_str(), val.toBool());
-//          else
                 m_currentItem->setProperty(property->propertyName().toStdString().c_str(), val);
     }
 
@@ -242,21 +229,12 @@ void MainWindow::draw_property_browser()
 
     const QMetaObject *meta = n->metaObject();
     int cnt = meta->propertyCount();
-//  qDebug() << "number of properties : " << cnt;
-//  qDebug() << "current item " << m_currentItem->node_type();
-/*
-    if (m_currentItem->node_type() == "M86_Spartan6")
-        ui->actionGenerateFpga->setEnabled(true);
-    else
-        ui->actionGenerateFpga->setDisabled(true);
-*/
 
     propertyEditor->clear();
 
     // Property Editor aufbauen
     for ( int i = 1; i < cnt; i++ ) {
         QMetaProperty prop = meta->property(i);
-//      qDebug() << "property " << i << " = " << prop.name() << "; value = " << prop.read(n);
 
         if ( prop.isWritable() ) {
 
@@ -341,10 +319,10 @@ void MainWindow::resizeEvent(QResizeEvent * event)
     QSize propertyViewSize;
     QSize splitterSize;
 
-    splitterSize.setHeight(QMainWindow::height()-55);
+    splitterSize.setHeight(QMainWindow::height()-65);
     splitterSize.setWidth(QMainWindow::width()-8);
-    ui->splitter->resize(splitterSize);
-    ui->splitter->move(4,1);
+    ui->vSplitter->resize(splitterSize);
+    ui->vSplitter->move(4,1);
 }
 
 // this function emits event by changing parameters in property editor
@@ -393,6 +371,12 @@ QObject * getObjectWithName (const QObject * pobject,const QString &name)
 
     }
     return pointer;
+}
+
+void MainWindow::printOutInfo(const QString &textToOut, const QColor &color)
+{
+    ui->outInfo->setTextColor(color);
+    ui->outInfo->append(textToOut);
 }
 
 QString MainWindow::setTipForProperty(const QMetaProperty & prop)

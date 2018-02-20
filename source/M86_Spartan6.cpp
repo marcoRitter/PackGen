@@ -33,8 +33,9 @@ M86_Spartan6::M86_Spartan6(QObject *parent) :
     pDelete = new QAction(tr("&Delete"), this);
     pDelete->setIcon(DeleteIcon);
     connect(pDelete, &QAction::triggered, this, &Node::delete_node);
-
     connect(parent->parent(), SIGNAL (generateFpga()), this, SLOT(generate_package()));
+
+    connect(this,SIGNAL(setOutInfo(QString, QColor)),parent->parent(), SLOT(printOutInfo(QString, QColor)));
     m_parent = parent;
 
 }
@@ -45,6 +46,7 @@ M86_Spartan6::~M86_Spartan6()
     disconnect(pNewFirmware, &QAction::triggered, this, &M86_Spartan6::new_Firmware);
     disconnect(pDelete, &QAction::triggered, this, &Node::delete_node);
     disconnect(m_parent->parent(), SIGNAL (generateFpga()), this, SLOT(generate_package()));
+    disconnect(this,SIGNAL(setOutInfo(QString, QColor)),m_parent->parent(), SLOT(printOutInfo(QString, QColor)));
 //  qDebug()<< "M86_Spartan object removed";
     delete pGenerate;
     delete pNewFirmware;
@@ -188,15 +190,29 @@ bool M86_Spartan6::generate_package()
 
     if (!versionFileCreate(this->getVerFileName(), this->getVerString()))
     {
-        qDebug() << "error by ver file creating";
+        setOutInfo("Package Ver file was not created:", m_errorColor);
+        return 0;
+    } else {
+        setOutInfo("Package Ver file created:", m_infoColor);
+        setOutInfo(this->getVerFileName(), m_normalColor);
+    }
+
+    if (!scriptFileCreate(this->getScrFileName(), "ModuleType = IOFW\n", true))
+    {
+        setOutInfo("Script file was not created:", m_errorColor);
         return 0;
     }
 
-    scriptFileCreate(this->getScrFileName(), "ModuleType = IOFW\n", true);
     QString scriptLine = "Version = ";
     scriptLine.append(this->getVerFileName());
     scriptLine.append("\n");
-    scriptFileCreate(this->getScrFileName(), scriptLine, false);
+
+    if(!scriptFileCreate(this->getScrFileName(), scriptLine, false))
+    {
+        setOutInfo("Error by script file creating", m_errorColor);
+        return 0;
+    }
+
 
     for (auto const & childsOfM86 : this->children())
     {
@@ -209,11 +225,27 @@ bool M86_Spartan6::generate_package()
             fpga->setTypecode(this->typecode());
             if (!versionFileCreate(fpga->getVerFileName(),fpga->getVerString()))
             {
-                qDebug() << "error by ver file creating";
+                setOutInfo("Error by FPGA Ver file creating", m_errorColor);
                 return 0;
             }
+            setOutInfo("FPGA Ver file created:", m_infoColor);
+            setOutInfo(fpga->getVerFileName(), m_normalColor);
             if (!fpga->runSrec())
-                fpga->runLogichdr();
+            {
+                QFileInfo hexFile = fpga->getHexFileName();
+                if (hexFile.exists() && hexFile.isFile())
+                {
+                    setOutInfo("FPGA bin to hex converted successfully:", m_infoColor);
+                    setOutInfo(fpga->getHexFileName(), m_normalColor);
+                    fpga->runLogichdr();
+                    hexFile = fpga->getMchFileName();
+                    if (hexFile.exists() && hexFile.isFile())
+                    {
+                        setOutInfo("FPGA mch file created:", m_infoColor);
+                        setOutInfo(fpga->getMchFileName(), m_normalColor);
+                    }
+                }
+            }
 
             scriptFileCreate(this->getScrFileName(), "ObjectType = LOGIC\n", false);
             QString fpgaScriptLine = "Version = ";
@@ -237,6 +269,13 @@ bool M86_Spartan6::generate_package()
                 return 0;
             }
             fw->runLogichdr();
+            QFileInfo hexFile = fw->getMchFileName();
+            if (hexFile.exists() && hexFile.isFile())
+            {
+                setOutInfo("Firmware mch file created:", m_infoColor);
+                setOutInfo(fw->getMchFileName(), m_normalColor);
+            }
+
             scriptFileCreate(this->getScrFileName(), "ObjectType = FIRMWARE\n", false);
             QString sfirmware = "Version = ";
             sfirmware.append(fw->getVerFileName());
@@ -249,10 +288,10 @@ bool M86_Spartan6::generate_package()
         }
     }
 
-    this->runMbind();
+    setOutInfo("Script file created:", m_infoColor);
+    setOutInfo(this->getScrFileName(), m_normalColor);
 
-    output outputWin;
-    outputWin.exec();
+    this->runMbind();
 
     return true;
 }
@@ -263,11 +302,9 @@ int M86_Spartan6::runMbind()
     qDebug() << "path to mbind" << mbindExe;
 
     QString outfilename = "";
-    outfilename.append('"');
     outfilename.append(m_location.filestring + "/");
     outfilename.append(m_pkgName);
-    outfilename.append(".m86");
-    outfilename.append('"');
+//  outfilename.append(".m86");
     QStringList parameters;
     parameters.clear();
     parameters << outfilename;
@@ -283,6 +320,17 @@ int M86_Spartan6::runMbind()
     if (!process->waitForFinished())
         qDebug() << "srec_cat failed";
     qDebug() << "end mbind";
+
+    QFileInfo m86File = outfilename+".m86";
+    if (m86File.exists() && m86File.isFile())
+    {
+        setOutInfo("M86 file created successfully", m_infoColor);
+        setOutInfo(outfilename, m_normalColor);
+    } else {
+
+        setOutInfo("ERROR", m_errorColor);
+    }
+
 
     delete process;
 

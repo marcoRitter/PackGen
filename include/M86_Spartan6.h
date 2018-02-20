@@ -94,17 +94,17 @@ public:
     {
         FileString fn = location();
         QString filenm = "";
-        filenm.append('"');
         filenm.append(fn.filestring);
         filenm.append("/");
         filenm.append(pkgName());
         filenm.append(".mbs");
-        filenm.append('"');
         m_scriptFileName = filenm;
     }
 
     void node_menue(QMenu *menu);
     int runMbind ();
+signals:
+    void setOutInfo (const QString & textToOut, const QColor & color);
 
 private slots:
     void new_FPGA();
@@ -114,6 +114,10 @@ private slots:
 
 private:
 //    QFileInfo m_file;
+    QColor m_errorColor = QColor("red");
+    QColor m_normalColor = QColor("black");
+    QColor m_infoColor = QColor("green");
+
     QString m_pkgName;
     QString m_outPkgName;
     FileString m_location;
