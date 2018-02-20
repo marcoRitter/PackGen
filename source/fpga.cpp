@@ -141,7 +141,7 @@ QVariant Fpga::updateStartAddress()
 {
     QVariant a;
     HexString temp;
-    if (m_dualboot.dualbootena && !m_fpgatype.selectedfpga)
+    if (m_dualboot.dualbootena && m_fpgatype.selectedfpga)
     {
         switch (m_flashsize.selectedsize)
         {
