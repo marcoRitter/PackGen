@@ -114,6 +114,9 @@ public:
         m_typecode = typeCode;
     }
 
+    QString getProcessOut () {
+        return m_processOut;
+    }
     void setSrecParameters ();
     QStringList getSrecParameters ();
     int runSrec();
@@ -164,6 +167,7 @@ private:
     QAction *pDeleteFPGA;
 
     QObject * m_parent;
+    QString m_processOut;
 
 };
 

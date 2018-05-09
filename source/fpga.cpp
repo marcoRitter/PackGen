@@ -210,6 +210,7 @@ int Fpga::runSrec()
     if (!process->waitForFinished())
         qDebug() << "srec_cat failed";
 
+    m_processOut = process->readAllStandardOutput();
 //  qDebug() <<"srec returned " << process->errorString();
 
     delete process;
@@ -247,6 +248,7 @@ int Fpga::runLogichdr()
     if (!process->waitForFinished())
         qDebug() << "srec_cat failed";
 
+    m_processOut = process->readAllStandardOutput();
 //  qDebug() <<"srec returned " << process->errorString();
     delete process;
     return 0;

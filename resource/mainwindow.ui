@@ -28,7 +28,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Package Generator v0.4</string>
+   <string>Package Generator v0.41</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">

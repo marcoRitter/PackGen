@@ -118,6 +118,7 @@ int firmware::runLogichdr()
         qDebug() << "error by executing srec_cat";
     if (!process->waitForFinished())
         qDebug() << "srec_cat failed";
+    m_processOut = process->readAllStandardOutput();
 
 //  qDebug() <<"srec returned " << process->errorString();
     delete process;

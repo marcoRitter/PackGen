@@ -48,6 +48,11 @@ MainWindow::MainWindow(QWidget *parent) :
     propertyEditor->setFactoryForManager(variantManager, variantFactory);
     ui->scrollArea->setWidget(propertyEditor);
     ui->outInfo->setReadOnly(true);
+    pClearAction = new QAction("Clear",ui->outInfo);
+
+    ui->outInfo->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->outInfo, SIGNAL(customContextMenuRequested(const QPoint&)),this, SLOT(outInfoMenu(QPoint)));
+
 
     QString winTitle;
     winTitle = m_winTitle + " - untitled";
@@ -379,6 +384,19 @@ void MainWindow::printOutInfo(const QString &textToOut, const QColor &color)
     ui->outInfo->append(textToOut);
 }
 
+void MainWindow::outInfoMenu(const QPoint &pt)
+{
+    QMenu *menu = ui->outInfo->createStandardContextMenu();
+    menu->addAction(pClearAction);
+    connect(pClearAction,SIGNAL(triggered(bool)),this,SLOT(clearOut()));
+    menu->exec(ui->outInfo->mapToGlobal(pt));
+    delete menu;
+}
+
+void MainWindow::clearOut()
+{
+    ui->outInfo->clear();
+}
 QString MainWindow::setTipForProperty(const QMetaProperty & prop)
 {
     QString toolTip = "defalut";

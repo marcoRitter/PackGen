@@ -53,6 +53,9 @@ public:
         return m_mchFileName;
     }
     QString getVerString();
+    QString getProcessOut() {
+        return m_processOut;
+    }
     void setVerFileName(QString &path)
     {
         /*
@@ -100,6 +103,7 @@ private:
     QString m_mchFileName;
     QAction *pDeleteFirmware;
 
+    QString m_processOut;
     QObject * m_parent;
 };
 

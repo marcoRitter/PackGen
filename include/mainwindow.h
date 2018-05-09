@@ -42,6 +42,7 @@ public:
 
     Node *getMCurrent () {return m_currentItem;}
 
+    void node_menue(QMenu *menu);
 signals:
     void generateFpga();
 private slots:
@@ -73,6 +74,8 @@ private slots:
     void printOutInfo (const QString & textToOut, const QColor &color);
 
     void on_actionGenerateFpga_triggered();
+    void outInfoMenu(const QPoint &pt);
+    void clearOut();
 
     QString setTipForProperty (const QMetaProperty & prop);
     QRegExp setRegExpForProperty (const QMetaProperty &prop);
@@ -80,7 +83,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QString Project_FileName = "";
-    QString m_winTitle = "Package Generator v0.4";
+    QString m_winTitle = "Package Generator v0.41";
 
     QtVariantPropertyManager *variantManager;
     QtVariantEditorFactory *variantFactory;
@@ -89,6 +92,8 @@ private:
 
     Node *m_currentItem;
     QMenu *pMainMenu;
+    QAction *pClearAction;
+
 };
 
 QObject * getObjectWithName (const QObject * pobject,const QString &name);

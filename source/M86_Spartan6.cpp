@@ -204,7 +204,9 @@ bool M86_Spartan6::generate_package()
     }
 
     QString scriptLine = "Version = ";
+    scriptLine.append('"');
     scriptLine.append(this->getVerFileName());
+    scriptLine.append('"');
     scriptLine.append("\n");
 
     if(!scriptFileCreate(this->getScrFileName(), scriptLine, false))
@@ -232,6 +234,7 @@ bool M86_Spartan6::generate_package()
             setOutInfo(fpga->getVerFileName(), m_normalColor);
             if (!fpga->runSrec())
             {
+                setOutInfo(fpga->getProcessOut(),m_infoColor);
                 QFileInfo hexFile = fpga->getHexFileName();
                 if (hexFile.exists() && hexFile.isFile())
                 {
@@ -239,6 +242,7 @@ bool M86_Spartan6::generate_package()
                     setOutInfo(fpga->getHexFileName(), m_normalColor);
                     fpga->runLogichdr();
                     hexFile = fpga->getMchFileName();
+                    setOutInfo(fpga->getProcessOut(),m_infoColor);
                     if (hexFile.exists() && hexFile.isFile())
                     {
                         setOutInfo("FPGA mch file created:", m_infoColor);
@@ -248,12 +252,14 @@ bool M86_Spartan6::generate_package()
             }
 
             scriptFileCreate(this->getScrFileName(), "ObjectType = LOGIC\n", false);
-            QString fpgaScriptLine = "Version = ";
+            QString fpgaScriptLine = "Version = \"";
             fpgaScriptLine.append(fpga->getVerFileName());
+            fpgaScriptLine.append('"');
             fpgaScriptLine.append("\n");
             scriptFileCreate(this->getScrFileName(),fpgaScriptLine,false);
-            fpgaScriptLine = "ObjectName = ";
+            fpgaScriptLine = "ObjectName = \"";
             fpgaScriptLine.append(fpga->getMchFileName());
+            fpgaScriptLine.append('"');
             fpgaScriptLine.append("\n");
             scriptFileCreate(this->getScrFileName(),fpgaScriptLine,false);
         }
@@ -270,6 +276,8 @@ bool M86_Spartan6::generate_package()
             }
             fw->runLogichdr();
             QFileInfo hexFile = fw->getMchFileName();
+            setOutInfo(fw->getProcessOut(),m_infoColor);
+
             if (hexFile.exists() && hexFile.isFile())
             {
                 setOutInfo("Firmware mch file created:", m_infoColor);
@@ -277,12 +285,14 @@ bool M86_Spartan6::generate_package()
             }
 
             scriptFileCreate(this->getScrFileName(), "ObjectType = FIRMWARE\n", false);
-            QString sfirmware = "Version = ";
+            QString sfirmware = "Version = \"";
             sfirmware.append(fw->getVerFileName());
+            sfirmware.append('"');
             sfirmware.append("\n");
             scriptFileCreate(this->getScrFileName(),sfirmware,false);
-            sfirmware = "ObjectName = ";
+            sfirmware = "ObjectName = \"";
             sfirmware.append(fw->getMchFileName());
+            sfirmware.append('"');
             sfirmware.append("\n");
             scriptFileCreate(this->getScrFileName(),sfirmware,false);
         }
@@ -304,14 +314,17 @@ int M86_Spartan6::runMbind()
     QString outfilename = "";
     outfilename.append(m_location.filestring + "/");
     outfilename.append(m_pkgName);
-//  outfilename.append(".m86");
     QStringList parameters;
+    QString scritFile = "";
     parameters.clear();
     parameters << outfilename;
     parameters << "/c";
-    parameters << m_scriptFileName;
+    scritFile.append(m_scriptFileName);
+    parameters << scritFile;// "\"" << m_scriptFileName << "\"";
 
-    qDebug() << "mbind parameters = " << parameters;
+    for (auto  entity: parameters) {
+        qDebug() << "mbind parameters = " << entity;
+    }
 
     QProcess *process = new QProcess(0);
     process->start(mbindExe, parameters,QIODevice::ReadWrite);
@@ -320,12 +333,15 @@ int M86_Spartan6::runMbind()
     if (!process->waitForFinished())
         qDebug() << "srec_cat failed";
     qDebug() << "end mbind";
+    QString mbindOutput = process->readAllStandardOutput();
+    qDebug() << "mbind output: " << mbindOutput;
 
     QFileInfo m86File = outfilename+".m86";
     if (m86File.exists() && m86File.isFile())
     {
+        setOutInfo(mbindOutput,m_infoColor);
         setOutInfo("M86 file created successfully", m_infoColor);
-        setOutInfo(outfilename, m_normalColor);
+        setOutInfo(outfilename + ".m86", m_normalColor);
     } else {
 
         setOutInfo("ERROR", m_errorColor);

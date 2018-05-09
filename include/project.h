@@ -61,9 +61,8 @@ private slots:
 private:
     QString projectName;
     QString m_name;
-//  FileString m_logichdr =(QString) "//pc011/tools/utils/logichdr.exe";
-    FileString m_srecCat = (QString) "/srec_cat.exe";
-    FileString m_logichdr =(QString) "/logichdr.exe";
+    FileString m_srecCat = (QString) "//pc011/tools/utils/srec_cat.exe";
+    FileString m_logichdr =(QString) "//pc011/tools/utils/logichdr.exe";
     FileString m_mbind =(QString) "//pc011/tools/utils/mbind.exe";
 
     QAction *pNewSpartan;
