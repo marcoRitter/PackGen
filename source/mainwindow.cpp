@@ -93,12 +93,16 @@ void MainWindow::on_actionSave_as_triggered()
 
 void MainWindow::on_actionLoad_triggered()
 {
-    Project_FileName = QFileDialog::getOpenFileName(this, tr("Open File"),".",tr("Pack Gen Files (*.pkg)"));
+    const QString DEFAULT_PKG_DIR ("default_pkg_dir");
+    QSettings mySettings;
+    QDir CurrentDir;
+    Project_FileName = QFileDialog::getOpenFileName(this, tr("Open File"),mySettings.value(DEFAULT_PKG_DIR).toString(),tr("Pack Gen Files (*.pkg)"));
     if (Project_FileName != "")
     {
         QStandardItem *project;
         m_model.load(Project_FileName, this);
         ui->treeView->expandAll();
+        mySettings.setValue(DEFAULT_PKG_DIR,CurrentDir.absoluteFilePath(Project_FileName));
     }
     propertyEditor->clear();
     QStringRef winTitle = Project_FileName.midRef(Project_FileName.lastIndexOf("/")+1,

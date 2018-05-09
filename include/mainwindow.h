@@ -83,7 +83,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QString Project_FileName = "";
-    QString m_winTitle = "Package Generator v0.41";
+    QString m_winTitle = "Package Generator v0.42";
 
     QtVariantPropertyManager *variantManager;
     QtVariantEditorFactory *variantFactory;

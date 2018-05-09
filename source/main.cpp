@@ -7,7 +7,9 @@ int main(int argc, char *argv[])
     CustomType::setup();
 
     QApplication a(argc, argv);
-    a.setApplicationName("PackGen v0.41");
+    a.setApplicationName("PackGen v0.42");
+    a.setOrganizationName("Bachmann GmbH");
+    a.setOrganizationDomain("home.org");
     MainWindow w;
     w.show();
 
