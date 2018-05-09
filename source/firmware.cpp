@@ -87,7 +87,10 @@ QString firmware::getVerString()
     ver.append(".");
     ver.append(ver_minor().section("",3,4));
     ver.append(".");
-    ver.append(ver_subminor().section("",3,4));
+    if (verstate().verstate.takeAt(verstate().selectedVersion) == "Release")
+        ver.append("00");
+    else
+        ver.append(ver_subminor().section("",3,4));
     ver.append(" ");
     ver.append(verstate().verstate.takeAt(verstate().selectedVersion));
     ver.append('"');

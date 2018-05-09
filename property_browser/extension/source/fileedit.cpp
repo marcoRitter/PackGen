@@ -67,11 +67,13 @@ void FileEdit::buttonClicked()
     QString filePath;
     if (pMainWindow->getMCurrent()->node_type() != "M86") {
         filePath = QFileDialog::getOpenFileName(this, tr("Choose a file"), mySettings.value(DEFAULT_M86_DIR).toString());//theLineEdit->text(), theFilter);
-        mySettings.setValue(DEFAULT_M86_DIR,CurrentDir.absoluteFilePath(filePath));
+        if (!filePath.isNull())
+            mySettings.setValue(DEFAULT_M86_DIR,CurrentDir.absoluteFilePath(filePath));
     }
     else {
         filePath = QFileDialog::getExistingDirectory(this, tr("Choosa a folder"), mySettings.value(DEFAULT_FW_DIR).toString());//theLineEdit->text(), 0);
-        mySettings.setValue(DEFAULT_FW_DIR,CurrentDir.absoluteFilePath(filePath));
+        if (!filePath.isNull())
+            mySettings.setValue(DEFAULT_FW_DIR,CurrentDir.absoluteFilePath(filePath));
     }
 
     if (filePath.isNull())

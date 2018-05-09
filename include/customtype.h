@@ -68,7 +68,7 @@ public:
 class VerState
 {
 public:
-    QStringList verstate = {"Alpha", "Beta"};
+    QStringList verstate = {"Alpha", "Beta", "Release"};
     uint selectedVersion = 0;
     VerState() {}
     VerState(const uint &value): selectedVersion(value) {}
