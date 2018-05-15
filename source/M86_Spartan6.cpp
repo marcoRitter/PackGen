@@ -37,7 +37,6 @@ M86_Spartan6::M86_Spartan6(QObject *parent) :
 
     connect(this,SIGNAL(setOutInfo(QString, QColor)),parent->parent(), SLOT(printOutInfo(QString, QColor)));
     m_parent = parent;
-
 }
 M86_Spartan6::~M86_Spartan6()
 {
