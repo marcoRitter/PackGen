@@ -124,6 +124,7 @@ bool Model::load(const QString &filename, QObject *parent)
          n = new M86_Spartan6(parent);
          M86_Spartan6 *x = (M86_Spartan6 *)n;
          x->readJson(jsonObj);
+         x->setType("M86 " + x->description());
      }
      if (node_type == "FPGA")
      {

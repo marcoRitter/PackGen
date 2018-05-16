@@ -77,9 +77,9 @@ void MainWindow::on_treeView_clicked(const QModelIndex &index)
 
 void MainWindow::on_actionSave_as_triggered()
 {
-
-    qDebug() << "Save as";
-    Project_FileName = QFileDialog::getSaveFileName(this, tr("Save File"),".",tr("Pack Gen Files (*.pkg)"));
+    const QString DEFAULT_PKG_DIR ("default_pkg_dir");
+    QSettings mySettings;
+    Project_FileName = QFileDialog::getSaveFileName(this, tr("Save File"),mySettings.value(DEFAULT_PKG_DIR).toString(),tr("Pack Gen Files (*.pkg)"));
     if (Project_FileName != "")
     {
         QStandardItem *project = m_model.item(0,0);
@@ -218,7 +218,10 @@ void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
 
         }
         else
-                m_currentItem->setProperty(property->propertyName().toStdString().c_str(), val);
+              m_currentItem->setProperty(property->propertyName().toStdString().c_str(), val);
+              if ((m_currentItem->getType().contains("M86")) && (property->propertyName().contains("description"))) {
+                  m_currentItem->setType("M86 " + val.toString());
+              }
     }
 
     if (m_currentItem->get_need_redraw() == 1)
@@ -254,6 +257,7 @@ void MainWindow::draw_property_browser()
                  property = variantManager->addProperty(QVariant::String, prop.name());
                  property->setValue(v.toString());
                  property->setToolTip(setTipForProperty(prop));
+              if (!((m_currentItem->getType().contains("M86")) && (property->propertyName().contains("description"))))
                  property->setAttribute("regExp", setRegExpForProperty(prop));
                  break ;
            case QVariant::UInt :
@@ -313,9 +317,7 @@ void MainWindow::draw_property_browser()
            default :
                break;
            }
-//         item = propertyEditor->addProperty(property);
            propertyEditor->addProperty(property);
-//         propertyEditor->setExpanded(item, false);
         }
     }
 }
