@@ -88,6 +88,7 @@ HEADERS  += include/mainwindow.h \
     include/version_file.h \
     include/firmware.h \
     include/firmware.h \
+    include/file.h\
     include/output.h \
     resource/output.h
 

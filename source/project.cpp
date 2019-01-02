@@ -11,6 +11,9 @@ Project::Project(QObject *parent) :
     pNewSpartan = new QAction("&New M86", this);
     pNewSpartan->setIcon(iconAct1);
     connect(pNewSpartan, SIGNAL(triggered()), this, SLOT(new_M86_Spartan6()));
+
+    pNewMasterfile = new QAction(tr("New &Masterfile"), this);
+    connect(pNewMasterfile, &QAction::triggered, this, &Project::new_Masterfile);
     /*
     pNewMasterFile = new QAction(tr("&Masterfile"), this);
     connect(pNewMasterFile, SIGNAL(triggered()), this, SLOT(new_Masterfile()));
@@ -86,6 +89,16 @@ void Project::new_M86_Spartan6()
     this->setChild(this->rowCount(),m);
 //  qDebug() << this->children();
 }
+
+void Project::new_Masterfile()
+{
+    Masterfile *m = new Masterfile(this);
+    Model* m_m = Node::getModel();
+    m->setModel(m_m);
+    m->setDescription("new Masterfile");
+    m->setType("Masterfile");
+    this->setChild(this->rowCount(),m);
+}
 /*
 void Project::new_JADE_Package()
 {
@@ -108,6 +121,7 @@ void Project::new_Masterfile()
 void Project::node_menue(QMenu *menu)
 {
     menu->addAction(pNewSpartan);
+    menu->addAction(pNewMasterfile);
     /*
     menu->addAction(pNewMasterFile);
     menu->addAction(pNewJadeFile);

@@ -53,6 +53,7 @@ public:
 
 private slots:
     void new_M86_Spartan6();
+    void new_Masterfile();
     /*
     void new_JADE_Package();
     void new_Masterfile();
@@ -66,7 +67,7 @@ private:
     FileString m_mbind =(QString) "//pc011/tools/utils/mbind.exe";
 
     QAction *pNewSpartan;
-    QAction *pNewMasterFile;
+    QAction *pNewMasterfile;
     QAction *pNewJadeFile;
 
 };
