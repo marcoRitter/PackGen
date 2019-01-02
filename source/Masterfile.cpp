@@ -91,7 +91,18 @@ void Masterfile::node_menue(QMenu *menu)
     QAction *newAct3 = new QAction(tr("&Delete"), this);
     connect(newAct3, &QAction::triggered, this, &Node::delete_node);
 
+    pNewFPGA = new QAction(tr("&New FPGA"), this);
+    connect(pNewFPGA, &QAction::triggered, this, &Masterfile::new_FPGA);
 
+    pNewFirmware = new QAction(tr("New &Firmware"), this);
+    connect(pNewFirmware,&QAction::triggered, this, &Masterfile::new_Firmware);
+
+    pNewFile = new QAction(tr("New &File"), this);
+    connect(pNewFile,&QAction::triggered, this, &Masterfile::new_File);
+
+    menu->addAction(pNewFPGA);
+    menu->addAction(pNewFirmware);
+    menu->addAction(pNewFile);
     menu->addAction(newAct1);
     menu->addSeparator();
 //    menu->addAction(newAct2);
@@ -114,5 +125,51 @@ bool Masterfile::generate_masterfile()
 {
     qDebug() << "Generate Masterfile";
     return true;
+}
+
+void Masterfile::new_FPGA()
+{
+    Fpga *m = new Fpga(this);
+    Model *m_m = Node::getModel();
+    m->setModel(m_m);
+    m->setDescription("new FPGA");
+    m->setType("FPGA");
+    this->setChild(this->rowCount(),m);
+}
+
+void Masterfile::new_Firmware()
+{
+    firmware *m = new firmware(this);
+    Model *m_m = Node::getModel();
+    m->setModel(m_m);
+    m->setDescription("new firmware");
+    m->setType("firmware");
+    this->setChild(this->rowCount(),m);
+}
+
+void Masterfile::new_File()
+{
+    file *m = new file(this);
+    Model *m_m = Node::getModel();
+    m->setModel(m_m);
+    m->setDescription("new File");
+    m->setType("File");
+    this->setChild(this->rowCount(),m);
+}
+
+void Masterfile::setSrecParameters()
+{
+    const QMetaObject *meta = this->metaObject();
+    int cnt = meta->propertyCount();
+    for ( int i = 1; i < cnt; i++ )
+    {
+        QMetaProperty prop = meta->property(i);
+        auto v = this->property(prop.name());
+    }
+}
+
+int Masterfile::runSrec()
+{
+
 }
 

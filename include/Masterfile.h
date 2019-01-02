@@ -4,6 +4,9 @@
 #include <QFileInfo>
 #include <QMenu>
 #include "node.h"
+#include "firmware.h"
+#include "fpga.h"
+#include "file.h"
 
 class Masterfile : public Node
 {
@@ -32,6 +35,8 @@ public:
     QString ver_subminor();
     void setVer_subminor(QString ver_subminor);
 
+    void setSrecParameters ();
+    int runSrec();
 
     //    virtual bool readJson(const QJsonObject *jsonObj);
     bool readJson(const QJsonObject *jsonObj);
@@ -41,7 +46,9 @@ public:
     void node_menue(QMenu *menu);
 
 private slots:
-//    void new_FPGA();
+    void new_FPGA();
+    void new_Firmware();
+    void new_File();
     bool generate_masterfile();
 
 
@@ -51,6 +58,15 @@ private:
     QString m_ver_major;
     QString m_ver_minor;
     QString m_ver_subminor;
+
+    QStringList m_srecParameters;
+
+    QAction *pGenerate;
+    QAction *pNewFPGA;
+    QAction *pNewFirmware;
+    QAction *pNewFile;
+    QAction *pDelete;
+    QObject *m_parent;
 };
 
 #endif // M86_Spartan6_H

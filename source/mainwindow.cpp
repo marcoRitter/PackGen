@@ -185,7 +185,7 @@ void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
             if (strcmp(v.typeName(),"FlashSize") == 0)
             {
                 FlashSize f;
-                f.selectedsize = val.toInt();
+                f.selectedsize = val.toUInt();
                 QVariant a;
                 a.setValue<FlashSize>(f);
                 m_currentItem->setProperty(property->propertyName().toStdString().c_str(), a);
@@ -195,7 +195,7 @@ void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
             {
                 QVariant a;
                 DualBoot dualboot;
-                dualboot.dualbootena = val.toInt();
+                dualboot.dualbootena = val.toUInt();
                 a.setValue<DualBoot>(dualboot);
                 m_currentItem->setProperty(property->propertyName().toStdString().c_str(),a);
             }
@@ -203,7 +203,7 @@ void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
             {
                 QVariant a;
                 FpgaType fpgatype;
-                fpgatype.selectedfpga = val.toInt();
+                fpgatype.selectedfpga = val.toUInt();
                 a.setValue<FpgaType>(fpgatype);
                 m_currentItem->setProperty(property->propertyName().toStdString().c_str(),a);
             }
@@ -211,7 +211,7 @@ void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
             {
                 QVariant a;
                 VerState verstate;
-                verstate.selectedVersion = val.toInt();
+                verstate.selectedVersion = val.toUInt();
                 a.setValue<VerState>(verstate);
                 m_currentItem->setProperty(property->propertyName().toStdString().c_str(),a);
             }

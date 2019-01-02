@@ -29,6 +29,9 @@ M86_Spartan6::M86_Spartan6(QObject *parent) :
     pNewFirmware = new QAction(tr("New &Firmware"), this);
     connect(pNewFirmware,&QAction::triggered, this, &M86_Spartan6::new_Firmware);
 
+    pNewMasterfile = new QAction(tr("New &Masterfile"), this);
+    connect(pNewMasterfile, &QAction::triggered, this, &M86_Spartan6::new_Masterfile);
+
     DeleteIcon.addFile(":/Images/icons8-delete.png", QSize(25,25));
     pDelete = new QAction(tr("&Delete"), this);
     pDelete->setIcon(DeleteIcon);
@@ -153,6 +156,7 @@ void M86_Spartan6::node_menue(QMenu *menu)
     menu->addAction(pGenerate);
     menu->addSeparator();
     menu->addAction(pNewFPGA);
+    menu->addAction(pNewMasterfile);
     menu->addAction(pNewFirmware);
     menu->addSeparator();
     menu->addAction(pDelete);
@@ -179,6 +183,15 @@ void M86_Spartan6::new_Firmware()
     this->setChild(this->rowCount(),m);
 }
 
+void M86_Spartan6::new_Masterfile()
+{
+    Masterfile *m = new Masterfile(this);
+    Model* m_m = Node::getModel();
+    m->setModel(m_m);
+    m->setDescription("new Masterfile");
+    m->setType("Masterfile");
+    this->setChild(this->rowCount(),m);
+}
 
 bool M86_Spartan6::generate_package()
 {

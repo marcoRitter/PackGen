@@ -89,6 +89,7 @@ public:
     {
         m_typecode = typeCode;
     }
+
 private:
 
     FileString m_filename;

@@ -6,6 +6,7 @@
 #include "node.h"
 #include "fpga.h"
 #include "firmware.h"
+#include "Masterfile.h"
 #include "customtype.h"
 
 /*
@@ -109,6 +110,7 @@ signals:
 private slots:
     void new_FPGA();
     void new_Firmware();
+    void new_Masterfile();
     bool generate_package();
 
 
@@ -135,7 +137,7 @@ private:
     QAction * pNewFPGA;
     QAction * pNewFirmware;
     QAction * pDelete;
-
+    QAction * pNewMasterfile;
     QObject * m_parent;
 };
 

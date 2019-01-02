@@ -65,6 +65,7 @@ bool Node::readJson(const QJsonObject *jsonObj)
 //  qDebug() << keys;
     foreach (QString key, keys)
     {
+        QVariant v = this->property(key.toLatin1().data());
         if (key != "childes")
         {
             QVariant v = this->property(key.toLatin1().data());
@@ -126,6 +127,7 @@ bool Node::readJson(const QJsonObject *jsonObj)
                     if (v.type() == QVariant::String)
                         if (strcmp(key.toLatin1().data(), "node_type"))
                             this->setProperty(key.toLatin1().data(),jsonVal.toString());
+
                     if (v.type() == QVariant::UInt)
                         this->setProperty(key.toLatin1().data(),jsonVal.toInt());
                     if (v.type() == QVariant::Bool)

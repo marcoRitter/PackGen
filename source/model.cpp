@@ -119,45 +119,51 @@ bool Model::load(const QString &filename, QObject *parent)
          Project *x = (Project *)n;
          x->readJson(jsonObj);
      }
-     if (node_type == "M86")
+     if (node_type.toLower() == "m86")
      {
          n = new M86_Spartan6(parent);
          M86_Spartan6 *x = (M86_Spartan6 *)n;
          x->readJson(jsonObj);
          x->setType("M86 " + x->description());
      }
-     if (node_type == "FPGA")
+     if (node_type.toLower() == "fpga")
      {
          n = new Fpga(parent);
          Fpga *x = (Fpga *)n;
          x->readJson(jsonObj);
      }
-     if (node_type == "firmware")
+     if (node_type.toLower() == "firmware")
      {
          n = new firmware(parent);
          firmware *x = (firmware *)n;
          x->readJson(jsonObj);
      }
-     if (node_type == "JADE_Package")
+     if (node_type.toLower() == "file")
+     {
+         n = new file(parent);
+         file *x = (file *)n;
+         x->readJson(jsonObj);
+     }
+     if (node_type.toLower() == "jade_package")
      {
          n = new JADE_Package(parent);
          JADE_Package *x = (JADE_Package *)n;
          x->readJson(jsonObj);
      }
-     if (node_type == "JADE_Moduledescription")
+     if (node_type.toLower() == "jade_moduledescription")
      {
          n = new JADE_Moduledescription(parent);
          JADE_Moduledescription *x = (JADE_Moduledescription *)n;
          x->readJson(jsonObj);
      }
-     if (node_type == "JADE_History")
+     if (node_type.toLower() == "jade_history")
      {
          n = new JADE_History(parent);
          JADE_History *x = (JADE_History *)n;
          x->readJson(jsonObj);
      }
 
-     if (node_type == "Masterfile")
+     if (node_type.toLower() == "masterfile")
      {
          n = new Masterfile(parent);
          Masterfile *x = (Masterfile *)n;
