@@ -56,7 +56,8 @@ SOURCES += source/main.cpp\
     source/aboutdialog.cpp \
     source/version_file.cpp \
     source/firmware.cpp \
-    source/output.cpp
+    source/file.cpp \
+    source/output.cpp \
 
 HEADERS  += include/mainwindow.h \
     include/node.h \
@@ -86,7 +87,8 @@ HEADERS  += include/mainwindow.h \
     include/aboutdialog.h \
     include/version_file.h \
     include/firmware.h \
-    include/output.h
+    include/firmware.h \
+    include/output.h \
     resource/output.h
 
 FORMS    += resource/mainwindow.ui \
