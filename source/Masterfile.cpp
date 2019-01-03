@@ -11,6 +11,7 @@
 Masterfile::Masterfile(QObject *parent) :
     Node(parent,"Masterfile")
 {
+
     pGenerate = new QAction(tr("Generate"), this);
     connect(pGenerate, SIGNAL(triggered()), this, SLOT(generate_masterfile()));
 
@@ -27,6 +28,9 @@ Masterfile::Masterfile(QObject *parent) :
     connect(pNewFile,&QAction::triggered, this, &Masterfile::new_File);
 
     connect(this,SIGNAL(setOutInfo(QString, QColor)),parent->parent(), SLOT(printOutInfo(QString, QColor)));
+
+    connect(parent->parent(), SIGNAL (generateFpga()), this, SLOT(generate_masterfile()));
+
     m_parent = parent;
 }
 Masterfile::~Masterfile()
@@ -36,7 +40,7 @@ Masterfile::~Masterfile()
     disconnect(pNewFirmware, &QAction::triggered, this, &Masterfile::new_Firmware);
     disconnect(pNewFirmware, &QAction::triggered, this, &Masterfile::new_File);
     disconnect(pDelete, &QAction::triggered, this, &Node::delete_node);
-
+    disconnect(m_parent->parent(), SIGNAL (generateFpga()), this, SLOT(generate_masterfile()));
     disconnect(this,SIGNAL(setOutInfo(QString, QColor)),m_parent->parent(), SLOT(printOutInfo(QString, QColor)));
 
     delete pGenerate;

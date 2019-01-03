@@ -285,7 +285,7 @@
     <string>GenerateFpga</string>
    </property>
    <property name="toolTip">
-    <string>Generate new Fga</string>
+    <string>Generate all</string>
    </property>
   </action>
  </widget>
