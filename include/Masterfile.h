@@ -42,7 +42,7 @@ public:
     QString ver_subminor();
     void setVer_subminor(QString ver_subminor);
 
-    void setSrecParameters ();
+    bool setSrecParameters ();
     int runSrec();
 
 

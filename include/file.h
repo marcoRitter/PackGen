@@ -14,7 +14,6 @@ class file : public Node
     Q_OBJECT
 
     Q_PROPERTY(FileString filename READ filename WRITE setFilename)
-    Q_PROPERTY(QString description READ description WRITE setDescription)
     Q_PROPERTY(QString version READ version WRITE setVersion)
     Q_PROPERTY(QString start_addr READ start_addr WRITE setStart_addr)
 

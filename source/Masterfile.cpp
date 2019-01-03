@@ -6,8 +6,6 @@
 #include <QProcess>
 #include <output.h>
 #include "version_file.h"
-#include <iostream>
-#include <exception>
 
 Masterfile::Masterfile(QObject *parent) :
     Node(parent,"Masterfile")
@@ -179,11 +177,46 @@ void Masterfile::new_File()
     this->setChild(this->rowCount(),m);
 }
 
-void Masterfile::setSrecParameters()
+bool Masterfile::setSrecParameters()
 {
     QStringList srec_parameters;
 
     srec_parameters.clear();
+
+
+    if(m_filename == "")
+    {
+        setOutInfo("Masterfile Property filename has no value", m_errorColor);
+        return false;
+    }
+    if(m_filename.contains(".")||m_filename.contains(",")||m_filename.contains(";")||m_filename.contains(":")
+            ||m_filename.contains("<") || m_filename.contains(">")||m_filename.contains("!")||m_filename.contains("§")
+            ||m_filename.contains("$")||m_filename.contains("%")||m_filename.contains("&")||m_filename.contains("/")
+            ||m_filename.contains("{") || m_filename.contains("(")||m_filename.contains("[")||m_filename.contains(")")
+            ||m_filename.contains("]")||m_filename.contains("=")||m_filename.contains("}")||m_filename.contains("?")
+            ||m_filename.contains("`")||m_filename.contains("´")||m_filename.contains("*"))
+    {
+        setOutInfo("Masterfile Property filename has an invalid value", m_errorColor);
+        return false;
+    }
+    if(m_location.filestring == "")
+    {
+        setOutInfo("Masterfile Property location has no value", m_errorColor);
+        return false;
+    }
+    if(m_ver_major == "")
+    {
+        setOutInfo("Masterfile Property ver_major has no value", m_errorColor);
+    }
+    if(m_ver_minor == "")
+    {
+        setOutInfo("Masterfile Property ver_minor has no value", m_errorColor);
+    }
+    if(m_ver_subminor == "")
+    {
+        setOutInfo("Masterfile Property ver_subminor has no value", m_errorColor);
+    }
+
 
     QObjectList objectsMasterfile = this->children();
     for(int i = 0; i < this->children().length(); i++)
@@ -191,6 +224,31 @@ void Masterfile::setSrecParameters()
         if(objectsMasterfile[i]->inherits("firmware"))
         {
             firmware *firm = (firmware*)objectsMasterfile[i];
+
+
+            if(firm->filename().filestring == "")
+            {
+                setOutInfo("Firmware Property filename has no value (Masterfile)", m_errorColor);
+                return false;
+            }
+            if(firm->ver_major() == "")
+            {
+                setOutInfo("Firmware Property ver_major has no value (Masterfile)", m_errorColor);
+            }
+            if(firm->ver_minor() == "")
+            {
+                setOutInfo("Firmware Property ver_minor has no value (Masterfile)", m_errorColor);
+            }
+            if(firm->ver_subminor() == "")
+            {
+                setOutInfo("Firmware Property ver_subminor has no value (Masterfile)", m_errorColor);
+            }
+            if(firm->start_addr() == "")
+            {
+                setOutInfo("Firmware Property start_addr has no value (Masterfile)", m_errorColor);
+                return false;
+            }
+
             srec_parameters.append(firm->filename().filestring);
             srec_parameters.append("--binary");
             srec_parameters.append("--offset");
@@ -199,6 +257,23 @@ void Masterfile::setSrecParameters()
         else if(objectsMasterfile[i]->inherits("file"))
         {
             file *fiLe = (file*)objectsMasterfile[i];
+
+            if(fiLe->filename().filestring == "")
+            {
+                setOutInfo("File Property filename has no value (Masterfile)", m_errorColor);
+                return false;
+            }
+            if(fiLe->version() == "")
+            {
+                setOutInfo("File Property version has no value (Masterfile)", m_errorColor);
+            }
+            if(fiLe->start_addr() == "")
+            {
+                setOutInfo("File Property start_addr has no value (Masterfile)", m_errorColor);
+                return false;
+            }
+
+
             srec_parameters.append(fiLe->filename().filestring);
             if(fiLe->filename().filestring.contains(".txt") || fiLe->filename().filestring.contains(".rtf")
                     || fiLe->filename().filestring.contains(".doc") || fiLe->filename().filestring.contains(".bin")
@@ -216,6 +291,30 @@ void Masterfile::setSrecParameters()
         else if(objectsMasterfile[i]->inherits("Fpga"))
         {
             Fpga *fpga = (Fpga*)objectsMasterfile[i];
+
+            if(fpga->filename().filestring == "")
+            {
+                setOutInfo("FPGA Property filename has no value (Masterfile)", m_errorColor);
+                return false;
+            }
+            if(fpga->designnumber() == "")
+            {
+                setOutInfo("File Property designnumber has no value (Masterfile)", m_errorColor);
+            }
+            if(fpga->revision() == "")
+            {
+                setOutInfo("File Property revision has no value (Masterfile)", m_errorColor);
+            }
+            if(fpga->testversion() == "")
+            {
+                setOutInfo("File Property testversion has no value (Masterfile)", m_errorColor);
+            }
+            if(fpga->start_addr() == "")
+            {
+                setOutInfo("FPGA Property start_addr has no value (Masterfile)", m_errorColor);
+                return false;
+            }
+
             srec_parameters.append(fpga->filename().filestring);
             srec_parameters.append("--binary");
             srec_parameters.append("--offset");
@@ -257,7 +356,12 @@ int Masterfile::runSrec()
     if (!(hexFile.exists() && hexFile.isFile()))
     {
         qDebug() << "error by hex file";
+        setOutInfo("Problems while creating Masterfile", m_errorColor);
         return 1;
+    }
+    else {
+        setOutInfo("Created Masterfile successfully:", m_infoColor);
+        setOutInfo(m_location.filestring + "/" + m_filename + ".hex", m_normalColor);
     }
 
     return 0;
@@ -265,19 +369,17 @@ int Masterfile::runSrec()
 
 bool Masterfile::generate_masterfile()
 {
-    setSrecParameters();
-    runSrec();
-
-    QFileInfo hexFile = m_location.filestring + "/" + m_filename + ".hex";
-    if (hexFile.exists() && hexFile.isFile())
+    if(setSrecParameters())
     {
-        setOutInfo("Created Masterfile successfully:", m_infoColor);
-        setOutInfo(m_location.filestring + "/" + m_filename + ".hex", m_normalColor);
+        if(!runSrec())
+        {
+            return false;
+        }
     }
-    else
-    {
-         setOutInfo("Problems while creating Masterfile", m_errorColor);
+    else {
+        return false;
     }
     return true;
+
 }
 
