@@ -125,8 +125,7 @@ bool Node::readJson(const QJsonObject *jsonObj)
             else
             {
                     if (v.type() == QVariant::String)
-                        if (strcmp(key.toLatin1().data(), "node_type"))
-                            this->setProperty(key.toLatin1().data(),jsonVal.toString());
+                        this->setProperty(key.toLatin1().data(),jsonVal.toString());
 
                     if (v.type() == QVariant::UInt)
                         this->setProperty(key.toLatin1().data(),jsonVal.toInt());

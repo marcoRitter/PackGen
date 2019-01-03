@@ -79,6 +79,17 @@ void firmware::node_menue(QMenu *menu)
     menu->addAction(pDeleteFirmware);
 }
 
+
+QString firmware::start_addr()
+{
+    return m_start_addr;
+}
+
+void firmware::setStart_addr(QString start_addr)
+{
+    m_start_addr = start_addr;
+}
+
 QString firmware::getVerString()
 {
     QString ver = "";

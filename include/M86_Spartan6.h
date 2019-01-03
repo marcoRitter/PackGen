@@ -42,7 +42,7 @@ public:
     QString node_type() {return"M86";}
 
     FileString location();
-    void setLocation(FileString filename);
+    void setLocation(FileString foldername);
 
     QString pkgName();
     void setPkgName (QString pkgname);

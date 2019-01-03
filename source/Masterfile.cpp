@@ -2,14 +2,49 @@
 #include "Masterfile.h"
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QMessageBox>
+#include <QProcess>
+#include <output.h>
+#include "version_file.h"
 
 
 Masterfile::Masterfile(QObject *parent) :
     Node(parent,"Masterfile")
 {
+    pGenerate = new QAction(tr("Generate"), this);
+    connect(pGenerate, SIGNAL(triggered()), this, SLOT(generate_masterfile()));
 
+    pDelete = new QAction(tr("&Delete"), this);
+    connect(pDelete, &QAction::triggered, this, &Node::delete_node);
+
+    pNewFPGA = new QAction(tr("&New FPGA"), this);
+    connect(pNewFPGA, &QAction::triggered, this, &Masterfile::new_FPGA);
+
+    pNewFirmware = new QAction(tr("New &Firmware"), this);
+    connect(pNewFirmware,&QAction::triggered, this, &Masterfile::new_Firmware);
+
+    pNewFile = new QAction(tr("New &File"), this);
+    connect(pNewFile,&QAction::triggered, this, &Masterfile::new_File);
+
+    connect(this,SIGNAL(setOutInfo(QString, QColor)),parent->parent(), SLOT(printOutInfo(QString, QColor)));
+    m_parent = parent;
 }
+Masterfile::~Masterfile()
+{
+    disconnect(pGenerate, SIGNAL (triggered()),this, SLOT(generate_masterfile()));
+    disconnect(pNewFPGA, &QAction::triggered, this, &Masterfile::new_FPGA);
+    disconnect(pNewFirmware, &QAction::triggered, this, &Masterfile::new_Firmware);
+    disconnect(pNewFirmware, &QAction::triggered, this, &Masterfile::new_File);
+    disconnect(pDelete, &QAction::triggered, this, &Node::delete_node);
 
+    disconnect(this,SIGNAL(setOutInfo(QString, QColor)),m_parent->parent(), SLOT(printOutInfo(QString, QColor)));
+
+    delete pGenerate;
+    delete pNewFirmware;
+    delete pNewFPGA;
+    delete pNewFile;
+    delete pDelete;
+}
 QString Masterfile::filename()
 {
     return m_filename;
@@ -18,6 +53,16 @@ QString Masterfile::filename()
 void Masterfile::setFilename(QString name)
 {
     m_filename = name;
+}
+
+FileString Masterfile::location()
+{
+    return m_location;
+}
+
+void Masterfile::setLocation(FileString foldername)
+{
+    m_location = foldername;
 }
 
 QString Masterfile::ver_major()
@@ -84,48 +129,18 @@ bool Masterfile::writeJson(QJsonObject *jsonObj)
 
 void Masterfile::node_menue(QMenu *menu)
 {
-    QAction *newAct1 = new QAction(tr("Generate"), this);
-    connect(newAct1, SIGNAL(triggered()), this, SLOT(generate_masterfile()));
-//    QAction *newAct2 = new QAction(tr("&New FPGA"), this);
-//    connect(newAct2, &QAction::triggered, this, &M86_Spartan6::new_FPGA);
-    QAction *newAct3 = new QAction(tr("&Delete"), this);
-    connect(newAct3, &QAction::triggered, this, &Node::delete_node);
 
-    pNewFPGA = new QAction(tr("&New FPGA"), this);
-    connect(pNewFPGA, &QAction::triggered, this, &Masterfile::new_FPGA);
 
-    pNewFirmware = new QAction(tr("New &Firmware"), this);
-    connect(pNewFirmware,&QAction::triggered, this, &Masterfile::new_Firmware);
-
-    pNewFile = new QAction(tr("New &File"), this);
-    connect(pNewFile,&QAction::triggered, this, &Masterfile::new_File);
-
+    menu->addAction(pGenerate);
+    menu->addSeparator();
     menu->addAction(pNewFPGA);
     menu->addAction(pNewFirmware);
     menu->addAction(pNewFile);
-    menu->addAction(newAct1);
     menu->addSeparator();
-//    menu->addAction(newAct2);
-//    menu->addSeparator();
-    menu->addAction(newAct3);
+    menu->addAction(pDelete);
 
 }
 
-//void Masterfile::new_FPGA()
-//{
-//    Fpga *m = new Fpga();
-//    Model* m_m = Node::getModel();
-//    m->setModel(m_m);
-//    m->setDescription("Spartan 6 FPGA");
-//    this->setChild(this->rowCount(),m);
-
-//}
-
-bool Masterfile::generate_masterfile()
-{
-    qDebug() << "Generate Masterfile";
-    return true;
-}
 
 void Masterfile::new_FPGA()
 {
@@ -159,17 +174,103 @@ void Masterfile::new_File()
 
 void Masterfile::setSrecParameters()
 {
-    const QMetaObject *meta = this->metaObject();
-    int cnt = meta->propertyCount();
-    for ( int i = 1; i < cnt; i++ )
+    QStringList srec_parameters;
+
+    srec_parameters.clear();
+
+    QObjectList objectsMasterfile = this->children();
+    for(int i = 0; i < this->children().length(); i++)
     {
-        QMetaProperty prop = meta->property(i);
-        auto v = this->property(prop.name());
+        if(objectsMasterfile[i]->inherits("firmware"))
+        {
+            firmware *firm = (firmware*)objectsMasterfile[i];
+            srec_parameters.append(firm->filename().filestring);
+            srec_parameters.append("--binary");
+            srec_parameters.append("--offset");
+            srec_parameters.append(firm->start_addr());
+        }
+        else if(objectsMasterfile[i]->inherits("file"))
+        {
+            file *fiLe = (file*)objectsMasterfile[i];
+            srec_parameters.append(fiLe->filename().filestring);
+            if(fiLe->filename().filestring.contains(".txt") || fiLe->filename().filestring.contains(".rtf")
+                    || fiLe->filename().filestring.contains(".doc") || fiLe->filename().filestring.contains(".bin")
+                    || fiLe->filename().filestring.contains(".bmp"))
+            {
+                srec_parameters.append("--binary");
+            }
+            else if(fiLe->filename().filestring.contains(".hex") || fiLe->filename().filestring.contains(".h86"))
+            {
+                srec_parameters.append("--intel");
+            }
+            srec_parameters.append("--offset");
+            srec_parameters.append(fiLe->start_addr());
+        }
+        else if(objectsMasterfile[i]->inherits("Fpga"))
+        {
+            Fpga *fpga = (Fpga*)objectsMasterfile[i];
+            srec_parameters.append(fpga->filename().filestring);
+            srec_parameters.append("--binary");
+            srec_parameters.append("--offset");
+            srec_parameters.append(fpga->start_addr());
+        }
+
     }
+
+    srec_parameters.append("--o");
+    srec_parameters.append(m_location.filestring + "/" + m_filename+".hex");
+    srec_parameters.append("--intel");
+
+    m_srecParameters = srec_parameters;
 }
 
 int Masterfile::runSrec()
 {
+    //QString srecExe = m_parent->parent()->property("srec_cat").value<FileString>().filestring;
+    QString srecExe = "//pc011/tools/utils/srec_cat.exe";
 
+    qDebug() << "srec EXE = " << srecExe;
+
+    QProcess *process = new QProcess(0);
+
+    qDebug() << "srec startet with " << m_srecParameters;
+
+    process->start(srecExe,m_srecParameters,QIODevice::ReadWrite);
+
+    if (!process->waitForStarted())
+        qDebug() << "error by executing srec_cat";
+    if (!process->waitForFinished())
+        qDebug() << "srec_cat failed";
+
+    m_processOut = process->readAllStandardOutput();
+//  qDebug() <<"srec returned " << process->errorString();
+
+    delete process;
+    QFileInfo hexFile = m_location.filestring + "/" + m_filename + ".hex";
+    if (!(hexFile.exists() && hexFile.isFile()))
+    {
+        qDebug() << "error by hex file";
+        return 1;
+    }
+
+    return 0;
+}
+
+bool Masterfile::generate_masterfile()
+{
+    setSrecParameters();
+    runSrec();
+
+    QFileInfo hexFile = m_location.filestring + "/" + m_filename + ".hex";
+    if (hexFile.exists() && hexFile.isFile())
+    {
+        setOutInfo("Created Masterfile successfully:", m_infoColor);
+        setOutInfo(m_location.filestring + "/" + m_filename + ".hex", m_normalColor);
+    }
+    else
+    {
+         setOutInfo("Problems while creating Masterfile", m_errorColor);
+    }
+    return true;
 }
 

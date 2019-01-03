@@ -65,7 +65,7 @@ void FileEdit::buttonClicked()
     QDir CurrentDir;
 
     QString filePath;
-    if (pMainWindow->getMCurrent()->node_type() != "M86") {
+    if (pMainWindow->getMCurrent()->node_type() != "M86" && pMainWindow->getMCurrent()->node_type() != "Masterfile") {
         filePath = QFileDialog::getOpenFileName(this, tr("Choose a file"), mySettings.value(DEFAULT_M86_DIR).toString());//theLineEdit->text(), theFilter);
         if (!filePath.isNull())
             mySettings.setValue(DEFAULT_M86_DIR,CurrentDir.absoluteFilePath(filePath));

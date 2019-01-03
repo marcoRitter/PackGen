@@ -18,6 +18,7 @@ class firmware : public Node
     Q_PROPERTY(QString ver_minor READ ver_minor WRITE setVer_minor)
     Q_PROPERTY(QString ver_subminor READ ver_subminor WRITE setVer_subminor)
     Q_PROPERTY(VerState verstate READ verstate WRITE setVerstate)
+    Q_PROPERTY(QString start_addr READ start_addr WRITE setStart_addr)
 
 public:
 
@@ -43,6 +44,9 @@ public:
 
     VerState verstate();
     void setVerstate (VerState verstate);
+
+    QString start_addr();
+    void setStart_addr(QString start_addr);
 
     QString getVerFileName()
     {
@@ -99,6 +103,7 @@ private:
     QString m_typecode;
     QString m_variant;
     VerState m_verstate;
+    QString m_start_addr;
 
     QString m_verFileName;
     QString m_mchFileName;
