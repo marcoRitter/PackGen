@@ -6,7 +6,8 @@
 #include <QProcess>
 #include <output.h>
 #include "version_file.h"
-
+#include <iostream>
+#include <exception>
 
 Masterfile::Masterfile(QObject *parent) :
     Node(parent,"Masterfile")
@@ -71,7 +72,7 @@ void Masterfile::setLocation(FileString foldername)
 
 QString Masterfile::ver_major()
 {
-   return m_ver_major;
+    return m_ver_major;
 }
 
 void Masterfile::setVer_major(QString ver_major)
@@ -232,8 +233,8 @@ void Masterfile::setSrecParameters()
 
 int Masterfile::runSrec()
 {
-    //QString srecExe = m_parent->parent()->property("srec_cat").value<FileString>().filestring;
-    QString srecExe = "//pc011/tools/utils/srec_cat.exe";
+    QString srecExe = m_parent->property("srec_cat").value<FileString>().filestring;
+    //QString srecExe = "//pc011/tools/utils/srec_cat.exe";
 
     qDebug() << "srec EXE = " << srecExe;
 
