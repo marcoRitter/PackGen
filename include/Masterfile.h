@@ -45,7 +45,7 @@ public:
     void setSrecParameters ();
     int runSrec();
 
-    //    virtual bool readJson(const QJsonObject *jsonObj);
+
     bool readJson(const QJsonObject *jsonObj);
     bool writeJson(QJsonObject *jsonObj);
 

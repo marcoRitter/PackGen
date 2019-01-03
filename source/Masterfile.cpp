@@ -105,6 +105,8 @@ bool Masterfile::readJson(const QJsonObject *jsonObj)
     setDescription(jsonVal.toString());
     jsonVal = jsonObj->value("filename");
     setFilename(jsonVal.toString());
+    jsonVal = jsonObj->value("location");
+    setLocation(jsonVal.toString());
     jsonVal = jsonObj->value("ver_major");
     setVer_major(jsonVal.toString());
     jsonVal = jsonObj->value("ver_minor");
