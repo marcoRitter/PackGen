@@ -191,6 +191,114 @@ bool M86_Spartan6::generate_package()
     this->setVerFileName();
     this->setScrFileName();
 
+    if(m_pkgName == "")
+    {
+        setOutInfo("M86 Property pkgName has no value", m_errorColor);
+        return false;
+    }
+    if(m_pkgName.contains(".")||m_pkgName.contains(",")||m_pkgName.contains(";")||m_pkgName.contains(":")
+            ||m_pkgName.contains("<") || m_pkgName.contains(">")||m_pkgName.contains("!")||m_pkgName.contains("Â§")
+            ||m_pkgName.contains("$")||m_pkgName.contains("%")||m_pkgName.contains("&")||m_pkgName.contains("/")
+            ||m_pkgName.contains("{") || m_pkgName.contains("(")||m_pkgName.contains("[")||m_pkgName.contains(")")
+            ||m_pkgName.contains("]")||m_pkgName.contains("=")||m_pkgName.contains("}")||m_pkgName.contains("?")
+            ||m_pkgName.contains("`")||m_pkgName.contains("Â´")||m_pkgName.contains("*"))
+    {
+        setOutInfo("M86 Property pkgName has an invalid value", m_errorColor);
+        return false;
+    }
+    if(m_location.filestring == "")
+    {
+        setOutInfo("M86 Property location has no value", m_errorColor);
+        return false;
+    }
+    if(m_typecode == "")
+    {
+        setOutInfo("M86 Property typecode has no value", m_errorColor);
+    }
+    if(m_variant == "")
+    {
+        setOutInfo("M86 Property variant has no value", m_errorColor);
+    }
+    if(m_ver_major == "")
+    {
+        setOutInfo("M86 Property ver_major has no value", m_errorColor);
+    }
+    if(m_ver_minor == "")
+    {
+        setOutInfo("M86 Property ver_minor has no value", m_errorColor);
+    }
+    if(m_ver_subminor == "")
+    {
+        setOutInfo("M86 Property ver_minor has no value", m_errorColor);
+    }
+
+
+    QObjectList objectsM86 = this->children();
+    for(int i = 0; i < this->children().length(); i++)
+    {
+        if(objectsM86[i]->inherits("firmware"))
+        {
+            firmware *firm = (firmware*)objectsM86[i];
+
+            if(firm->filename().filestring == "")
+            {
+                setOutInfo("Firmware Property filename has no value (M86)", m_errorColor);
+                return false;
+            }
+            if(firm->ver_major() == "")
+            {
+                setOutInfo("Firmware Property ver_major has no value (M86)", m_errorColor);
+                return false;
+            }
+            if(firm->ver_minor() == "")
+            {
+                setOutInfo("Firmware Property ver_minor has no value (M86)", m_errorColor);
+                return false;
+            }
+            if(firm->ver_subminor() == "")
+            {
+                setOutInfo("Firmware Property ver_subminor has no value (M86)", m_errorColor);
+                return false;
+            }
+            if(firm->start_addr() == "")
+            {
+                setOutInfo("Firmware Property start_addr has no value (M86)", m_errorColor);
+                return false;
+            }
+        }
+        else if(objectsM86[i]->inherits("Fpga"))
+        {
+            Fpga *fpga = (Fpga*)objectsM86[i];
+
+            if(fpga->filename().filestring == "")
+            {
+                setOutInfo("FPGA Property filename has no value (M86)", m_errorColor);
+                return false;
+            }
+            if(fpga->designnumber() == "")
+            {
+                setOutInfo("File Property designnumber has no value (M86)", m_errorColor);
+                return false;
+            }
+            if(fpga->revision() == "")
+            {
+                setOutInfo("File Property revision has no value (M86)", m_errorColor);
+                return false;
+            }
+            if(fpga->testversion() == "")
+            {
+                setOutInfo("File Property testversion has no value (M86)", m_errorColor);
+                return false;
+            }
+            if(fpga->start_addr() == "")
+            {
+                setOutInfo("FPGA Property start_addr has no value (M86)", m_errorColor);
+                return false;
+            }
+        }
+    }
+
+
     if (!versionFileCreate(this->getVerFileName(), this->getVerString()))
     {
         setOutInfo("Package Ver file was not created:", m_errorColor);
