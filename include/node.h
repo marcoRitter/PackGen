@@ -3,7 +3,7 @@
 
 #include <QStandardItem>
 #include <QMenu>
-#include "customtype.h"
+//#include "customtype.h"
 #include <QDebug>
 #include <QMetaProperty>
 

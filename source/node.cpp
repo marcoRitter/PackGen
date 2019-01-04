@@ -60,7 +60,7 @@ bool Node::readJson(const QJsonObject *jsonObj)
 {
 //  qDebug() << "Read Json";
     QJsonValue jsonVal;
-    int cnt = jsonObj->count();
+    //int cnt = jsonObj->count();
     QStringList keys = jsonObj->keys();
 //  qDebug() << keys;
     foreach (QString key, keys)

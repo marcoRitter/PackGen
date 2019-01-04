@@ -12,14 +12,14 @@ Model::Model(QObject *parent) :
 
 void saveTreeNode(QStandardItem * pItem, QJsonObject *jsonObj)
 {
-    if ( pItem == 0 )
+    if (!pItem)
         return;
 
-    Node *n = (Node *)pItem;
+    Node *n = static_cast<Node *>(pItem);
 //    QJsonObject jsonObj;
 
 //  qDebug() << "Nodename : " << n->description();
-    const QMetaObject *meta = n->metaObject() ;
+//   const QMetaObject *meta = n->metaObject() ;
 //  int cnt = meta->propertyCount();
 //  qDebug() << "number of properties : " << cnt;
 //    for ( int i = 0; i < cnt; i++ )
@@ -62,8 +62,8 @@ bool Model::save(const QString &filename, QStandardItem *n)
 
 void Model::delete_node(Node *n)
 {
-   QStandardItem *n1 = (QStandardItem*)n;
-   Node *p = (Node*)n1->parent();
+   QStandardItem *n1 = static_cast<QStandardItem*>(n);
+   Node *p = static_cast<Node*>(n1->parent());
    p->removeRow(n->row());
 }
 
@@ -97,7 +97,7 @@ bool Model::load(const QString &filename, QObject *parent)
     delete old;
 
     clear();
-    Node *root = loadTreeNode(&jsonObj, (Node *)parent);
+    Node *root = loadTreeNode(&jsonObj, static_cast<Node *>(parent));
 
     root->dumpObjectTree();
 
@@ -116,57 +116,57 @@ bool Model::load(const QString &filename, QObject *parent)
      if (node_type == "Project")
      {
          n = new Project(parent);
-         Project *x = (Project *)n;
+         Project *x = static_cast<Project *>(n);
          x->readJson(jsonObj);
      }
      if (node_type.toLower() == "m86")
      {
          n = new M86_Spartan6(parent);
-         M86_Spartan6 *x = (M86_Spartan6 *)n;
+         M86_Spartan6 *x = static_cast<M86_Spartan6 *>(n);
          x->readJson(jsonObj);
          x->setType("M86 " + x->description());
      }
      if (node_type.toLower() == "fpga")
      {
          n = new Fpga(parent);
-         Fpga *x = (Fpga *)n;
+         Fpga *x = static_cast<Fpga *>(n);
          x->readJson(jsonObj);
      }
      if (node_type.toLower() == "firmware")
      {
          n = new firmware(parent);
-         firmware *x = (firmware *)n;
+         firmware *x = static_cast<firmware *>(n);
          x->readJson(jsonObj);
      }
      if (node_type.toLower() == "file")
      {
          n = new file(parent);
-         file *x = (file *)n;
+         file *x = static_cast<file *>(n);
          x->readJson(jsonObj);
      }
      if (node_type.toLower() == "jade_package")
      {
          n = new JADE_Package(parent);
-         JADE_Package *x = (JADE_Package *)n;
+         JADE_Package *x = static_cast<JADE_Package *>(n);
          x->readJson(jsonObj);
      }
      if (node_type.toLower() == "jade_moduledescription")
      {
          n = new JADE_Moduledescription(parent);
-         JADE_Moduledescription *x = (JADE_Moduledescription *)n;
+         JADE_Moduledescription *x = static_cast<JADE_Moduledescription *>(n);
          x->readJson(jsonObj);
      }
      if (node_type.toLower() == "jade_history")
      {
          n = new JADE_History(parent);
-         JADE_History *x = (JADE_History *)n;
+         JADE_History *x = static_cast<JADE_History *>(n);
          x->readJson(jsonObj);
      }
 
      if (node_type.toLower() == "masterfile")
      {
          n = new Masterfile(parent);
-         Masterfile *x = (Masterfile *)n;
+         Masterfile *x = static_cast<Masterfile *>(n);
          x->readJson(jsonObj);
      }
 

@@ -99,7 +99,7 @@ void MainWindow::on_actionLoad_triggered()
     Project_FileName = QFileDialog::getOpenFileName(this, tr("Open File"),mySettings.value(DEFAULT_PKG_DIR).toString(),tr("Pack Gen Files (*.pkg)"));
     if (Project_FileName != "")
     {
-        QStandardItem *project;
+        //QStandardItem *project;
         m_model.load(Project_FileName, this);
         ui->treeView->expandAll();
         mySettings.setValue(DEFAULT_PKG_DIR,CurrentDir.absoluteFilePath(Project_FileName));
@@ -148,7 +148,7 @@ void MainWindow::on_treeView_customContextMenuRequested(const QPoint &pos)
     if (!selected)
         return;
 
-    Node *n = (Node *)selected;
+    Node *n = static_cast<Node *>(selected);
     pMainMenu->clear();
     n->node_menue(pMainMenu);
     pMainMenu->popup(tree->viewport()->mapToGlobal(pos));
@@ -233,9 +233,9 @@ void MainWindow::draw_property_browser()
     QStandardItem *selected = m_model.itemFromIndex(m_model.get_index());
 
     QtVariantProperty *property;
-    QtBrowserItem *item;
+    //QtBrowserItem *item;
 
-    Node *n = (Node *)selected;
+    Node *n = static_cast<Node *>(selected);
     m_currentItem = n;
 
 
@@ -326,8 +326,8 @@ void MainWindow::resizeEvent(QResizeEvent * event)
 {
     QMainWindow::resizeEvent(event);
 
-    QSize treeViewSize;
-    QSize propertyViewSize;
+    //QSize treeViewSize;
+    //QSize propertyViewSize;
     QSize splitterSize;
 
     splitterSize.setHeight(QMainWindow::height()-65);
@@ -367,13 +367,13 @@ void MainWindow::on_actionGenerateFpga_triggered()
 
 QObject * getObjectWithName (const QObject * pobject,const QString &name)
 {
-    QObject * pointer =(QObject *) pobject;
+    QObject * pointer = const_cast<QObject *>(pobject);
     if (pointer->objectName() == name)
         return pointer;
     else
     {
-        if (pointer == 0)
-            return 0;
+        if (!pointer)
+            return nullptr;
         else
         {
             pointer = pointer->parent();

@@ -223,7 +223,7 @@ bool Masterfile::setSrecParameters()
     {
         if(objectsMasterfile[i]->inherits("firmware"))
         {
-            firmware *firm = (firmware*)objectsMasterfile[i];
+            firmware *firm = static_cast<firmware*>(objectsMasterfile[i]);
 
 
             if(firm->filename().filestring == "")
@@ -256,7 +256,7 @@ bool Masterfile::setSrecParameters()
         }
         else if(objectsMasterfile[i]->inherits("file"))
         {
-            file *fiLe = (file*)objectsMasterfile[i];
+            file *fiLe = static_cast<file*>(objectsMasterfile[i]);
 
             if(fiLe->filename().filestring == "")
             {
@@ -290,7 +290,7 @@ bool Masterfile::setSrecParameters()
         }
         else if(objectsMasterfile[i]->inherits("Fpga"))
         {
-            Fpga *fpga = (Fpga*)objectsMasterfile[i];
+            Fpga *fpga = static_cast<Fpga*>(objectsMasterfile[i]);
 
             if(fpga->filename().filestring == "")
             {
@@ -328,6 +328,7 @@ bool Masterfile::setSrecParameters()
     srec_parameters.append("--intel");
 
     m_srecParameters = srec_parameters;
+    return true;
 }
 
 int Masterfile::runSrec()
@@ -337,7 +338,7 @@ int Masterfile::runSrec()
 
     qDebug() << "srec EXE = " << srecExe;
 
-    QProcess *process = new QProcess(0);
+    QProcess *process = new QProcess();
 
     qDebug() << "srec startet with " << m_srecParameters;
 
