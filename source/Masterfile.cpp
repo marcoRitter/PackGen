@@ -189,7 +189,7 @@ bool Masterfile::setSrecParameters()
         setOutInfo("Masterfile Property filename has no value", m_errorColor);
         return false;
     }
-    if(m_filename.contains(".")||m_filename.contains(",")||m_filename.contains(";")||m_filename.contains(":")
+    else if(m_filename.contains(".")||m_filename.contains(",")||m_filename.contains(";")||m_filename.contains(":")
             ||m_filename.contains("<") || m_filename.contains(">")||m_filename.contains("!")||m_filename.contains("§")
             ||m_filename.contains("$")||m_filename.contains("%")||m_filename.contains("&")||m_filename.contains("/")
             ||m_filename.contains("{") || m_filename.contains("(")||m_filename.contains("[")||m_filename.contains(")")
@@ -199,20 +199,20 @@ bool Masterfile::setSrecParameters()
         setOutInfo("Masterfile Property filename has an invalid value", m_errorColor);
         return false;
     }
-    if(m_location.filestring == "")
+    if(m_location.filestring.isEmpty())
     {
         setOutInfo("Masterfile Property location has no value", m_errorColor);
         return false;
     }
-    if(m_ver_major == "")
+    if(m_ver_major.isEmpty())
     {
         setOutInfo("Masterfile Property ver_major has no value", m_errorColor);
     }
-    if(m_ver_minor == "")
+    if(m_ver_minor.isEmpty())
     {
         setOutInfo("Masterfile Property ver_minor has no value", m_errorColor);
     }
-    if(m_ver_subminor == "")
+    if(m_ver_subminor.isEmpty())
     {
         setOutInfo("Masterfile Property ver_subminor has no value", m_errorColor);
     }
@@ -226,24 +226,24 @@ bool Masterfile::setSrecParameters()
             firmware *firm = static_cast<firmware*>(objectsMasterfile[i]);
 
 
-            if(firm->filename().filestring == "")
+            if(firm->filename().filestring.isEmpty())
             {
                 setOutInfo("Firmware Property filename has no value (Masterfile)", m_errorColor);
                 return false;
             }
-            if(firm->ver_major() == "")
+            if(firm->ver_major().isEmpty())
             {
                 setOutInfo("Firmware Property ver_major has no value (Masterfile)", m_errorColor);
             }
-            if(firm->ver_minor() == "")
+            if(firm->ver_minor().isEmpty())
             {
                 setOutInfo("Firmware Property ver_minor has no value (Masterfile)", m_errorColor);
             }
-            if(firm->ver_subminor() == "")
+            if(firm->ver_subminor().isEmpty())
             {
                 setOutInfo("Firmware Property ver_subminor has no value (Masterfile)", m_errorColor);
             }
-            if(firm->start_addr() == "")
+            if(firm->start_addr().isEmpty())
             {
                 setOutInfo("Firmware Property start_addr has no value (Masterfile)", m_errorColor);
                 return false;
@@ -258,16 +258,16 @@ bool Masterfile::setSrecParameters()
         {
             file *fiLe = static_cast<file*>(objectsMasterfile[i]);
 
-            if(fiLe->filename().filestring == "")
+            if(fiLe->filename().filestring.isEmpty())
             {
                 setOutInfo("File Property filename has no value (Masterfile)", m_errorColor);
                 return false;
             }
-            if(fiLe->version() == "")
+            if(fiLe->version().isEmpty())
             {
                 setOutInfo("File Property version has no value (Masterfile)", m_errorColor);
             }
-            if(fiLe->start_addr() == "")
+            if(fiLe->start_addr().isEmpty())
             {
                 setOutInfo("File Property start_addr has no value (Masterfile)", m_errorColor);
                 return false;
@@ -292,24 +292,24 @@ bool Masterfile::setSrecParameters()
         {
             Fpga *fpga = static_cast<Fpga*>(objectsMasterfile[i]);
 
-            if(fpga->filename().filestring == "")
+            if(fpga->filename().filestring.isEmpty())
             {
                 setOutInfo("FPGA Property filename has no value (Masterfile)", m_errorColor);
                 return false;
             }
-            if(fpga->designnumber() == "")
+            if(fpga->designnumber().isEmpty())
             {
                 setOutInfo("File Property designnumber has no value (Masterfile)", m_errorColor);
             }
-            if(fpga->revision() == "")
+            if(fpga->revision().isEmpty())
             {
                 setOutInfo("File Property revision has no value (Masterfile)", m_errorColor);
             }
-            if(fpga->testversion() == "")
+            if(fpga->testversion().isEmpty())
             {
                 setOutInfo("File Property testversion has no value (Masterfile)", m_errorColor);
             }
-            if(fpga->start_addr() == "")
+            if(fpga->start_addr().isEmpty())
             {
                 setOutInfo("FPGA Property start_addr has no value (Masterfile)", m_errorColor);
                 return false;

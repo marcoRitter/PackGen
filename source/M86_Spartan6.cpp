@@ -191,12 +191,12 @@ bool M86_Spartan6::generate_package()
     this->setVerFileName();
     this->setScrFileName();
 
-    if(m_pkgName == "")
+    if(m_pkgName.isEmpty())
     {
         setOutInfo("M86 Property pkgName has no value", m_errorColor);
         return false;
     }
-    if(m_pkgName.contains(".")||m_pkgName.contains(",")||m_pkgName.contains(";")||m_pkgName.contains(":")
+    else if(m_pkgName.contains(".")||m_pkgName.contains(",")||m_pkgName.contains(";")||m_pkgName.contains(":")
             ||m_pkgName.contains("<") || m_pkgName.contains(">")||m_pkgName.contains("!")||m_pkgName.contains("Â§")
             ||m_pkgName.contains("$")||m_pkgName.contains("%")||m_pkgName.contains("&")||m_pkgName.contains("/")
             ||m_pkgName.contains("{") || m_pkgName.contains("(")||m_pkgName.contains("[")||m_pkgName.contains(")")
@@ -206,28 +206,28 @@ bool M86_Spartan6::generate_package()
         setOutInfo("M86 Property pkgName has an invalid value", m_errorColor);
         return false;
     }
-    if(m_location.filestring == "")
+    if(m_location.filestring.isEmpty())
     {
         setOutInfo("M86 Property location has no value", m_errorColor);
         return false;
     }
-    if(m_typecode == "")
+    if(m_typecode.isEmpty())
     {
         setOutInfo("M86 Property typecode has no value", m_errorColor);
     }
-    if(m_variant == "")
+    if(m_variant.isEmpty())
     {
         setOutInfo("M86 Property variant has no value", m_errorColor);
     }
-    if(m_ver_major == "")
+    if(m_ver_major.isEmpty())
     {
         setOutInfo("M86 Property ver_major has no value", m_errorColor);
     }
-    if(m_ver_minor == "")
+    if(m_ver_minor.isEmpty())
     {
         setOutInfo("M86 Property ver_minor has no value", m_errorColor);
     }
-    if(m_ver_subminor == "")
+    if(m_ver_subminor.isEmpty())
     {
         setOutInfo("M86 Property ver_minor has no value", m_errorColor);
     }
@@ -238,29 +238,29 @@ bool M86_Spartan6::generate_package()
     {
         if(objectsM86[i]->inherits("firmware"))
         {
-            firmware *firm = (firmware*)objectsM86[i];
+            firmware *firm = static_cast<firmware*>(objectsM86[i]);
 
-            if(firm->filename().filestring == "")
+            if(firm->filename().filestring.isEmpty())
             {
                 setOutInfo("Firmware Property filename has no value (M86)", m_errorColor);
                 return false;
             }
-            if(firm->ver_major() == "")
+            if(firm->ver_major().isEmpty())
             {
                 setOutInfo("Firmware Property ver_major has no value (M86)", m_errorColor);
                 return false;
             }
-            if(firm->ver_minor() == "")
+            if(firm->ver_minor().isEmpty())
             {
                 setOutInfo("Firmware Property ver_minor has no value (M86)", m_errorColor);
                 return false;
             }
-            if(firm->ver_subminor() == "")
+            if(firm->ver_subminor().isEmpty())
             {
                 setOutInfo("Firmware Property ver_subminor has no value (M86)", m_errorColor);
                 return false;
             }
-            if(firm->start_addr() == "")
+            if(firm->start_addr().isEmpty())
             {
                 setOutInfo("Firmware Property start_addr has no value (M86)", m_errorColor);
                 return false;
@@ -268,29 +268,29 @@ bool M86_Spartan6::generate_package()
         }
         else if(objectsM86[i]->inherits("Fpga"))
         {
-            Fpga *fpga = (Fpga*)objectsM86[i];
+            Fpga *fpga = static_cast<Fpga*>(objectsM86[i]);
 
-            if(fpga->filename().filestring == "")
+            if(fpga->filename().filestring.isEmpty())
             {
                 setOutInfo("FPGA Property filename has no value (M86)", m_errorColor);
                 return false;
             }
-            if(fpga->designnumber() == "")
+            if(fpga->designnumber().isEmpty())
             {
                 setOutInfo("File Property designnumber has no value (M86)", m_errorColor);
                 return false;
             }
-            if(fpga->revision() == "")
+            if(fpga->revision().isEmpty())
             {
                 setOutInfo("File Property revision has no value (M86)", m_errorColor);
                 return false;
             }
-            if(fpga->testversion() == "")
+            if(fpga->testversion().isEmpty())
             {
                 setOutInfo("File Property testversion has no value (M86)", m_errorColor);
                 return false;
             }
-            if(fpga->start_addr() == "")
+            if(fpga->start_addr().isEmpty())
             {
                 setOutInfo("FPGA Property start_addr has no value (M86)", m_errorColor);
                 return false;
@@ -331,7 +331,7 @@ bool M86_Spartan6::generate_package()
     {
         if (childsOfM86->objectName()=="FPGA")
         {
-            Fpga *fpga = (Fpga*) childsOfM86;
+            Fpga *fpga = static_cast<Fpga*>(childsOfM86);
             fpga->setHexFileName(m_location.filestring);
             fpga->setSrecParameters();
             fpga->setVariant(this->variant());
@@ -376,7 +376,7 @@ bool M86_Spartan6::generate_package()
         }
         if (childsOfM86->objectName()=="firmware")
         {
-            firmware *fw = (firmware*)childsOfM86;
+            firmware *fw = static_cast<firmware*>(childsOfM86);
             fw->setVerFileName(m_location.filestring);
             fw->setVariant(this->variant());
             fw->setTypecode(this->typecode());
@@ -437,7 +437,7 @@ int M86_Spartan6::runMbind()
         qDebug() << "mbind parameters = " << entity;
     }
 
-    QProcess *process = new QProcess(0);
+    QProcess *process = new QProcess(nullptr);
     process->start(mbindExe, parameters,QIODevice::ReadWrite);
     if (!process->waitForStarted())
         qDebug() << "error by executing srec_cat";
