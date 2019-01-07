@@ -57,9 +57,9 @@ bool JADE_Moduledescription::readJson(const QJsonObject *jsonObj)
     setDescription(jsonObj->value("description").toString());
     setFilename(jsonObj->value("filename").toString());
 
-    setVer_major(jsonObj->value("ver_major").toString().toInt());
-    setVer_minor(jsonObj->value("ver_minor").toString().toInt());
-    setVer_subminor(jsonObj->value("ver_subminor").toString().toInt());
+    setVer_major(static_cast<uint>(jsonObj->value("ver_major").toString().toInt()));
+    setVer_minor(static_cast<uint>(jsonObj->value("ver_minor").toString().toInt()));
+    setVer_subminor(static_cast<uint>(jsonObj->value("ver_subminor").toString().toInt()));
 
     return true;
 }

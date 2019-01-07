@@ -254,9 +254,12 @@ void MainWindow::draw_property_browser()
            QVariant v = prop.read(n);
            switch ( v.type() ) {
            case QVariant::String :
+               if(static_cast<QString>(prop.name()) != "object_name")
+               {
                  property = variantManager->addProperty(QVariant::String, prop.name());
                  property->setValue(v.toString());
                  property->setToolTip(setTipForProperty(prop));
+               }
               if (!((m_currentItem->getType().contains("M86")) && (property->propertyName().contains("description"))))
                  property->setAttribute("regExp", setRegExpForProperty(prop));
                  break ;

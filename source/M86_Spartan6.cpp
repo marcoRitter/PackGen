@@ -134,12 +134,12 @@ QString M86_Spartan6::getVerString()
     ver.append(".");
     ver.append(ver_minor().section("",3,4));
     ver.append(".");
-    if (verstate().verstate.takeAt(verstate().selectedVersion) == "Release")
+    if (verstate().verstate.takeAt(static_cast<int>(verstate().selectedVersion)) == "Release")
         ver.append("00");
     else
         ver.append(ver_subminor().section("",3,4));
     ver.append(" ");
-    ver.append(verstate().verstate.takeAt(verstate().selectedVersion));
+    ver.append(verstate().verstate.takeAt(static_cast<int>(verstate().selectedVersion)));
     ver.append('"');
     return ver;
 }

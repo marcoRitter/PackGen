@@ -58,6 +58,16 @@ void Masterfile::setFilename(QString name)
     m_filename = name;
 }
 
+FlashSize Masterfile::flash_size()
+{
+    return m_flashsize;
+}
+
+void Masterfile::setFlash_size(FlashSize flashsize)
+{
+    m_flashsize = flashsize;
+}
+
 FileString Masterfile::location()
 {
     return m_location;
@@ -116,6 +126,10 @@ bool Masterfile::readJson(const QJsonObject *jsonObj)
     setVer_minor(jsonVal.toString());
     jsonVal = jsonObj->value("ver_subminor");
     setVer_subminor(jsonVal.toString());
+    jsonVal = jsonObj->value("flash_size");
+    FlashSize f;
+    f.selectedsize = static_cast<uint>(jsonVal.toInt());
+    setFlash_size(f);
 
     return true;
 }
@@ -128,7 +142,7 @@ bool Masterfile::writeJson(QJsonObject *jsonObj)
     jsonObj->insert("ver_major",ver_major());
     jsonObj->insert("ver_minor",ver_minor());
     jsonObj->insert("ver_subminor",ver_subminor());
-
+    jsonObj->insert("flash_size",static_cast<int>(flash_size().selectedsize));
     return true;
 }
 
@@ -149,21 +163,21 @@ void Masterfile::node_menue(QMenu *menu)
 
 void Masterfile::new_FPGA()
 {
-    Fpga *m = new Fpga(this);
+    file *m = new file(this);
     Model *m_m = Node::getModel();
     m->setModel(m_m);
     m->setDescription("new FPGA");
-    m->setType("FPGA");
+    m->setObject_name("FPGA");
     this->setChild(this->rowCount(),m);
 }
 
 void Masterfile::new_Firmware()
 {
-    firmware *m = new firmware(this);
+    file *m = new file(this);
     Model *m_m = Node::getModel();
     m->setModel(m_m);
     m->setDescription("new firmware");
-    m->setType("firmware");
+    m->setObject_name("Firmware");
     this->setChild(this->rowCount(),m);
 }
 
@@ -173,7 +187,7 @@ void Masterfile::new_File()
     Model *m_m = Node::getModel();
     m->setModel(m_m);
     m->setDescription("new File");
-    m->setType("File");
+    m->setObject_name("File");
     this->setChild(this->rowCount(),m);
 }
 
@@ -216,45 +230,17 @@ bool Masterfile::setSrecParameters()
     {
         setOutInfo("Masterfile Property ver_subminor has no value", m_errorColor);
     }
+    if(m_flashsize.memorysize.isEmpty())
+    {
+        setOutInfo("Masterfile Property flashsize has no value", m_errorColor);
+        return false;
+    }
 
 
     QObjectList objectsMasterfile = this->children();
     for(int i = 0; i < this->children().length(); i++)
     {
-        if(objectsMasterfile[i]->inherits("firmware"))
-        {
-            firmware *firm = static_cast<firmware*>(objectsMasterfile[i]);
-
-
-            if(firm->filename().filestring.isEmpty())
-            {
-                setOutInfo("Firmware Property filename has no value (Masterfile)", m_errorColor);
-                return false;
-            }
-            if(firm->ver_major().isEmpty())
-            {
-                setOutInfo("Firmware Property ver_major has no value (Masterfile)", m_errorColor);
-            }
-            if(firm->ver_minor().isEmpty())
-            {
-                setOutInfo("Firmware Property ver_minor has no value (Masterfile)", m_errorColor);
-            }
-            if(firm->ver_subminor().isEmpty())
-            {
-                setOutInfo("Firmware Property ver_subminor has no value (Masterfile)", m_errorColor);
-            }
-            if(firm->start_addr().isEmpty())
-            {
-                setOutInfo("Firmware Property start_addr has no value (Masterfile)", m_errorColor);
-                return false;
-            }
-
-            srec_parameters.append(firm->filename().filestring);
-            srec_parameters.append("--binary");
-            srec_parameters.append("--offset");
-            srec_parameters.append(firm->start_addr());
-        }
-        else if(objectsMasterfile[i]->inherits("file"))
+        if(objectsMasterfile[i]->inherits("file"))
         {
             file *fiLe = static_cast<file*>(objectsMasterfile[i]);
 
@@ -277,7 +263,7 @@ bool Masterfile::setSrecParameters()
             srec_parameters.append(fiLe->filename().filestring);
             if(fiLe->filename().filestring.contains(".txt") || fiLe->filename().filestring.contains(".rtf")
                     || fiLe->filename().filestring.contains(".doc") || fiLe->filename().filestring.contains(".bin")
-                    || fiLe->filename().filestring.contains(".bmp"))
+                    || fiLe->filename().filestring.contains(".bmp") || fiLe->filename().filestring.contains(".bit"))
             {
                 srec_parameters.append("--binary");
             }
@@ -288,39 +274,6 @@ bool Masterfile::setSrecParameters()
             srec_parameters.append("--offset");
             srec_parameters.append(fiLe->start_addr());
         }
-        else if(objectsMasterfile[i]->inherits("Fpga"))
-        {
-            Fpga *fpga = static_cast<Fpga*>(objectsMasterfile[i]);
-
-            if(fpga->filename().filestring.isEmpty())
-            {
-                setOutInfo("FPGA Property filename has no value (Masterfile)", m_errorColor);
-                return false;
-            }
-            if(fpga->designnumber().isEmpty())
-            {
-                setOutInfo("File Property designnumber has no value (Masterfile)", m_errorColor);
-            }
-            if(fpga->revision().isEmpty())
-            {
-                setOutInfo("File Property revision has no value (Masterfile)", m_errorColor);
-            }
-            if(fpga->testversion().isEmpty())
-            {
-                setOutInfo("File Property testversion has no value (Masterfile)", m_errorColor);
-            }
-            if(fpga->start_addr().isEmpty())
-            {
-                setOutInfo("FPGA Property start_addr has no value (Masterfile)", m_errorColor);
-                return false;
-            }
-
-            srec_parameters.append(fpga->filename().filestring);
-            srec_parameters.append("--binary");
-            srec_parameters.append("--offset");
-            srec_parameters.append(fpga->start_addr());
-        }
-
     }
 
     srec_parameters.append("--o");

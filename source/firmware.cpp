@@ -98,12 +98,12 @@ QString firmware::getVerString()
     ver.append(".");
     ver.append(ver_minor().section("",3,4));
     ver.append(".");
-    if (verstate().verstate.takeAt(verstate().selectedVersion) == "Release")
+    if (verstate().verstate.takeAt(static_cast<int>(verstate().selectedVersion)) == "Release")
         ver.append("00");
     else
         ver.append(ver_subminor().section("",3,4));
     ver.append(" ");
-    ver.append(verstate().verstate.takeAt(verstate().selectedVersion));
+    ver.append(verstate().verstate.takeAt(static_cast<int>(verstate().selectedVersion)));
     ver.append('"');
     return ver;
 }
@@ -126,7 +126,7 @@ int firmware::runLogichdr()
     parameters << "-e" << "FW1";
     qDebug() << "logichdr parameters = \n" << parameters;
 
-    QProcess *process = new QProcess(0);
+    QProcess *process = new QProcess(nullptr);
     process->start(logichdr, parameters,QIODevice::ReadWrite);
     if (!process->waitForStarted())
         qDebug() << "error by executing srec_cat";

@@ -21,6 +21,7 @@ class Masterfile : public Node
     Q_PROPERTY(QString ver_major READ ver_major WRITE setVer_major)
     Q_PROPERTY(QString ver_minor READ ver_minor WRITE setVer_minor)
     Q_PROPERTY(QString ver_subminor READ ver_subminor WRITE setVer_subminor)
+    Q_PROPERTY(FlashSize flash_size READ flash_size WRITE setFlash_size)
 public:
     Masterfile(QObject *parent = nullptr);
     ~Masterfile();
@@ -29,6 +30,9 @@ public:
 
     FileString location();
     void setLocation(FileString foldername);
+
+    FlashSize flash_size();
+    void setFlash_size(FlashSize flashsize);
 
     QString filename();
     void setFilename(QString filename);
@@ -67,6 +71,7 @@ private:
     QString m_ver_major;
     QString m_ver_minor;
     QString m_ver_subminor;
+    FlashSize m_flashsize;
 
     QStringList m_srecParameters;
     QString m_processOut;

@@ -199,7 +199,7 @@ int Fpga::runSrec()
 
     qDebug() << "srec EXE = " << srecExe;
 
-    QProcess *process = new QProcess(0);
+    QProcess *process = new QProcess(nullptr);
 
     qDebug() << "srec startet with " << m_srecParameters;
 
@@ -241,7 +241,7 @@ int Fpga::runLogichdr()
     parameters << "-e" << "FPGA";
     qDebug() << "logichdr parameters = \n" << parameters;
 
-    QProcess *process = new QProcess(0);
+    QProcess *process = new QProcess(nullptr);
     process->start(logichdr, parameters,QIODevice::ReadWrite);
     if (!process->waitForStarted())
         qDebug() << "error by executing srec_cat";

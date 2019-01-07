@@ -91,7 +91,7 @@ bool Node::readJson(const QJsonObject *jsonObj)
                 if (strcmp(v.typeName(),"FlashSize") == 0)
                 {
                         FlashSize f;
-                        f.selectedsize = jsonVal.toInt();
+                        f.selectedsize = static_cast<uint>(jsonVal.toInt());
                         QVariant a;
                         a.setValue<FlashSize>(f);
                         this->setProperty(key.toLatin1().data(),a);
@@ -99,7 +99,7 @@ bool Node::readJson(const QJsonObject *jsonObj)
                 if (strcmp(v.typeName(), "DualBoot") == 0)
                 {
                         DualBoot d;
-                        d.dualbootena = jsonVal.toInt();
+                        d.dualbootena = static_cast<uint>(jsonVal.toInt());
                         QVariant a;
                         a.setValue<DualBoot>(d);
                         this->setProperty(key.toLatin1().data(),a);
@@ -107,7 +107,7 @@ bool Node::readJson(const QJsonObject *jsonObj)
                 if (strcmp(v.typeName(), "FpgaType") == 0)
                 {
                         FpgaType d;
-                        d.selectedfpga = jsonVal.toInt();
+                        d.selectedfpga = static_cast<uint>(jsonVal.toInt());
                         QVariant a;
                         a.setValue<FpgaType>(d);
                         this->setProperty(key.toLatin1().data(),a);
@@ -115,7 +115,7 @@ bool Node::readJson(const QJsonObject *jsonObj)
                 if (strcmp(v.typeName(), "VerState") == 0)
                 {
                         VerState d;
-                        d.selectedVersion = jsonVal.toInt();
+                        d.selectedVersion = static_cast<uint>(jsonVal.toInt());
                         QVariant a;
                         a.setValue<VerState>(d);
                         this->setProperty(key.toLatin1().data(),a);
