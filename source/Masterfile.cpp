@@ -246,16 +246,16 @@ bool Masterfile::setSrecParameters()
 
             if(fiLe->filename().filestring.isEmpty())
             {
-                setOutInfo("File Property filename has no value (Masterfile)", m_errorColor);
+                setOutInfo(fiLe->object_name()+" Property filename has no value (Masterfile)", m_errorColor);
                 return false;
             }
             if(fiLe->version().isEmpty())
             {
-                setOutInfo("File Property version has no value (Masterfile)", m_errorColor);
+                setOutInfo(fiLe->object_name()+" Property version has no value (Masterfile)", m_errorColor);
             }
             if(fiLe->start_addr().isEmpty())
             {
-                setOutInfo("File Property start_addr has no value (Masterfile)", m_errorColor);
+                setOutInfo(fiLe->object_name()+" Property start_addr has no value (Masterfile)", m_errorColor);
                 return false;
             }
 
@@ -276,32 +276,6 @@ bool Masterfile::setSrecParameters()
         }
     }
 
-    srec_parameters.append("--fill");
-    srec_parameters.append("0xFF");
-    srec_parameters.append("0x00000000");
-    switch (m_flashsize.selectedsize) {
-        case 0:
-            srec_parameters.append("0x00003333");
-            break;
-        case 1:
-            srec_parameters.append("0x00006666");
-            break;
-        case 2:
-            srec_parameters.append("0x0000CCCC");
-            break;
-        case 3:
-            srec_parameters.append("0x00019999");
-            break;
-        case 4:
-            srec_parameters.append("0x00033333");
-            break;
-        case 5:
-            srec_parameters.append("0x00066666");
-            break;
-        case 6:
-            srec_parameters.append("0x000CCCCC");
-            break;
-    }
 
     srec_parameters.append("--o");
     srec_parameters.append(m_location.filestring + "/" + m_filename+".hex");
@@ -333,17 +307,6 @@ int Masterfile::runSrec()
 //  qDebug() <<"srec returned " << process->errorString();
 
     delete process;
-    QFileInfo hexFile = m_location.filestring + "/" + m_filename + ".hex";
-    if (!(hexFile.exists() && hexFile.isFile()))
-    {
-        qDebug() << "error by hex file";
-        setOutInfo("Problems while creating Masterfile", m_errorColor);
-        return 1;
-    }
-    else {
-        setOutInfo("Created Masterfile successfully:", m_infoColor);
-        setOutInfo(m_location.filestring + "/" + m_filename + ".hex", m_normalColor);
-    }
 
     return 0;
 }
@@ -352,9 +315,52 @@ bool Masterfile::generate_masterfile()
 {
     if(setSrecParameters())
     {
-        if(!runSrec())
+        if(runSrec())
         {
             return false;
+        }
+        else {
+
+
+            QFileInfo hexFile = m_location.filestring + "/" + m_filename + ".hex";
+            if (!(hexFile.exists() && hexFile.isFile()))
+            {
+                qDebug() << "error by hex file";
+                setOutInfo("Problems while creating Masterfile", m_errorColor);
+                setOutInfo(m_processOut, m_errorColor);
+            }
+            else {
+                setOutInfo("Created Masterfile successfully:", m_infoColor);
+                setOutInfo(m_location.filestring + "/" + m_filename + ".hex", m_normalColor);
+            }
+
+
+            if(fillBlanks())
+            {
+                if(runSrec())
+                {
+                    return false;
+                }
+                else {
+
+                    QFileInfo hexFile = m_location.filestring + "/" + m_filename+"_filled"+".hex";
+                    if (!(hexFile.exists() && hexFile.isFile()))
+                    {
+                        qDebug() << "error by hex file";
+                        setOutInfo("Problems while creating Masterfile", m_errorColor);
+                        setOutInfo(m_processOut, m_errorColor);
+                    }
+                    else {
+                        setOutInfo("Created Masterfile successfully:", m_infoColor);
+                        setOutInfo(m_location.filestring + "/" + m_filename+"_filled"+".hex", m_normalColor);
+                    }
+
+                    return true;
+                }
+            }
+            else {
+                return false;
+            }
         }
     }
     else {
@@ -362,4 +368,49 @@ bool Masterfile::generate_masterfile()
     }
     return true;
 
+}
+
+
+bool Masterfile::fillBlanks()
+{
+    QStringList srec_parameters;
+
+    srec_parameters.clear();
+
+
+    srec_parameters.append(m_location.filestring + "/" + m_filename+".hex");
+    srec_parameters.append("--intel");
+    srec_parameters.append("--fill");
+    srec_parameters.append("0xFF");
+    srec_parameters.append("0x00000000");
+    switch (m_flashsize.selectedsize) {
+        case 0:
+            srec_parameters.append("0x00003333");
+            break;
+        case 1:
+            srec_parameters.append("0x00006666");
+            break;
+        case 2:
+            srec_parameters.append("0x0000CCCC");
+            break;
+        case 3:
+            srec_parameters.append("0x00019999");
+            break;
+        case 4:
+            srec_parameters.append("0x00033333");
+            break;
+        case 5:
+            srec_parameters.append("0x00066666");
+            break;
+        case 6:
+            srec_parameters.append("0x000CCCCC");
+            break;
+    }
+
+    srec_parameters.append("--o");
+    srec_parameters.append(m_location.filestring + "/" + m_filename+"_filled"+".hex");
+    srec_parameters.append("--intel");
+
+    m_srecParameters = srec_parameters;
+    return true;
 }

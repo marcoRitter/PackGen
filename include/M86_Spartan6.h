@@ -7,8 +7,6 @@
 #include "fpga.h"
 #include "firmware.h"
 
-//#include "customtype.h"
-
 /*
 
 enum VER_STATE

@@ -47,6 +47,7 @@ public:
     void setVer_subminor(QString ver_subminor);
 
     bool setSrecParameters ();
+    bool fillBlanks();
     int runSrec();
 
 
