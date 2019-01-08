@@ -7,7 +7,7 @@
 file::file(QObject *parent) : Node(parent,"File")
 {
     QIcon DeleteIcon;
-    //this->setObjectName("File");
+    this->setObjectName("File");
     DeleteIcon.addFile(":/Images/icons8-delete.png",QSize(25,25));
     pDeleteFile = new QAction (tr("&Delete"),this);
 
@@ -33,15 +33,6 @@ void file::setFilename(FileString filename)
     m_filename = filename;
 }
 
-QString file::description()
-{
-    return m_description;
-}
-
-void file::setDescription(QString description)
-{
-    m_description = description;
-}
 
 QString file::version()
 {

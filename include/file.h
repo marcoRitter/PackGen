@@ -22,10 +22,7 @@ public:
     file(QObject *parent = nullptr);
     ~file();
 
-    QString node_type() {return"Fpga";}
-
-    QString description();
-    void setDescription(QString description);
+    QString node_type() {return"File";}
 
     FileString filename();
     void setFilename(FileString filename);

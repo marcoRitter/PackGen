@@ -50,6 +50,7 @@ public:
     int runSrec();
 
 
+
     bool readJson(const QJsonObject *jsonObj);
     bool writeJson(QJsonObject *jsonObj);
 

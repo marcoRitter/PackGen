@@ -7,7 +7,7 @@
 #include "fpga.h"
 #include "firmware.h"
 
-#include "customtype.h"
+//#include "customtype.h"
 
 /*
 
