@@ -58,6 +58,7 @@ SOURCES += source/main.cpp\
     source/firmware.cpp \
     source/file.cpp \
     source/output.cpp \
+    source/goldenReference.cpp
 
 HEADERS  += include/mainwindow.h \
     include/node.h \
@@ -90,7 +91,8 @@ HEADERS  += include/mainwindow.h \
     include/firmware.h \
     include/file.h\
     include/output.h \
-    resource/output.h
+    resource/output.h \
+    include/goldenReference.h
 
 FORMS    += resource/mainwindow.ui \
     resource/aboutdialog.ui \
