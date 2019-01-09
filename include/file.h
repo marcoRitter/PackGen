@@ -14,9 +14,11 @@ class file : public Node
     Q_OBJECT
 
     Q_PROPERTY(FileString filename READ filename WRITE setFilename)
+    Q_PROPERTY(FileType file_type READ file_type WRITE setFile_type)
     Q_PROPERTY(QString version READ version WRITE setVersion)
     Q_PROPERTY(QString start_addr READ start_addr WRITE setStart_addr)
     Q_PROPERTY(QString object_name READ object_name WRITE setObject_name)
+
 
 public:
     file(QObject *parent = nullptr);
@@ -26,6 +28,9 @@ public:
 
     FileString filename();
     void setFilename(FileString filename);
+
+    FileType file_type();
+    void setFile_type(FileType file_type);
 
     QString version();
     void setVersion(QString version);
@@ -41,6 +46,7 @@ public:
 private:
 
     FileString m_filename;
+    FileType m_file_type;
     QString m_description;
     QString m_version;
     QString m_start_addr;

@@ -215,6 +215,14 @@ void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
                 a.setValue<VerState>(verstate);
                 m_currentItem->setProperty(property->propertyName().toStdString().c_str(),a);
             }
+            if(strcmp(v.typeName(),"FileType") == 0)
+            {
+                QVariant a;
+                FileType filetype;
+                filetype.selectedType = val.toUInt();
+                a.setValue<FileType>(filetype);
+                m_currentItem->setProperty(property->propertyName().toStdString().c_str(),a);
+            }
 
         }
         else
@@ -316,6 +324,12 @@ void MainWindow::draw_property_browser()
                    property->setAttribute("enumNames",v.value<VerState>().verstate);
                    property->setValue(v.value<VerState>().selectedVersion);
                 }
+               if(strcmp(v.typeName(),"FileType") == 0)
+               {
+                   property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
+                   property->setAttribute("enumNames",v.value<FileType>().filetype);
+                   property->setValue(v.value<FileType>().selectedType);
+               }
                 break;
            default :
                break;

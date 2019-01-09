@@ -8,5 +8,6 @@ void CustomType::setup()
     CustomTypeFile = qRegisterMetaType<FlashSize>("FlashSize");
     CustomTypeFile = qRegisterMetaType<FpgaType>("FpgaType");
     CustomTypeFile = qRegisterMetaType<VerState>("VerState");
+    CustomTypeFile = qRegisterMetaType<FileType>("FileType");
 }
 

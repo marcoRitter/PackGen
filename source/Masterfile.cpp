@@ -261,13 +261,11 @@ bool Masterfile::setSrecParameters()
 
 
             srec_parameters.append(fiLe->filename().filestring);
-            if(fiLe->filename().filestring.contains(".txt") || fiLe->filename().filestring.contains(".rtf")
-                    || fiLe->filename().filestring.contains(".doc") || fiLe->filename().filestring.contains(".bin")
-                    || fiLe->filename().filestring.contains(".bmp") || fiLe->filename().filestring.contains(".bit"))
+            if(fiLe->file_type().selectedType == 1)
             {
                 srec_parameters.append("--binary");
             }
-            else if(fiLe->filename().filestring.contains(".hex") || fiLe->filename().filestring.contains(".h86"))
+            else if(fiLe->file_type().selectedType == 0)
             {
                 srec_parameters.append("--intel");
             }
@@ -280,6 +278,8 @@ bool Masterfile::setSrecParameters()
     srec_parameters.append("--o");
     srec_parameters.append(m_location.filestring + "/" + m_filename+".hex");
     srec_parameters.append("--intel");
+
+    srec_parameters.append("--obs=16");
 
     m_srecParameters = srec_parameters;
     return true;
@@ -385,31 +385,32 @@ bool Masterfile::fillBlanks()
     srec_parameters.append("0x00000000");
     switch (m_flashsize.selectedsize) {
         case 0:
-            srec_parameters.append("0x00003333");
+            srec_parameters.append("0x0003FFFF");
             break;
         case 1:
-            srec_parameters.append("0x00006666");
+            srec_parameters.append("0x0007FFFF");
             break;
         case 2:
-            srec_parameters.append("0x0000CCCC");
+            srec_parameters.append("0x000FFFFF");
             break;
         case 3:
-            srec_parameters.append("0x00019999");
+            srec_parameters.append("0x001FFFFF");
             break;
         case 4:
-            srec_parameters.append("0x00033333");
+            srec_parameters.append("0x003FFFFF");
             break;
         case 5:
-            srec_parameters.append("0x00066666");
+            srec_parameters.append("0x007FFFFF");
             break;
         case 6:
-            srec_parameters.append("0x000CCCCC");
+            srec_parameters.append("0x00FFFFFF");
             break;
     }
 
     srec_parameters.append("--o");
     srec_parameters.append(m_location.filestring + "/" + m_filename+"_filled"+".hex");
     srec_parameters.append("--intel");
+    srec_parameters.append("--obs=16");
 
     m_srecParameters = srec_parameters;
     return true;

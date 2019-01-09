@@ -33,6 +33,15 @@ void file::setFilename(FileString filename)
     m_filename = filename;
 }
 
+FileType file::file_type()
+{
+    return m_file_type;
+}
+
+void file::setFile_type(FileType file_type)
+{
+    m_file_type = file_type;
+}
 
 QString file::version()
 {

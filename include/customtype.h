@@ -74,6 +74,15 @@ public:
     VerState(const uint &value): selectedVersion(value) {}
 };
 
+class FileType
+{
+public:
+    QStringList filetype = {"intel hex-file", "binary-file"};
+    uint selectedType = 0;
+    FileType(){}
+    FileType(const uint &value): selectedType(value){}
+};
+
 
 Q_DECLARE_METATYPE(FileString)
 Q_DECLARE_METATYPE(HexString)
@@ -81,6 +90,7 @@ Q_DECLARE_METATYPE(FlashSize)
 Q_DECLARE_METATYPE(DualBoot)
 Q_DECLARE_METATYPE(FpgaType)
 Q_DECLARE_METATYPE(VerState)
+Q_DECLARE_METATYPE(FileType)
 
 
 

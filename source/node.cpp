@@ -120,6 +120,14 @@ bool Node::readJson(const QJsonObject *jsonObj)
                         a.setValue<VerState>(d);
                         this->setProperty(key.toLatin1().data(),a);
                 }
+                if(strcmp(v.typeName(),"FileType") == 0)
+                {
+                        FileType d;
+                        d.selectedType = static_cast<uint>(jsonVal.toInt());
+                        QVariant a;
+                        a.setValue<FileType>(d);
+                        this->setProperty(key.toLatin1().data(),a);
+                }
 
             }
             else
@@ -170,6 +178,11 @@ bool Node::writeJson(QJsonObject *jsonObj)
             if (strcmp(v.typeName(), "VerState") == 0)
             {
                 QVariant x = v.value<VerState>().selectedVersion;
+                jsonObj->insert(prop.name(),x.toInt());
+            }
+            if (strcmp(v.typeName(), "FileType") == 0)
+            {
+                QVariant x = v.value<FileType>().selectedType;
                 jsonObj->insert(prop.name(),x.toInt());
             }
 
