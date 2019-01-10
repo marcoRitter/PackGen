@@ -14,24 +14,24 @@ Project::Project(QObject *parent) :
 
     pNewMasterfile = new QAction(tr("New &Masterfile"), this);
     connect(pNewMasterfile, &QAction::triggered, this, &Project::new_Masterfile);
-    /*
-    pNewMasterFile = new QAction(tr("&Masterfile"), this);
-    connect(pNewMasterFile, SIGNAL(triggered()), this, SLOT(new_Masterfile()));
-    pNewJadeFile = new QAction(tr("&New JADE Package"), this);
-    connect(pNewJadeFile, SIGNAL(triggered()), this, SLOT(new_JADE_Package()));
-    */
+
+    pNewgoldenRef = new QAction(tr("New &Golden Reference"), this);
+    connect(pNewgoldenRef, &QAction::triggered, this, &Project::new_goldenRef);
 
 }
 
 Project::~Project()
 {
     disconnect(pNewSpartan, SIGNAL(triggered()), this, SLOT(new_M86_Spartan6()));
+    disconnect(pNewMasterfile, &QAction::triggered, this, &Project::new_Masterfile);
+    disconnect(pNewgoldenRef, &QAction::triggered, this, &Project::new_goldenRef);
     /*
-    disconnect(pNewMasterFile, SIGNAL(triggered()), this, SLOT(new_Masterfile()));
     disconnect(pNewJadeFile, SIGNAL(triggered()), this, SLOT(new_JADE_Package()));
     */
 
     delete pNewSpartan;
+    delete pNewgoldenRef;
+    delete pNewMasterfile;
     /*
     delete pNewMasterFile;
     delete pNewJadeFile;
@@ -99,6 +99,16 @@ void Project::new_Masterfile()
     m->setType("Masterfile");
     this->setChild(this->rowCount(),m);
 }
+
+void Project::new_goldenRef()
+{
+    goldenReference *m = new goldenReference(this);
+    Model *m_m = Node::getModel();
+    m->setModel(m_m);
+    m->setDescription("new Golden Reference");
+    m->setType("goldenReference");
+    this->setChild(this->rowCount(),m);
+}
 /*
 void Project::new_JADE_Package()
 {
@@ -122,6 +132,7 @@ void Project::node_menue(QMenu *menu)
 {
     menu->addAction(pNewSpartan);
     menu->addAction(pNewMasterfile);
+    menu->addAction(pNewgoldenRef);
     /*
     menu->addAction(pNewMasterFile);
     menu->addAction(pNewJadeFile);

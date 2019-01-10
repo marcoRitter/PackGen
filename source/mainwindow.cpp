@@ -292,7 +292,7 @@ void MainWindow::draw_property_browser()
                {
                    property = variantManager->addProperty(VariantManager::filePathTypeId(), prop.name());
                    property->setValue(v);
-                }
+               }
                if (strcmp(v.typeName(),"HexString") == 0)
                {
                    property = variantManager->addProperty(QVariant::String, prop.name());

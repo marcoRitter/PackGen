@@ -170,6 +170,13 @@ bool Model::load(const QString &filename, QObject *parent)
          x->readJson(jsonObj);
      }
 
+     if (node_type.toLower() == "goldenreference")
+     {
+         n = new goldenReference(parent);
+         goldenReference *x = static_cast<goldenReference *>(n);
+         x->readJson(jsonObj);
+     }
+
      // parse child objects (has anumber as name)
      QJsonValue childes = jsonObj->value("childes");
      QJsonArray jsonArray = childes.toArray();

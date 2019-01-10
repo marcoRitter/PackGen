@@ -5,6 +5,7 @@
 #include "M86_Spartan6.h"
 #include "JADE_Package.h"
 #include "Masterfile.h"
+#include "goldenReference.h"
 #include "model.h"
 
 
@@ -54,9 +55,9 @@ public:
 private slots:
     void new_M86_Spartan6();
     void new_Masterfile();
+    void new_goldenRef();
     /*
-    void new_JADE_Package();
-    void new_Masterfile();
+    void new_JADE_Package();  
     */
 
 private:
@@ -68,6 +69,7 @@ private:
 
     QAction *pNewSpartan;
     QAction *pNewMasterfile;
+    QAction *pNewgoldenRef;
     QAction *pNewJadeFile;
 
 };
