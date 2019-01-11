@@ -130,14 +130,14 @@ QString M86_Spartan6::getVerString()
 {
     QString ver = "";
     ver.append("\"V");
-    ver.append(ver_major().section("",3,4));
+    ver.append(ver_major());
     ver.append(".");
-    ver.append(ver_minor().section("",3,4));
+    ver.append(ver_minor());
     ver.append(".");
     if (verstate().verstate.takeAt(static_cast<int>(verstate().selectedVersion)) == "Release")
         ver.append("00");
     else
-        ver.append(ver_subminor().section("",3,4));
+        ver.append(ver_subminor());
     ver.append(" ");
     ver.append(verstate().verstate.takeAt(static_cast<int>(verstate().selectedVersion)));
     ver.append('"');
@@ -174,8 +174,8 @@ void M86_Spartan6::new_Firmware()
     firmware *m = new firmware(this);
     Model* m_m = Node::getModel();
     m->setModel(m_m);
-    m->setDescription("new firmware");
-    m->setType("firmware");
+    m->setDescription("new Firmware");
+    m->setType("Firmware");
     this->setChild(this->rowCount(),m);
 }
 

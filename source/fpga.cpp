@@ -165,11 +165,11 @@ QString Fpga::getVerString()
 {
     QString ver = "";
     ver.append("\"V");
-    ver.append(designnumber().section("",3,4));
+    ver.append(designnumber());
     ver.append(".");
-    ver.append(designnumber().section("",5,6));
+    ver.append(designnumber());
     ver.append(".");
-    ver.append(revision().section("",3,4));
+    ver.append(revision());
     ver.append('"');
     return ver;
 }

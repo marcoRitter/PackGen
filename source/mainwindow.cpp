@@ -422,7 +422,7 @@ void MainWindow::clearOut()
 }
 QString MainWindow::setTipForProperty(const QMetaProperty & prop)
 {
-    QString toolTip = "defalut";
+    QString toolTip = "default";
     if (strcmp(prop.name(), "description") == 0)
         toolTip = "description";
     if (strcmp(prop.name(), "pkgName") == 0)
@@ -435,8 +435,27 @@ QString MainWindow::setTipForProperty(const QMetaProperty & prop)
         toolTip = "Minor subversion of project(0x..)";
     if (strcmp(prop.name(), "typecode") == 0)
         toolTip = "Variant (0x..)";
-    if (strcmp(prop.name(), "typecode") == 0)
+    if (strcmp(prop.name(), "variant") == 0)
         toolTip = "Variant (0x..)";
+    if(strcmp(prop.name(), "location") == 0)
+        toolTip = "final folder";
+    if(strcmp(prop.name(), "verstate") == 0)
+        toolTip = "package version state";
+    if(strcmp(prop.name(), "filename") == 0)
+        toolTip = "final filename";
+    if(strcmp(prop.name(), "designnumber") == 0)
+        toolTip = "Designnumber (0x..)";
+    if(strcmp(prop.name(), "revision") == 0)
+        toolTip = "File revision (0x..)";
+    if(strcmp(prop.name(), "testversion") == 0)
+        toolTip = "Testversion (0x..)";
+    if(strcmp(prop.name(), "start_addr") == 0)
+        toolTip = "Code jump in address (0x..)";
+    if(strcmp(prop.name(), "name") == 0)
+        toolTip = "Project name";
+    if(strcmp(prop.name(), "version") == 0)
+        toolTip = "File version";
+
     return toolTip;
 }
 
@@ -444,19 +463,20 @@ QRegExp MainWindow::setRegExpForProperty(const QMetaProperty &prop)
 {
     QRegExp regexp;
     regexp.setPattern(".*");
-    if (strcmp(prop.name(), "ver_major") == 0 ||
-        strcmp(prop.name(), "ver_minor") == 0 ||
-        strcmp(prop.name(), "ver_subminor") == 0 ||
-        strcmp(prop.name(), "revision") == 0 ||
-        strcmp(prop.name(), "testversion") == 0 ||
+    if (strcmp(prop.name(), "testversion") == 0 ||
         strcmp(prop.name(), "variant") == 0 ||
         strcmp(prop.name(), "typecode") == 0)
             regexp.setPattern("0x[0-9A-Fa-f]{1,2}");
+    if(strcmp(prop.name(), "revision") == 0 ||
+       strcmp(prop.name(), "ver_major") == 0 ||
+       strcmp(prop.name(), "ver_minor") == 0 ||
+       strcmp(prop.name(), "ver_subminor") == 0)
+            regexp.setPattern("[0-9]{1,2}");
     if (strcmp(prop.name(), "designnumber") == 0)
         regexp.setPattern("0x[0-9A-Fa-f]{1,4}");
     if (strcmp(prop.name(), "start_addr") == 0)
         regexp.setPattern("0x[0-9A-Fa-f]{1,8}");
-    if (strcmp(prop.name(),"description") == 0)
-        regexp.setPattern("[0-9A-Za-z_-]{1,8}");
+    /*if (strcmp(prop.name(),"description") == 0)
+        regexp.setPattern("[0-9A-Za-z_-]{1,8}");*/
     return regexp;
 }

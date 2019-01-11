@@ -83,7 +83,7 @@ void Project::new_M86_Spartan6()
     Model* m_m = Node::getModel();
     m->setModel(m_m);
     m->setDescription("New M86");
-    m->setType("M86 " + m->description());
+    m->setType("M86 Package");
 //  m->setType("FPGA");
     //m->setVer_state(Alpha);
     this->setChild(this->rowCount(),m);
@@ -106,7 +106,7 @@ void Project::new_goldenRef()
     Model *m_m = Node::getModel();
     m->setModel(m_m);
     m->setDescription("new Golden Reference");
-    m->setType("goldenReference");
+    m->setType("Golden Reference");
     this->setChild(this->rowCount(),m);
 }
 /*
