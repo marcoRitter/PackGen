@@ -59,7 +59,7 @@ public:
 class FpgaType
 {
 public:
-    QStringList fpgatype = {"Xilinx", "Lattice"};
+    QStringList fpgatype = {"Xilinx Spartan6", "Lattice ECP2", "Lattice ECP5"};
     uint selectedfpga = 0;
     FpgaType() { }
     FpgaType(const uint &value): selectedfpga(value) { }

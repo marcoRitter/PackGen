@@ -91,6 +91,18 @@ void goldenReference::setFlash_size(FlashSize flashsize)
     m_flash_size = flashsize;
 }
 
+FpgaType goldenReference::fpgatype()
+{
+    return m_fpgatype;
+}
+
+void goldenReference::setFpgatype(FpgaType fpgatype)
+{
+    m_fpgatype = fpgatype;
+    //need_redraw("start_addr",goldenReference::updateStartAddress());
+}
+
+
 void goldenReference::node_menue(QMenu *menu)
 {
     menu->addAction(pGenerate);

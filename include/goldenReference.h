@@ -16,6 +16,7 @@ class goldenReference : public Node
     Q_PROPERTY(FileString location READ location WRITE setLocation)
     Q_PROPERTY(QString version READ version WRITE setVersion)
     Q_PROPERTY(FlashSize flash_size READ flash_size WRITE setFlash_size)
+    Q_PROPERTY(FpgaType fpgatype READ fpgatype WRITE setFpgatype)
 
 signals:
     void setOutInfo(const QString & textToOut, const QColor & color);
@@ -27,6 +28,9 @@ public:
     ~goldenReference();
 
     QString node_type() {return "goldenReference";}
+
+    FpgaType fpgatype();
+    void setFpgatype (FpgaType fpgatype);
 
     FileString goldenRef_file();
     void setGoldenRef_file(FileString file);
@@ -59,6 +63,7 @@ private:
     FileType m_file_type;
     QString m_version;
     FlashSize m_flash_size;
+    FpgaType m_fpgatype;
 
     QStringList m_srecParameters;
     QString m_processOut;
