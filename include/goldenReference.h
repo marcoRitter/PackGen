@@ -65,6 +65,7 @@ private:
     FlashSize m_flash_size;
     FpgaType m_fpgatype;
 
+    QString arrayLattice[2][5];
     QStringList m_srecParameters;
     QString m_processOut;
 
