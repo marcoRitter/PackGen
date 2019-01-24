@@ -22,6 +22,9 @@ goldenReference::goldenReference(QObject *parent) : Node(parent, "goldenReferenc
 
     connect(parent->parent(), SIGNAL (generateFpga()), this, SLOT(generate_goldenRef()));
 
+    connect(this, SIGNAL(need_redraw(QString ,  QVariant )),
+           parent->parent(),SLOT(changeProperty ( QString  ,QVariant )));
+
     m_parent = parent;
 }
 
@@ -31,6 +34,8 @@ goldenReference::~goldenReference()
     disconnect(pDelete, &QAction::triggered, this, &Node::delete_node);
     disconnect(m_parent->parent(), SIGNAL (generateFpga()), this, SLOT(generate_goldenRef()));
     disconnect(this,SIGNAL(setOutInfo(QString, QColor)),m_parent->parent(), SLOT(printOutInfo(QString, QColor)));
+    disconnect(this, SIGNAL(need_redraw(QString ,  QVariant )),
+           m_parent->parent(),SLOT(changeProperty ( QString  ,QVariant )));
 
     delete pGenerate;
     delete pDelete;
@@ -89,6 +94,7 @@ FlashSize goldenReference::flash_size()
 void goldenReference::setFlash_size(FlashSize flashsize)
 {
     m_flash_size = flashsize;
+    need_redraw("start_addr",goldenReference::updateStartAddress());
 }
 
 FpgaType goldenReference::fpgatype()
@@ -99,8 +105,18 @@ FpgaType goldenReference::fpgatype()
 void goldenReference::setFpgatype(FpgaType fpgatype)
 {
     m_fpgatype = fpgatype;
+    need_redraw("start_addr",goldenReference::updateStartAddress());
 }
 
+QString goldenReference::start_addr()
+{
+    return m_start_addr;
+}
+
+void goldenReference::setStart_addr(QString start_addr)
+{
+    m_start_addr = start_addr;
+}
 
 void goldenReference::node_menue(QMenu *menu)
 {
@@ -129,7 +145,7 @@ bool goldenReference::setSrecParameters()
     QStringList srecParameters;
     srecParameters.clear();
 
-    if(arrayLattice[1][4].isEmpty())
+    if(jumpCommend_addr.isEmpty())
     {
         srecParameters.append(m_location.filestring+"/"+m_filename+"_header.hex");
         srecParameters.append("--intel");
@@ -177,11 +193,11 @@ bool goldenReference::setSrecParameters()
         srecParameters.append(m_location.filestring+"/"+m_filename+"_header.hex");
         srecParameters.append("--intel");
         srecParameters.append("--offset");
-        srecParameters.append(arrayLattice[0][0]);
+        srecParameters.append(jumpCommend_addr);
         srecParameters.append("--fill");
-        srecParameters.append("0x00");
-        srecParameters.append(arrayLattice[0][0]);
-        srecParameters.append(arrayLattice[0][1]);
+        srecParameters.append("0xFF");
+        srecParameters.append(jumpCommend_addr);
+        srecParameters.append(jumpCommend_fill);
         srecParameters.append("--o");
         srecParameters.append(m_location.filestring+"/"+m_filename+"_header_filled.hex");
         srecParameters.append("--intel");
@@ -195,7 +211,7 @@ bool goldenReference::setSrecParameters()
             srecParameters.append(m_location.filestring+"/"+m_filename+"_header_filled.hex");
             srecParameters.append("--intel");
             srecParameters.append("--offset");
-            srecParameters.append(arrayLattice[0][0]);
+            srecParameters.append(jumpCommend_addr);
             srecParameters.append(m_goldenRef_file.filestring);
             if(m_file_type.selectedType == 0)
             {
@@ -206,11 +222,8 @@ bool goldenReference::setSrecParameters()
                 srecParameters.append("--binary");
             }
             srecParameters.append("--offset");
-            srecParameters.append(arrayLattice[0][2]+"000");
-            srecParameters.append("--fill");
-            srecParameters.append("0xFF");
-            srecParameters.append(arrayLattice[0][2]+"000");
-            srecParameters.append(arrayLattice[0][3]);
+            srecParameters.append(start_addr()+"000");
+
             srecParameters.append("--o");
             srecParameters.append(m_location.filestring+"/"+m_filename+".hex");
             srecParameters.append("--intel");
@@ -251,7 +264,7 @@ int goldenReference::runSrec()
 
 void goldenReference::creatHeader()
 {
-    if(arrayLattice[1][4].isEmpty())
+    if(jumpCommend_addr.isEmpty())
     {
        /* QString head13[] = {"0x00", "0x09", "0x0F", "0xF0", "0x0F", "0xF0", "0x0F", "0xF0", "0x0F", "0xF0", "0x00", "0x00", "0x01"};
         const uint8_t head13_length = 13;*/
@@ -431,7 +444,7 @@ void goldenReference::creatHeader()
 
         QString row1[] = {"0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF"};
         const uint8_t row1_length = 16;
-        QString row2[] = {"0xBD", "0xB3", "0xC4", "0x00", "0x00", "0x00", "0x00", "0x00", "0x00", "0x00", "0xFE", "0x00", "0x00", "0x00", "0x03", arrayLattice[0][2].remove("0000")};
+        QString row2[] = {"0xBD", "0xB3", "0xC4", "0x00", "0x00", "0x00", "0x00", "0x00", "0x00", "0x00", "0xFE", "0x00", "0x00", "0x00", "0x03", m_start_addr.remove("0000")};
         const uint8_t row2_length = 16;
         QString row3[] = {"0x00","0x00","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF"};
         const uint8_t row3_length = 16;
@@ -462,21 +475,33 @@ void goldenReference::creatHeader()
             }
 
 
-            if(arrayLattice[0][2].contains("0x04"))
+            if(m_start_addr.contains("0x02"))
+            {
+                stream << "A9";
+            }
+            else if(m_start_addr.contains("0x04"))
             {
                 stream << "A7";
             }
-            else if(arrayLattice[0][2].contains("0x08"))
+            else if(m_start_addr.contains("0x08"))
             {
                 stream << "A3";
             }
-            else if(arrayLattice[0][2].contains("0x20"))
+            else if(m_start_addr.contains("0x10"))
+            {
+                stream << "9B";
+            }
+            else if(m_start_addr.contains("0x20"))
             {
                 stream << "8B";
             }
-            else if(arrayLattice[0][2].contains("0x40"))
+            else if(m_start_addr.contains("0x40"))
             {
                 stream << "6B";
+            }
+            else if(m_start_addr.contains("0x80"))
+            {
+                stream << "2B";
             }
 
             stream << "\n";
@@ -510,75 +535,48 @@ bool goldenReference::generate_goldenRef()
 
     if(m_fpgatype.selectedfpga == 0)
     {
-        arrayLattice[1][4].clear();
+        jumpCommend_addr.clear();
     }
 
     else if(m_fpgatype.selectedfpga == 1)
     {
-        arrayLattice[1][4] = "Hello World";
-        switch (m_flash_size.selectedsize) {
-        case 1:
-            arrayLattice[0][0] = "0x0";
-            arrayLattice[0][1] = "0x000100";
-            arrayLattice[0][2] = "0x040000";
-            arrayLattice[0][3] = "0x070000";
-            break;
-        case 2:
-            arrayLattice[0][0] = "0x0";
-            arrayLattice[0][1] = "0x000100";
-            arrayLattice[0][2] = "0x080000";
-            arrayLattice[0][3] = "0x0E0000";
-            break;
-        case 5:
-            arrayLattice[0][0] = "0x0";
-            arrayLattice[0][2] = "0x000100";
-            arrayLattice[0][3] = "0x200000";
-            arrayLattice[0][4] = "0x340000";
-            break;
-        default:
-            arrayLattice[0][0].clear();
-            arrayLattice[0][1].clear();
-            arrayLattice[0][2].clear();
-            arrayLattice[0][3].clear();
-            setOutInfo("No FPGA Type with this Flash size implemented in PackGen", m_infoColor);
-            break;
-        }
+        jumpCommend_addr = "0x000000";
+        jumpCommend_fill = "0x000100";
     }
 
     else if(m_fpgatype.selectedfpga == 2)
     {
-        arrayLattice[1][4] = "Hello World";
-        switch (m_flash_size.selectedsize) {
+        switch (flash_size().selectedsize) {
+        case 0:
+            jumpCommend_addr = "0x03FF00";
+            jumpCommend_fill = "0x040000";
+            break;
         case 1:
-            arrayLattice[0][0] = "0x0FFF00";
-            arrayLattice[0][1] = "0x100000";
-            arrayLattice[0][2] = "0x080000";
-            arrayLattice[0][3] = "0x0E0000";
+            jumpCommend_addr = "0x07FF00";
+            jumpCommend_fill = "0x080000";
             break;
         case 2:
-            arrayLattice[0][0] = "0x3FFF00";
-            arrayLattice[0][1] = "0x400000";
-            arrayLattice[0][2] = "0x200000";
-            arrayLattice[0][3] = "0x340000";
+            jumpCommend_addr = "0x0FFF00";
+            jumpCommend_fill = "0x100000";
+            break;
+        case 3:
+            jumpCommend_addr = "0x1FFF00";
+            jumpCommend_fill = "0x200000";
+            break;
+        case 4:
+            jumpCommend_addr = "0x3FFF00";
+            jumpCommend_fill = "0x400000";
             break;
         case 5:
-            arrayLattice[0][0] = "0x7FFF00";
-            arrayLattice[0][1] = "0x800000";
-            arrayLattice[0][2] = "0x400000";
-            arrayLattice[0][3] = "0x650000";
+            jumpCommend_addr = "0x7FFF00";
+            jumpCommend_fill = "0x800000";
             break;
-        default:
-            arrayLattice[0][0].clear();
-            arrayLattice[0][1].clear();
-            arrayLattice[0][2].clear();
-            arrayLattice[0][3].clear();
-            setOutInfo("Selected FPGA doesn`t exist in PackGen with this FlashSize", m_errorColor);
+        case 6:
+            jumpCommend_addr = "0xFFFF00";
+            jumpCommend_fill = "0x1000000";
             break;
         }
     }
-
-    if(arrayLattice[0][0].isEmpty())
-        return false;
 
     creatHeader();
     setSrecParameters();
@@ -599,4 +597,46 @@ bool goldenReference::generate_goldenRef()
         headerfilled.remove();
     }
     return  true;
+}
+
+
+QVariant goldenReference::updateStartAddress()
+{
+    QVariant a;
+    HexString temp;
+
+    if(fpgatype().selectedfpga == 0)
+    {
+        setStart_addr("0x001000");
+    }
+
+    else
+    {
+        switch (flash_size().selectedsize) {
+        case 0:
+            setStart_addr("0x020000");
+            break;
+        case 1:
+            setStart_addr("0x040000");
+            break;
+        case 2:
+            setStart_addr("0x080000");
+            break;
+        case 3:
+            setStart_addr("0x100000");
+            break;
+        case 4:
+            setStart_addr("0x200000");
+            break;
+        case 5:
+            setStart_addr("0x400000");
+            break;
+        case 6:
+            setStart_addr("0x800000");
+            break;
+        }
+    }
+
+    a.setValue(m_start_addr);
+    return a;
 }

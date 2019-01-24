@@ -379,7 +379,6 @@ bool Masterfile::fillBlanks()
 
     srec_parameters.clear();
 
-
     srec_parameters.append(m_location.filestring + "/" + m_filename+"_notfilled"+".hex");
     srec_parameters.append("--intel");
     srec_parameters.append("--fill");

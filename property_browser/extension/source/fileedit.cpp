@@ -69,7 +69,7 @@ void FileEdit::buttonClicked()
     if(pMainWindow->getMCurrent()->node_type() == "goldenReference")
     {
         goldenReference *goldRef = static_cast<goldenReference*>(pMainWindow->getMCurrent());
-        if(!goldRef->goldenRef_file().filestring.isEmpty())
+        if(goldRef->goldenRef_file().filestring.isEmpty())
         {
             file = false;
         }

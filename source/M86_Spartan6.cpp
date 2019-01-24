@@ -197,11 +197,11 @@ bool M86_Spartan6::generate_package()
         return false;
     }
     else if(m_pkgName.contains(".")||m_pkgName.contains(",")||m_pkgName.contains(";")||m_pkgName.contains(":")
-            ||m_pkgName.contains("<") || m_pkgName.contains(">")||m_pkgName.contains("!")||m_pkgName.contains("Â§")
+            ||m_pkgName.contains("<") || m_pkgName.contains(">")||m_pkgName.contains("!")||m_pkgName.contains("§")
             ||m_pkgName.contains("$")||m_pkgName.contains("%")||m_pkgName.contains("&")||m_pkgName.contains("/")
             ||m_pkgName.contains("{") || m_pkgName.contains("(")||m_pkgName.contains("[")||m_pkgName.contains(")")
             ||m_pkgName.contains("]")||m_pkgName.contains("=")||m_pkgName.contains("}")||m_pkgName.contains("?")
-            ||m_pkgName.contains("`")||m_pkgName.contains("Â´")||m_pkgName.contains("*"))
+            ||m_pkgName.contains("`")||m_pkgName.contains("´")||m_pkgName.contains("*"))
     {
         setOutInfo("M86 Property pkgName has an invalid value", m_errorColor);
         return false;

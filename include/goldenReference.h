@@ -10,13 +10,14 @@ class goldenReference : public Node
 {
     Q_OBJECT
 
-    Q_PROPERTY(FileString goldenRef_file READ goldenRef_file WRITE setGoldenRef_file)
-    Q_PROPERTY(FileType file_type READ file_type WRITE setFile_type)
     Q_PROPERTY(QString filename READ filename WRITE setFilename)
     Q_PROPERTY(FileString location READ location WRITE setLocation)
+    Q_PROPERTY(FileString goldenRef_file READ goldenRef_file WRITE setGoldenRef_file)
+    Q_PROPERTY(FileType file_type READ file_type WRITE setFile_type)
     Q_PROPERTY(QString version READ version WRITE setVersion)
     Q_PROPERTY(FlashSize flash_size READ flash_size WRITE setFlash_size)
     Q_PROPERTY(FpgaType fpgatype READ fpgatype WRITE setFpgatype)
+    Q_PROPERTY(QString start_addr READ start_addr WRITE setStart_addr)
 
 signals:
     void setOutInfo(const QString & textToOut, const QColor & color);
@@ -50,11 +51,19 @@ public:
     FlashSize flash_size();
     void setFlash_size(FlashSize flashsize);
 
+    QString start_addr();
+    void setStart_addr(QString start_addr);
+
+    QVariant updateStartAddress();
     void node_menue(QMenu *menu);
 
     bool setSrecParameters ();
     int runSrec();
     void creatHeader();
+
+
+signals:
+    void need_redraw(const QString &name, const QVariant a);
 
 private:
     FileString m_goldenRef_file;
@@ -64,8 +73,10 @@ private:
     QString m_version;
     FlashSize m_flash_size;
     FpgaType m_fpgatype;
+    QString m_start_addr;
+    QString jumpCommend_addr;
+    QString jumpCommend_fill;
 
-    QString arrayLattice[2][5];
     QStringList m_srecParameters;
     QString m_processOut;
 
