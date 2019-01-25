@@ -24,7 +24,7 @@ class M86_Spartan6 : public Node
     // property to identify the node type
 //  Q_PROPERTY(QString node_type READ node_type)
 
-    Q_PROPERTY(QString pkgName READ pkgName WRITE setPkgName)
+    Q_PROPERTY(QString pkg_name READ pkgName WRITE setPkgName)
     Q_PROPERTY(FileString location READ location WRITE setLocation)
     Q_PROPERTY(QString typecode READ typecode WRITE setTypeCode)
     Q_PROPERTY(QString variant READ variant WRITE setVariant)

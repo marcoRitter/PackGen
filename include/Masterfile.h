@@ -16,7 +16,7 @@ class Masterfile : public Node
     // property to identify the node type
     Q_PROPERTY(QString node_type READ node_type)
 
-    Q_PROPERTY(QString filename READ filename WRITE setFilename)
+    Q_PROPERTY(QString masterfile_name READ filename WRITE setFilename)
     Q_PROPERTY(FileString location READ location WRITE setLocation)
     Q_PROPERTY(QString ver_major READ ver_major WRITE setVer_major)
     Q_PROPERTY(QString ver_minor READ ver_minor WRITE setVer_minor)

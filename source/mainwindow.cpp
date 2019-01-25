@@ -424,37 +424,41 @@ QString MainWindow::setTipForProperty(const QMetaProperty & prop)
 {
     QString toolTip = "default";
     if (strcmp(prop.name(), "description") == 0)
-        toolTip = "description";
-    if (strcmp(prop.name(), "pkgName") == 0)
-        toolTip = "Output filename";
+        toolTip = "File description (not used)";
+    if (strcmp(prop.name(), "pkg_name") == 0)
+        toolTip = "Output filename (without type ending)";
+    if (strcmp(prop.name(), "masterfile_name") == 0)
+        toolTip = "Output filename (without type ending)";
+    if (strcmp(prop.name(), "goldenRef_name") == 0)
+        toolTip = "Output filename (without type ending)";
     if (strcmp(prop.name(), "ver_major") == 0)
-        toolTip = "Major version of project (0x..)";
+        toolTip = "Major version of project (%d%d, 0-9)";
     if (strcmp(prop.name(), "ver_minor") == 0)
-        toolTip = "Minor version of project(0x..)";
+        toolTip = "Minor version of project (%d%d, 0-9)";
     if (strcmp(prop.name(), "ver_subminor") == 0)
-        toolTip = "Minor subversion of project(0x..)";
+        toolTip = "Minor subversion of project (%d%d, 0-9)";
     if (strcmp(prop.name(), "typecode") == 0)
-        toolTip = "Variant (0x..)";
+        toolTip = "Module type for final package (0x..)";
     if (strcmp(prop.name(), "variant") == 0)
-        toolTip = "Variant (0x..)";
+        toolTip = "Module variant for final package (0xff for multiple)";
     if(strcmp(prop.name(), "location") == 0)
-        toolTip = "final folder";
+        toolTip = "final folder for generated files";
     if(strcmp(prop.name(), "verstate") == 0)
-        toolTip = "package version state";
+        toolTip = "development status";
     if(strcmp(prop.name(), "filename") == 0)
         toolTip = "final filename";
     if(strcmp(prop.name(), "designnumber") == 0)
-        toolTip = "Designnumber (0x..)";
+        toolTip = "Designnumber according to logic \n reference list (0x..)";
     if(strcmp(prop.name(), "revision") == 0)
-        toolTip = "File revision (0x..)";
+        toolTip = "Main revision of logic (0x..)";
     if(strcmp(prop.name(), "testversion") == 0)
-        toolTip = "Testversion (0x..)";
+        toolTip = "Testversion of logic (0x..)";
     if(strcmp(prop.name(), "start_addr") == 0)
         toolTip = "Code jump in address (0x..)";
     if(strcmp(prop.name(), "name") == 0)
         toolTip = "Project name";
     if(strcmp(prop.name(), "version") == 0)
-        toolTip = "File version";
+        toolTip = "File version (not used; %d%d, 0-9)";
 
     return toolTip;
 }
@@ -470,12 +474,18 @@ QRegExp MainWindow::setRegExpForProperty(const QMetaProperty &prop)
     if(strcmp(prop.name(), "revision") == 0 ||
        strcmp(prop.name(), "ver_major") == 0 ||
        strcmp(prop.name(), "ver_minor") == 0 ||
+       strcmp(prop.name(), "version") == 0 ||
        strcmp(prop.name(), "ver_subminor") == 0)
             regexp.setPattern("[0-9]{1,2}");
     if (strcmp(prop.name(), "designnumber") == 0)
         regexp.setPattern("0x[0-9A-Fa-f]{1,4}");
     if (strcmp(prop.name(), "start_addr") == 0)
         regexp.setPattern("0x[0-9A-Fa-f]{1,8}");
+    if(strcmp(prop.name(), "masterfile_name") == 0 ||
+        strcmp(prop.name(), "goldenRef_name") == 0 ||
+        strcmp(prop.name(), "pkg_name") == 0)
+        regexp.setPattern("[0-9A-Za-z]{1,100}");
+
     /*if (strcmp(prop.name(),"description") == 0)
         regexp.setPattern("[0-9A-Za-z_-]{1,8}");*/
     return regexp;

@@ -10,7 +10,7 @@ class goldenReference : public Node
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString filename READ filename WRITE setFilename)
+    Q_PROPERTY(QString goldenRef_name READ filename WRITE setFilename)
     Q_PROPERTY(FileString location READ location WRITE setLocation)
     Q_PROPERTY(FileString goldenRef_file READ goldenRef_file WRITE setGoldenRef_file)
     Q_PROPERTY(FileType file_type READ file_type WRITE setFile_type)
@@ -59,7 +59,7 @@ public:
 
     bool setSrecParameters ();
     int runSrec();
-    void creatHeader();
+    bool creatHeader();
 
 
 signals:

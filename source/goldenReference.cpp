@@ -127,21 +127,6 @@ void goldenReference::node_menue(QMenu *menu)
 
 bool goldenReference::setSrecParameters()
 {
-    if(m_filename.isEmpty())
-    {
-        setOutInfo("goldenReference Property filename has no value (Masterfile)", m_errorColor);
-        return false;
-    }
-    if(m_location.filestring.isEmpty())
-    {
-        setOutInfo("goldenReference Property location has no value (Masterfile)", m_errorColor);
-        return false;
-    }
-    if(m_version.isEmpty())
-    {
-        setOutInfo("goldenReference Property version has no value (Masterfile)", m_errorColor);
-    }
-
     QStringList srecParameters;
     srecParameters.clear();
 
@@ -192,12 +177,9 @@ bool goldenReference::setSrecParameters()
     else {
         srecParameters.append(m_location.filestring+"/"+m_filename+"_header.hex");
         srecParameters.append("--intel");
+        srecParameters.append("--bit-reverse");
         srecParameters.append("--offset");
         srecParameters.append(jumpCommend_addr);
-        srecParameters.append("--fill");
-        srecParameters.append("0xFF");
-        srecParameters.append(jumpCommend_addr);
-        srecParameters.append(jumpCommend_fill);
         srecParameters.append("--o");
         srecParameters.append(m_location.filestring+"/"+m_filename+"_header_filled.hex");
         srecParameters.append("--intel");
@@ -220,9 +202,10 @@ bool goldenReference::setSrecParameters()
             else if(m_file_type.selectedType == 1)
             {
                 srecParameters.append("--binary");
+                srecParameters.append("--bit-reverse");
             }
             srecParameters.append("--offset");
-            srecParameters.append(start_addr()+"000");
+            srecParameters.append(start_addr()+"0000");
 
             srecParameters.append("--o");
             srecParameters.append(m_location.filestring+"/"+m_filename+".hex");
@@ -262,8 +245,24 @@ int goldenReference::runSrec()
     return 1;
 }
 
-void goldenReference::creatHeader()
+bool goldenReference::creatHeader()
 {
+
+    if(m_filename.isEmpty())
+    {
+        setOutInfo("goldenReference Property filename has no value", m_errorColor);
+        return false;
+    }
+    if(m_location.filestring.isEmpty())
+    {
+        setOutInfo("goldenReference Property location has no value", m_errorColor);
+        return false;
+    }
+    if(m_version.isEmpty())
+    {
+        setOutInfo("goldenReference Property version has no value", m_errorColor);
+    }
+
     if(jumpCommend_addr.isEmpty())
     {
        /* QString head13[] = {"0x00", "0x09", "0x0F", "0xF0", "0x0F", "0xF0", "0x0F", "0xF0", "0x0F", "0xF0", "0x00", "0x00", "0x01"};
@@ -427,6 +426,12 @@ void goldenReference::creatHeader()
             stream << "000000000000000000000000000000000000000041";
             file.flush();
             file.close();
+
+            return true;
+        }
+        else {
+            setOutInfo("can`t create header file", m_errorColor);
+            return false;
         }
     }
 
@@ -448,8 +453,8 @@ void goldenReference::creatHeader()
         const uint8_t row2_length = 16;
         QString row3[] = {"0x00","0x00","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF"};
         const uint8_t row3_length = 16;
-        QString row4[] = {"0xFF","0xFF","0x00","0x00", "0x00","0x00", "0x00","0x00", "0x00","0x00", "0x00","0x00", "0x00","0x00", "0x00","0x00"};
-        const uint8_t row4_length = 16;
+        QString row4[] = {"0xFF","0xFF"};
+        const uint8_t row4_length = 2;
 
         QString filenameHeader = m_location.filestring + "/" + m_filename + "_header.hex";
         QFile file(filenameHeader);
@@ -514,18 +519,22 @@ void goldenReference::creatHeader()
 
             stream << "DE";
             stream << "\n";
-            stream << ":10003000";
+            stream << ":02003000";
 
             for(int i = 0; i < row4_length; i++)
             {
                 stream << row4[i].remove("0x");
             }
 
-            stream << "C2";
-
+            stream << "D0";
             file.flush();
             file.close();
+            return true;
         }
+        else {
+            return false;
+        }
+
     }
 
 }
@@ -578,7 +587,10 @@ bool goldenReference::generate_goldenRef()
         }
     }
 
-    creatHeader();
+
+    if(!creatHeader())
+        return false;
+
     setSrecParameters();
 
     QFileInfo hexFile = m_location.filestring+"/"+m_filename+".hex";
