@@ -300,7 +300,7 @@ void MainWindow::draw_property_browser()
                    property->setAttribute("regExp", QRegExp("0x[0-9A-Fa-f]{1,8}"));
                    property->setToolTip("Enter Address as 0x1324");
                 }
-               if (strcmp(v.typeName(),"FlashSize") == 0)
+               if (strcmp(v.typeName(),"FlashSize") == 0 && !m_currentItem->getType().contains("File") && !m_currentItem->getType().contains("Firmware")&& !m_currentItem->getType().contains("Golden"))
                {
                    property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
                    property->setAttribute("enumNames",v.value<FlashSize>().memorysize);
@@ -312,7 +312,7 @@ void MainWindow::draw_property_browser()
                    property->setAttribute("enumNames",v.value<DualBoot>().dualboot);
                    property->setValue(v.value<DualBoot>().dualbootena);
                 }
-               if (strcmp(v.typeName(),"FpgaType") == 0)
+               if (strcmp(v.typeName(),"FpgaType") == 0 && (!m_currentItem->getType().contains("File") && !m_currentItem->getType().contains("Golden")))
                {
                    property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
                    property->setAttribute("enumNames",v.value<FpgaType>().fpgatype);

@@ -14,6 +14,9 @@ file::file(QObject *parent) : Node(parent,"File")
     pDeleteFile->setIcon(DeleteIcon);
     connect(pDeleteFile, &QAction::triggered, this, &Node::delete_node);
 
+    connect(this, SIGNAL(need_redraw(QString ,  QVariant )),
+           parent->parent()->parent(),SLOT(changeProperty ( QString  ,QVariant )));
+
     m_parent = parent;
 }
 
@@ -21,6 +24,8 @@ file::~file()
 {
     disconnect(pDeleteFile, &QAction::triggered, this, &Node::delete_node);
     delete pDeleteFile;
+    disconnect(this, SIGNAL(need_redraw(QString ,  QVariant )),
+           m_parent->parent()->parent(),SLOT(changeProperty ( QString  ,QVariant )));
 }
 
 FileString file::filename()
@@ -76,4 +81,69 @@ QString file::object_name()
 void file::setObject_name(QString object_name)
 {
     this->setType(object_name);
+}
+
+FlashSize file::flash_size()
+{
+    return m_flash_size;
+}
+void file::setFlash_size(FlashSize flashsize)
+{
+    m_flash_size = flashsize;
+    need_redraw("start_addr",file::updateStartAddress());
+}
+
+FpgaType file::fpgatype()
+{
+    return m_fpgatype;
+}
+
+void file::setFpgatype(FpgaType fpgatype)
+{
+    m_fpgatype = fpgatype;
+    need_redraw("start_addr",file::updateStartAddress());
+}
+
+QVariant file::updateStartAddress()
+{
+    QVariant a;
+    HexString temp;
+
+    if(fpgatype().selectedfpga == 1)
+    {
+        setStart_addr("0x010000");
+    }
+    else if (fpgatype().selectedfpga == 2) {
+        setStart_addr("0x000000");
+    }
+
+    else
+    {
+        switch (flash_size().selectedsize) {
+        case 0:
+            setStart_addr("0x020000");
+            break;
+        case 1:
+            setStart_addr("0x040000");
+            break;
+        case 2:
+            setStart_addr("0x080000");
+            break;
+        case 3:
+            setStart_addr("0x100000");
+            break;
+        case 4:
+            setStart_addr("0x200000");
+            break;
+        case 5:
+            setStart_addr("0x400000");
+            break;
+        case 6:
+            setStart_addr("0x800000");
+            break;
+        }
+    }
+
+    a.setValue(m_start_addr);
+    return a;
 }

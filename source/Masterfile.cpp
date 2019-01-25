@@ -25,6 +25,8 @@ Masterfile::Masterfile(QObject *parent) :
 
     pNewFile = new QAction(tr("New &File"), this);
     connect(pNewFile,&QAction::triggered, this, &Masterfile::new_File);
+    pNewGolden = new QAction(tr("New &GoldenReference"), this);
+    connect(pNewGolden,&QAction::triggered, this, &Masterfile::new_Golden);
 
     connect(this,SIGNAL(setOutInfo(QString, QColor)),parent->parent(), SLOT(printOutInfo(QString, QColor)));
 
@@ -37,10 +39,11 @@ Masterfile::~Masterfile()
     disconnect(pGenerate, SIGNAL (triggered()),this, SLOT(generate_masterfile()));
     disconnect(pNewFPGA, &QAction::triggered, this, &Masterfile::new_FPGA);
     disconnect(pNewFirmware, &QAction::triggered, this, &Masterfile::new_Firmware);
-    disconnect(pNewFirmware, &QAction::triggered, this, &Masterfile::new_File);
+    disconnect(pNewFile, &QAction::triggered, this, &Masterfile::new_File);
     disconnect(pDelete, &QAction::triggered, this, &Node::delete_node);
     disconnect(m_parent->parent(), SIGNAL (generateFpga()), this, SLOT(generate_masterfile()));
     disconnect(this,SIGNAL(setOutInfo(QString, QColor)),m_parent->parent(), SLOT(printOutInfo(QString, QColor)));
+    disconnect(pNewGolden,&QAction::triggered, this, &Masterfile::new_Golden);
 
     delete pGenerate;
     delete pNewFirmware;
@@ -155,6 +158,7 @@ void Masterfile::node_menue(QMenu *menu)
     menu->addAction(pNewFPGA);
     menu->addAction(pNewFirmware);
     menu->addAction(pNewFile);
+    menu->addAction(pNewGolden);
     menu->addSeparator();
     menu->addAction(pDelete);
 
@@ -176,7 +180,7 @@ void Masterfile::new_Firmware()
     file *m = new file(this);
     Model *m_m = Node::getModel();
     m->setModel(m_m);
-    m->setDescription("new firmware");
+    m->setDescription("new Firmware");
     m->setObject_name("Firmware");
     this->setChild(this->rowCount(),m);
 }
@@ -188,6 +192,16 @@ void Masterfile::new_File()
     m->setModel(m_m);
     m->setDescription("new File");
     m->setObject_name("File");
+    this->setChild(this->rowCount(),m);
+}
+
+void Masterfile::new_Golden()
+{
+    file *m = new file(this);
+    Model *m_m = Node::getModel();
+    m->setModel(m_m);
+    m->setDescription("new Golden Reference");
+    m->setObject_name("GoldenReference");
     this->setChild(this->rowCount(),m);
 }
 

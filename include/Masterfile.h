@@ -63,6 +63,7 @@ private slots:
     void new_FPGA();
     void new_Firmware();
     void new_File();
+    void new_Golden();
     bool generate_masterfile();
 
 
@@ -86,6 +87,7 @@ private:
     QAction *pNewFPGA;
     QAction *pNewFirmware;
     QAction *pNewFile;
+    QAction *pNewGolden;
     QAction *pDelete;
     QObject *m_parent;
 };
