@@ -66,6 +66,7 @@ void FileEdit::buttonClicked()
 
     QString filePath;
     bool file = true;
+
     if(pMainWindow->getMCurrent()->node_type() == "goldenReference")
     {
         goldenReference *goldRef = static_cast<goldenReference*>(pMainWindow->getMCurrent());
