@@ -73,7 +73,7 @@ private:
     QString m_version;
     FlashSize m_flash_size;
     FpgaType m_fpgatype;
-    QString m_start_addr;
+    QString m_start_addr = "0x000000";
     QString jumpCommend_addr;
     QString jumpCommend_fill;
 

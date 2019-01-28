@@ -227,9 +227,9 @@ void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
         }
         else
               m_currentItem->setProperty(property->propertyName().toStdString().c_str(), val);
-              if ((m_currentItem->getType().contains("M86")) && (property->propertyName().contains("description"))) {
+              /*if ((m_currentItem->getType().contains("M86")) && (property->propertyName().contains("description"))) {
                   m_currentItem->setType("M86 " + val.toString());
-              }
+              }*/
     }
 
     if (m_currentItem->get_need_redraw() == 1)
@@ -275,16 +275,19 @@ void MainWindow::draw_property_browser()
                property = variantManager->addProperty(QVariant::Int, prop.name());
                property->setAttribute(QLatin1String("minimum"), 0);
                property->setValue(v.toInt());
+               property->setToolTip(setTipForProperty(prop));
                  break ;
            case QVariant::Int :
                property = variantManager->addProperty(QVariant::Int, prop.name());
                property->setAttribute(QLatin1String("minimum"), 0);
                property->setValue(v.toInt());
+               property->setToolTip(setTipForProperty(prop));
                  break ;
 
            case QVariant::Bool :
                property = variantManager->addProperty(QVariant::Bool, prop.name());
                property->setValue(v.toBool());
+               property->setToolTip(setTipForProperty(prop));
                  break ;
 
            case QVariant::UserType :
@@ -292,43 +295,49 @@ void MainWindow::draw_property_browser()
                {
                    property = variantManager->addProperty(VariantManager::filePathTypeId(), prop.name());
                    property->setValue(v);
+                   //property->setToolTip(setTipForProperty(prop));
                }
                if (strcmp(v.typeName(),"HexString") == 0)
                {
                    property = variantManager->addProperty(QVariant::String, prop.name());
                    property->setValue(v.value<HexString>().hexstring);
                    property->setAttribute("regExp", QRegExp("0x[0-9A-Fa-f]{1,8}"));
-                   property->setToolTip("Enter Address as 0x1324");
+                  // property->setToolTip("Enter Address as 0x1324");
                 }
-               if (strcmp(v.typeName(),"FlashSize") == 0 && !m_currentItem->getType().contains("File") && !m_currentItem->getType().contains("Firmware")&& !m_currentItem->getType().contains("Golden"))
+               if (strcmp(v.typeName(),"FlashSize") == 0)
                {
                    property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
                    property->setAttribute("enumNames",v.value<FlashSize>().memorysize);
                    property->setValue(v.value<FlashSize>().selectedsize);
+                  // property->setToolTip(setTipForProperty(prop));
                 }
                if (strcmp(v.typeName(),"DualBoot") == 0)
                {
                    property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
                    property->setAttribute("enumNames",v.value<DualBoot>().dualboot);
                    property->setValue(v.value<DualBoot>().dualbootena);
+                  // property->setToolTip(setTipForProperty(prop));
                 }
-               if (strcmp(v.typeName(),"FpgaType") == 0 && (!m_currentItem->getType().contains("File") && !m_currentItem->getType().contains("Golden")))
+               if (strcmp(v.typeName(),"FpgaType") == 0 && !m_currentItem->getType().contains("File") && !m_currentItem->getType().contains("Firmware") && !m_currentItem->getType().contains("Golden File"))
                {
                    property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
                    property->setAttribute("enumNames",v.value<FpgaType>().fpgatype);
                    property->setValue(v.value<FpgaType>().selectedfpga);
+                 //  property->setToolTip(setTipForProperty(prop));
                 }
                if (strcmp(v.typeName(),"VerState") == 0)
                {
                    property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
                    property->setAttribute("enumNames",v.value<VerState>().verstate);
                    property->setValue(v.value<VerState>().selectedVersion);
+                  // property->setToolTip(setTipForProperty(prop));
                 }
                if(strcmp(v.typeName(),"FileType") == 0)
                {
                    property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
                    property->setAttribute("enumNames",v.value<FileType>().filetype);
                    property->setValue(v.value<FileType>().selectedType);
+                  // property->setToolTip(setTipForProperty(prop));
                }
                 break;
            default :
@@ -459,6 +468,8 @@ QString MainWindow::setTipForProperty(const QMetaProperty & prop)
         toolTip = "Project name";
     if(strcmp(prop.name(), "version") == 0)
         toolTip = "File version (not used; %d%d, 0-9)";
+    if(strcmp(prop.name(), "JadeProject") == 0)
+        toolTip = "true = PackGen for Jade \n flase = PackGen for M200";
 
     return toolTip;
 }

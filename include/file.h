@@ -16,7 +16,6 @@ class file : public Node
     Q_PROPERTY(FileString filename READ filename WRITE setFilename)
     Q_PROPERTY(FileType file_type READ file_type WRITE setFile_type)
     Q_PROPERTY(QString version READ version WRITE setVersion)
-    Q_PROPERTY(FlashSize flash_size READ flash_size WRITE setFlash_size)
     Q_PROPERTY(FpgaType fpgatype READ fpgatype WRITE setFpgatype)
     Q_PROPERTY(QString start_addr READ start_addr WRITE setStart_addr)
     Q_PROPERTY(QString object_name READ object_name WRITE setObject_name)
@@ -43,9 +42,6 @@ public:
     QString start_addr();
     void setStart_addr(QString start_addr);
 
-    FlashSize flash_size();
-    void setFlash_size(FlashSize flashsize);
-
     FpgaType fpgatype();
     void setFpgatype (FpgaType fpgatype);
 
@@ -61,7 +57,7 @@ private:
     FileType m_file_type;
     QString m_description;
     QString m_version;
-    QString m_start_addr;
+    QString m_start_addr = "0x000000";
     FlashSize m_flash_size;
     FpgaType m_fpgatype;
 

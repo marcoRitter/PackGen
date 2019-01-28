@@ -145,13 +145,13 @@ QVariant Fpga::updateStartAddress()
     {
         switch (m_flashsize.selectedsize)
         {
-            case 0: m_start_addr = "0x10000"; break;
-            case 1: m_start_addr = "0x20000"; break;
-            case 2: m_start_addr = "0x40000"; break;
-            case 3: m_start_addr = "0x80000"; break;
-            case 4: m_start_addr = "0x100000"; break;
-            case 5: m_start_addr = "0x200000"; break;
-            case 6: m_start_addr = "0x400000"; break;
+            case 0: m_start_addr = "0x020000"; break;
+            case 1: m_start_addr = "0x040000"; break;
+            case 2: m_start_addr = "0x080000"; break;
+            case 3: m_start_addr = "0x100000"; break;
+            case 4: m_start_addr = "0x200000"; break;
+            case 5: m_start_addr = "0x400000"; break;
+            case 6: m_start_addr = "0x800000"; break;
         }
     }
     else if(m_dualboot.dualbootena)

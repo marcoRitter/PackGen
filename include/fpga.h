@@ -151,7 +151,7 @@ private:
     QString m_typecode;
     QString m_variant;
 //  HexString m_start_addr;
-    QString m_start_addr;
+    QString m_start_addr = "0x000000";
     FlashSize m_flashsize;
 //  bool m_with_golden_reference;
     DualBoot m_dualboot;

@@ -83,16 +83,6 @@ void file::setObject_name(QString object_name)
     this->setType(object_name);
 }
 
-FlashSize file::flash_size()
-{
-    return m_flash_size;
-}
-void file::setFlash_size(FlashSize flashsize)
-{
-    m_flash_size = flashsize;
-    need_redraw("start_addr",file::updateStartAddress());
-}
-
 FpgaType file::fpgatype()
 {
     return m_fpgatype;
@@ -101,13 +91,16 @@ FpgaType file::fpgatype()
 void file::setFpgatype(FpgaType fpgatype)
 {
     m_fpgatype = fpgatype;
-    need_redraw("start_addr",file::updateStartAddress());
+    if(!m_parent->parent()->property("JadeProject").value<bool>())
+        need_redraw("start_addr",file::updateStartAddress());
 }
 
 QVariant file::updateStartAddress()
 {
     QVariant a;
     HexString temp;
+        //QString srecExe = m_parent->property("srec_cat").value<FileString>().filestring;
+    m_flash_size = m_parent->property("flash_size").value<FlashSize>();
 
     if(fpgatype().selectedfpga == 1)
     {
@@ -119,7 +112,7 @@ QVariant file::updateStartAddress()
 
     else
     {
-        switch (flash_size().selectedsize) {
+        switch (m_flash_size.selectedsize) {
         case 0:
             setStart_addr("0x020000");
             break;

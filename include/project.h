@@ -1,3 +1,5 @@
+
+#pragma once
 #ifndef PROJECT_H
 #define PROJECT_H
 
@@ -17,6 +19,7 @@ class Project : public Node
 
     // Properties for this node
     Q_PROPERTY(QString name READ name WRITE setName)
+    Q_PROPERTY(bool JadeProject READ jade WRITE setJade)
     Q_PROPERTY(FileString srec_cat READ srec_cat WRITE setSrec_cat)
     Q_PROPERTY(FileString logichdr READ logichdr WRITE setLogichdr)
     Q_PROPERTY(FileString mbind READ mbind WRITE setMbind)
@@ -24,10 +27,10 @@ class Project : public Node
 public:
     explicit Project(QObject *parent = nullptr);
     ~Project();
-#if 0
-    explicit Project();
-    explicit Project(QObject *parent = nullptr, QString projectName = "Project");
-#endif
+//#if 0
+  //  explicit Project();
+   // explicit Project(QObject *parent = nullptr, QString projectName = "Project");
+//#endif
 
     QString node_type() {return"Project";}
 //  void setNode_type(QString setNodeType)
@@ -37,6 +40,9 @@ public:
 
     QString name();
     void setName(QString name);
+
+    bool jade();
+    void setJade(bool jade);
 
     FileString srec_cat();
     void setSrec_cat(FileString filename);
@@ -63,15 +69,15 @@ private slots:
 private:
     QString projectName;
     QString m_name;
-    FileString m_srecCat = (QString) "//pc011/tools/utils/srec_cat.exe";
-    FileString m_logichdr =(QString) "//pc011/tools/utils/logichdr.exe";
-    FileString m_mbind =(QString) "//pc011/tools/utils/mbind.exe";
+    bool m_jade = false;
+    FileString m_srecCat = static_cast<QString>("//pc011/tools/utils/srec_cat.exe");
+    FileString m_logichdr =static_cast<QString>("//pc011/tools/utils/logichdr.exe");
+    FileString m_mbind =static_cast<QString>("//pc011/tools/utils/mbind.exe");
 
     QAction *pNewSpartan;
     QAction *pNewMasterfile;
     QAction *pNewgoldenRef;
     QAction *pNewJadeFile;
-
 };
-
 #endif // PROJECT_H
+

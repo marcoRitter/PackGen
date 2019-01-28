@@ -94,7 +94,8 @@ FlashSize goldenReference::flash_size()
 void goldenReference::setFlash_size(FlashSize flashsize)
 {
     m_flash_size = flashsize;
-    need_redraw("start_addr",goldenReference::updateStartAddress());
+    if(!m_parent->property("JadeProject").value<bool>())
+        need_redraw("start_addr",goldenReference::updateStartAddress());
 }
 
 FpgaType goldenReference::fpgatype()
@@ -105,7 +106,8 @@ FpgaType goldenReference::fpgatype()
 void goldenReference::setFpgatype(FpgaType fpgatype)
 {
     m_fpgatype = fpgatype;
-    need_redraw("start_addr",goldenReference::updateStartAddress());
+    if(!m_parent->property("JadeProject").value<bool>())
+        need_redraw("start_addr",goldenReference::updateStartAddress());
 }
 
 QString goldenReference::start_addr()

@@ -48,6 +48,16 @@ void Project::setName(QString name)
     m_name = name;
 }
 
+bool Project::jade()
+{
+    return m_jade;
+}
+void Project::setJade(bool jade)
+{
+    m_jade = jade;
+}
+
+
 FileString Project::srec_cat()
 {
     return m_srecCat;
@@ -130,7 +140,8 @@ void Project::new_Masterfile()
 */
 void Project::node_menue(QMenu *menu)
 {
-    menu->addAction(pNewSpartan);
+    if(!jade())
+        menu->addAction(pNewSpartan);
     menu->addAction(pNewMasterfile);
     menu->addAction(pNewgoldenRef);
     /*

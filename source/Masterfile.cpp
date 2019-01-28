@@ -119,7 +119,7 @@ bool Masterfile::readJson(const QJsonObject *jsonObj)
 
     jsonVal = jsonObj->value("description");
     setDescription(jsonVal.toString());
-    jsonVal = jsonObj->value("filename");
+    jsonVal = jsonObj->value("masterfile_name");
     setFilename(jsonVal.toString());
     jsonVal = jsonObj->value("location");
     setLocation(jsonVal.toString());
@@ -201,7 +201,7 @@ void Masterfile::new_Golden()
     Model *m_m = Node::getModel();
     m->setModel(m_m);
     m->setDescription("new Golden Reference");
-    m->setObject_name("GoldenReference");
+    m->setObject_name("Golden File");
     this->setChild(this->rowCount(),m);
 }
 
@@ -260,16 +260,16 @@ bool Masterfile::setSrecParameters()
 
             if(fiLe->filename().filestring.isEmpty())
             {
-                setOutInfo(fiLe->object_name()+" Property filename has no value (Masterfile)", m_errorColor);
+                setOutInfo(fiLe->object_name()+" Property filename has no value", m_errorColor);
                 return false;
             }
             if(fiLe->version().isEmpty())
             {
-                setOutInfo(fiLe->object_name()+" Property version has no value (Masterfile)", m_errorColor);
+                setOutInfo(fiLe->object_name()+" Property version has no value", m_errorColor);
             }
             if(fiLe->start_addr().isEmpty())
             {
-                setOutInfo(fiLe->object_name()+" Property start_addr has no value (Masterfile)", m_errorColor);
+                setOutInfo(fiLe->object_name()+" Property start_addr has no value", m_errorColor);
                 return false;
             }
 
@@ -278,6 +278,11 @@ bool Masterfile::setSrecParameters()
             if(fiLe->file_type().selectedType == 1)
             {
                 srec_parameters.append("--binary");
+
+                if(fiLe->fpgatype().selectedfpga > 0)
+                {
+                    srec_parameters.append("--bit-reverse");
+                }
             }
             else if(fiLe->file_type().selectedType == 0)
             {
@@ -366,8 +371,8 @@ bool Masterfile::generate_masterfile()
                     else {
                         setOutInfo("Created Masterfile successfully:", m_infoColor);
                         setOutInfo(m_location.filestring + "/" + m_filename+".hex", m_normalColor);
-                        QFile file(m_location.filestring + "/" + m_filename + "_notfilled" + ".hex");
-                        file.remove();
+                        //QFile file(m_location.filestring + "/" + m_filename + "_notfilled" + ".hex");
+                        //file.remove();
                     }
 
                     return true;

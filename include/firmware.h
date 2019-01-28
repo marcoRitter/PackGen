@@ -103,7 +103,7 @@ private:
     QString m_typecode;
     QString m_variant;
     VerState m_verstate;
-    QString m_start_addr;
+    QString m_start_addr = "0x000000";
 
     QString m_verFileName;
     QString m_mchFileName;
