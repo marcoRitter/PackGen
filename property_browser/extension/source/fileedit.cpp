@@ -69,7 +69,7 @@ void FileEdit::buttonClicked()
     if(pMainWindow->getMCurrent()->node_type() == "goldenReference")
     {
         goldenReference *goldRef = static_cast<goldenReference*>(pMainWindow->getMCurrent());
-        if(goldRef->goldenRef_file().filestring.isEmpty())
+        if(goldRef->goldenRef_file().filestring.isEmpty() && goldRef->location().filestring.isEmpty())
         {
             file = false;
         }
@@ -79,6 +79,7 @@ void FileEdit::buttonClicked()
         if (!filePath.isNull())
             mySettings.setValue(DEFAULT_M86_DIR,CurrentDir.absoluteFilePath(filePath));
     }
+
     else {
         filePath = QFileDialog::getExistingDirectory(this, tr("Choosa a folder"), mySettings.value(DEFAULT_FW_DIR).toString());//theLineEdit->text(), 0);
         if (!filePath.isNull())

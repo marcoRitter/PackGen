@@ -6,6 +6,7 @@
 #include <QMetaProperty>
 #include <QFileDialog>
 #include <QRegExp>
+#include <QAction>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -53,9 +54,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->outInfo->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->outInfo, SIGNAL(customContextMenuRequested(const QPoint&)),this, SLOT(outInfoMenu(QPoint)));
 
-
+    //connect(new QAction(ui->menuHelp), &QAction::triggered, this, &MainWindow::on_actionHelpDialog_trigged);
     QString winTitle;
-    winTitle = m_winTitle + " - untitled";
+    winTitle = m_winTitle;
     QMainWindow::setWindowTitle(winTitle);
 
 
@@ -384,6 +385,13 @@ void MainWindow::on_actionProperties_triggered()
 
 }
 
+void MainWindow::on_actionHelpDialog_triggered()
+{
+    helpDialog propWin;
+    propWin.exec();
+    qDebug() << "properties started";
+}
+
 
 void MainWindow::on_actionGenerateFpga_triggered()
 {
@@ -447,7 +455,7 @@ QString MainWindow::setTipForProperty(const QMetaProperty & prop)
     if (strcmp(prop.name(), "ver_subminor") == 0)
         toolTip = "Minor subversion of project (%d%d, 0-9)";
     if (strcmp(prop.name(), "typecode") == 0)
-        toolTip = "Module type for final package (0x..)";
+        toolTip = "Module type for final package (%d%d, 0-9)";
     if (strcmp(prop.name(), "variant") == 0)
         toolTip = "Module variant for final package (0xff for multiple)";
     if(strcmp(prop.name(), "location") == 0)
@@ -457,19 +465,19 @@ QString MainWindow::setTipForProperty(const QMetaProperty & prop)
     if(strcmp(prop.name(), "filename") == 0)
         toolTip = "final filename";
     if(strcmp(prop.name(), "designnumber") == 0)
-        toolTip = "Designnumber according to logic \n reference list (0x..)";
+        toolTip = "Designnumber according to logic \nreference list (%d%d%d%d, 0-9)";
     if(strcmp(prop.name(), "revision") == 0)
-        toolTip = "Main revision of logic (0x..)";
+        toolTip = "Main revision of logic (%d%d, 0-9)";
     if(strcmp(prop.name(), "testversion") == 0)
-        toolTip = "Testversion of logic (0x..)";
+        toolTip = "Testversion of logic (%d%d, 0-9)";
     if(strcmp(prop.name(), "start_addr") == 0)
-        toolTip = "Code jump in address (0x..)";
+        toolTip = "Code jump in address (%d%d, 0-9)";
     if(strcmp(prop.name(), "name") == 0)
         toolTip = "Project name";
     if(strcmp(prop.name(), "version") == 0)
         toolTip = "File version (not used; %d%d, 0-9)";
     if(strcmp(prop.name(), "JadeProject") == 0)
-        toolTip = "true = PackGen for Jade \n flase = PackGen for M200";
+        toolTip = "true = PackGen for Jade \nflase = PackGen for M200";
 
     return toolTip;
 }
@@ -481,21 +489,21 @@ QRegExp MainWindow::setRegExpForProperty(const QMetaProperty &prop)
     if (strcmp(prop.name(), "testversion") == 0 ||
         strcmp(prop.name(), "variant") == 0 ||
         strcmp(prop.name(), "typecode") == 0)
-            regexp.setPattern("0x[0-9A-Fa-f]{1,2}");
+            regexp.setPattern("[0-9]{0,2}");
     if(strcmp(prop.name(), "revision") == 0 ||
        strcmp(prop.name(), "ver_major") == 0 ||
        strcmp(prop.name(), "ver_minor") == 0 ||
        strcmp(prop.name(), "version") == 0 ||
        strcmp(prop.name(), "ver_subminor") == 0)
-            regexp.setPattern("[0-9]{1,2}");
+            regexp.setPattern("[0-9]{0,2}");
     if (strcmp(prop.name(), "designnumber") == 0)
-        regexp.setPattern("0x[0-9A-Fa-f]{1,4}");
+        regexp.setPattern("[0-9]{0,4}");
     if (strcmp(prop.name(), "start_addr") == 0)
-        regexp.setPattern("0x[0-9A-Fa-f]{1,8}");
+        regexp.setPattern("0x[0-9A-Fa-f]{0,8}");
     if(strcmp(prop.name(), "masterfile_name") == 0 ||
         strcmp(prop.name(), "goldenRef_name") == 0 ||
         strcmp(prop.name(), "pkg_name") == 0)
-        regexp.setPattern("[0-9A-Za-z]{1,100}");
+        regexp.setPattern("[0-9A-Za-z]{0,100}");
 
     /*if (strcmp(prop.name(),"description") == 0)
         regexp.setPattern("[0-9A-Za-z_-]{1,8}");*/

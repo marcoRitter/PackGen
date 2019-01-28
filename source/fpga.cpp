@@ -156,14 +156,7 @@ QVariant Fpga::updateStartAddress()
     }
     else if(m_dualboot.dualbootena)
     {
-      if(m_fpgatype.selectedfpga == 1)
-      {
-            m_start_addr = "0x010000";
-      }
-      else if(m_fpgatype.selectedfpga == 2)
-      {
-            m_start_addr = "0x000000";
-      }
+      m_start_addr = "0x000000";
     }
 //      m_start_addr = temp.get_offset(m_flashsize.selectedsize);
 //  else

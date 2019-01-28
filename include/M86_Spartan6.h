@@ -23,9 +23,8 @@ class M86_Spartan6 : public Node
     Q_OBJECT
     // property to identify the node type
 //  Q_PROPERTY(QString node_type READ node_type)
-
-    Q_PROPERTY(QString pkg_name READ pkgName WRITE setPkgName)
-    Q_PROPERTY(FileString location READ location WRITE setLocation)
+    Q_PROPERTY(FileString outputFile_location READ location WRITE setLocation)
+    Q_PROPERTY(QString outputFile_name READ pkgName WRITE setPkgName)
     Q_PROPERTY(QString typecode READ typecode WRITE setTypeCode)
     Q_PROPERTY(QString variant READ variant WRITE setVariant)
     Q_PROPERTY(QString ver_major READ ver_major WRITE setVer_major)

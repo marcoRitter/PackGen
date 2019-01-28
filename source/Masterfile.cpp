@@ -278,16 +278,20 @@ bool Masterfile::setSrecParameters()
             if(fiLe->file_type().selectedType == 1)
             {
                 srec_parameters.append("--binary");
-
-                if(fiLe->fpgatype().selectedfpga > 0)
-                {
-                    srec_parameters.append("--bit-reverse");
-                }
             }
             else if(fiLe->file_type().selectedType == 0)
             {
                 srec_parameters.append("--intel");
             }
+            if(fiLe->object_name() != "Golden Ref" && fiLe->object_name() != "FPGA")
+            {
+                srec_parameters.append("--bit-reverse");
+            }
+            else if(fiLe->fpgatype().selectedfpga > 0 && fiLe->file_type().selectedType == 1)
+            {
+                srec_parameters.append("--bit-reverse");
+            }
+
             srec_parameters.append("--offset");
             srec_parameters.append(fiLe->start_addr());
         }
@@ -371,8 +375,9 @@ bool Masterfile::generate_masterfile()
                     else {
                         setOutInfo("Created Masterfile successfully:", m_infoColor);
                         setOutInfo(m_location.filestring + "/" + m_filename+".hex", m_normalColor);
-                        //QFile file(m_location.filestring + "/" + m_filename + "_notfilled" + ".hex");
-                        //file.remove();
+                        QFile file(m_location.filestring + "/" + m_filename + "_notfilled" + ".hex");
+                        file.remove();
+
                     }
 
                     return true;

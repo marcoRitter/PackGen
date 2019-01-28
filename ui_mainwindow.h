@@ -36,6 +36,7 @@ public:
     QAction *actionNew;
     QAction *actionSave_as;
     QAction *actionProperties;
+    QAction *actionHelpDialog;
     QAction *actionGenerateFpga;
     QWidget *centralWidget;
     QSplitter *vSplitter;
@@ -47,6 +48,7 @@ public:
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuEdit;
+    QMenu *menuHelp;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -93,6 +95,8 @@ public:
         actionSave_as->setIcon(icon4);
         actionProperties = new QAction(MainWindow);
         actionProperties->setObjectName(QStringLiteral("actionProperties"));
+        actionHelpDialog = new QAction(MainWindow);
+        actionHelpDialog->setObjectName(QStringLiteral("actionHelpDialog"));
         actionGenerateFpga = new QAction(MainWindow);
         actionGenerateFpga->setObjectName(QStringLiteral("actionGenerateFpga"));
         actionGenerateFpga->setIcon(icon);
@@ -158,6 +162,8 @@ public:
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuEdit = new QMenu(menuBar);
         menuEdit->setObjectName(QStringLiteral("menuEdit"));
+        menuHelp = new QMenu(menuBar);
+        menuHelp->setObjectName(QStringLiteral("menuHelp"));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -175,6 +181,7 @@ public:
 
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuEdit->menuAction());
+        menuBar->addAction(menuHelp->menuAction());
         menuFile->addAction(actionNew);
         menuFile->addAction(actionLoad);
         menuFile->addAction(actionSave);
@@ -182,6 +189,7 @@ public:
         menuFile->addSeparator();
         menuFile->addAction(actionQuit);
         menuEdit->addAction(actionProperties);
+        menuHelp->addAction(actionHelpDialog);
         mainToolBar->addAction(actionNew);
         mainToolBar->addAction(actionSave);
         mainToolBar->addAction(actionSave_as);
@@ -216,12 +224,14 @@ public:
 #endif // QT_NO_SHORTCUT
         actionSave_as->setText(QApplication::translate("MainWindow", "Save as ...", Q_NULLPTR));
         actionProperties->setText(QApplication::translate("MainWindow", "About", Q_NULLPTR));
+        actionHelpDialog->setText(QApplication::translate("MainWindow", "Help", Q_NULLPTR));
         actionGenerateFpga->setText(QApplication::translate("MainWindow", "GenerateFpga", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         actionGenerateFpga->setToolTip(QApplication::translate("MainWindow", "Generate new Fga", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         menuFile->setTitle(QApplication::translate("MainWindow", "File", Q_NULLPTR));
         menuEdit->setTitle(QApplication::translate("MainWindow", "About", Q_NULLPTR));
+        menuHelp->setTitle(QApplication::translate("MainWindow", "Help", Q_NULLPTR));
         mainToolBar->setWindowTitle(QString());
     } // retranslateUi
 

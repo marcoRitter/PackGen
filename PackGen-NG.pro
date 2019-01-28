@@ -58,7 +58,8 @@ SOURCES += source/main.cpp\
     source/firmware.cpp \
     source/file.cpp \
     source/output.cpp \
-    source/goldenReference.cpp
+    source/goldenReference.cpp \
+    source/helpdialog.cpp \
 
 HEADERS  += include/mainwindow.h \
     include/node.h \
@@ -92,11 +93,14 @@ HEADERS  += include/mainwindow.h \
     include/file.h\
     include/output.h \
     resource/output.h \
-    include/goldenReference.h
+    include/goldenReference.h \
+    include/help.h \
+    ui_helpdialog.h \
 
 FORMS    += resource/mainwindow.ui \
     resource/aboutdialog.ui \
-    resource/output.ui
+    resource/output.ui \
+    resource/ui_helpdialog.ui
 
 RESOURCES += \
     resource/resources.qrc

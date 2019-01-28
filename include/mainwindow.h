@@ -6,6 +6,7 @@
 #include "model.h"
 #include "project.h"
 #include "M86_Spartan6.h"
+#include "help.h"
 
 #include <QMainWindow>
 
@@ -57,6 +58,8 @@ private slots:
     void on_actionSave_triggered();
 
     void on_actionProperties_triggered();
+
+    void on_actionHelpDialog_triggered();
 
     void on_treeView_customContextMenuRequested(const QPoint &pos);
 

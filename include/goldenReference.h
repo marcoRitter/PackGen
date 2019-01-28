@@ -10,10 +10,11 @@ class goldenReference : public Node
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString goldenRef_name READ filename WRITE setFilename)
-    Q_PROPERTY(FileString location READ location WRITE setLocation)
-    Q_PROPERTY(FileString goldenRef_file READ goldenRef_file WRITE setGoldenRef_file)
-    Q_PROPERTY(FileType file_type READ file_type WRITE setFile_type)
+
+    Q_PROPERTY(FileString outputFile_location READ location WRITE setLocation)
+    Q_PROPERTY(QString outputFile_name READ filename WRITE setFilename)
+    Q_PROPERTY(FileString inputFile_directory READ goldenRef_file WRITE setGoldenRef_file)
+    Q_PROPERTY(FileType inputFile_type READ file_type WRITE setFile_type)
     Q_PROPERTY(QString version READ version WRITE setVersion)
     Q_PROPERTY(FlashSize flash_size READ flash_size WRITE setFlash_size)
     Q_PROPERTY(FpgaType fpgatype READ fpgatype WRITE setFpgatype)
