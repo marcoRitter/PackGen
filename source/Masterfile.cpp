@@ -284,7 +284,7 @@ bool Masterfile::setSrecParameters()
                 srec_parameters.append("--intel");
             }
             if(fiLe->object_name() != "Golden Ref" && fiLe->object_name() != "FPGA")
-            {
+            { //TODO: bit reverse anpassen
                 srec_parameters.append("--bit-reverse");
             }
             else if(fiLe->fpgatype().selectedfpga > 0 && fiLe->file_type().selectedType == 1)
@@ -353,10 +353,6 @@ bool Masterfile::generate_masterfile()
                 setOutInfo(m_processOut, m_errorColor);
             }
             else {
-
-
-
-
             if(fillBlanks())
             {
                 if(runSrec())

@@ -47,7 +47,7 @@ void Project::setName(QString name)
 {
     m_name = name;
 }
-
+//TODO Jade Funktionen wenn möglich ausbauen
 bool Project::jade()
 {
     return m_jade;

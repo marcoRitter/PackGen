@@ -10,7 +10,7 @@ class goldenReference : public Node
 {
     Q_OBJECT
 
-
+    //TODO Properties anpassen (Namensgebung, entfernene,..)
     Q_PROPERTY(FileString outputFile_location READ location WRITE setLocation)
     Q_PROPERTY(QString outputFile_name READ filename WRITE setFilename)
     Q_PROPERTY(FileString inputFile_directory READ goldenRef_file WRITE setGoldenRef_file)
