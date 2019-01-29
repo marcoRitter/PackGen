@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/Helptxt">
+        <file>txt/allgemeines.txt</file>
+        <file>txt/file.txt</file>
+        <file>txt/firmware.txt</file>
+        <file>txt/firmwareFile.txt</file>
+        <file>txt/fpga.txt</file>
+        <file>txt/fpgaFile.txt</file>
+        <file>txt/golden.txt</file>
+        <file>txt/goldenFile.txt</file>
+        <file>txt/m86.txt</file>
+        <file>txt/masterfile.txt</file>
+        <file>txt/project.txt</file>
+    </qresource>
+</RCC>

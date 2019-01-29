@@ -42,6 +42,7 @@ public:
 
     Node *getMCurrent () {return m_currentItem;}
     void node_menue(QMenu *menu);
+    void readTXTdata(QString file);
 
 private slots:
     void on_treeView_clicked(const QModelIndex &index);

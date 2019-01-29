@@ -103,4 +103,5 @@ FORMS    += resource/mainwindow.ui \
     resource/ui_helpdialog.ui
 
 RESOURCES += \
-    resource/resources.qrc
+    resource/resources.qrc \
+    resource/helptxt.qrc

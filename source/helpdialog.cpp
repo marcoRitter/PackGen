@@ -62,15 +62,17 @@ helpDialog::helpDialog(QWidget *parent) :
 
     propertyEditor = new QTextEdit(ui->scrollArea);
     //propertyEditor->setHeaderVisible(true);
-    propertyEditor->setReadOnly(true);
-    propertyEditor->setText("text");
+    propertyEditor->setReadOnly(false);
+
+
     QFont font;
     font.setFamily("arial");
     font.setWeight(1);
-    font.setPixelSize(12);
+    font.setPixelSize(13);
     font.setItalic(false);
     propertyEditor->setFont(font);
 
+    readTXTdata("allgemeines");
 
     ui->scrollArea->setWidget(propertyEditor);
 }
@@ -105,59 +107,55 @@ void helpDialog::on_treeView_customContextMenuRequested(const QPoint &pos)
 
 void helpDialog::draw_property_browser()
 {
-    propertyEditor->clear();
+        propertyEditor->clear();
 
         QStandardItem *selected = m_model.itemFromIndex(m_model.get_index());
         Node *a = static_cast<Node*>(selected);
 
         if(!a->isEnabled())
         {
-            propertyEditor->setText("allgemein");
+            readTXTdata("allgemeines");
         }
         else if(a->getType().toLower().contains("project"))
         {
-            propertyEditor->setText("Project");
+            readTXTdata("project");
         }
         else if (a->getType().toLower().contains("m86"))
         {
-            propertyEditor->setText("M86");
+            readTXTdata("m86");
         }
         else if (a->getType().toLower().contains("fpga") &&a->objectName().toLower() == "fpga")
         {
-            propertyEditor->setText("FPGA");
+            readTXTdata("fpga");
         }
         else if (a->getType().toLower().contains("firmware") &&a->objectName().toLower() == "firmware")
         {
-            propertyEditor->setText("FIRMWARE");
+            readTXTdata("firmware");
         }
         else if (a->getType().toLower().contains("masterfile"))
         {
-            propertyEditor->setText("Masterfile");
+            readTXTdata("masterfile");
         }
         else if (a->getType().toLower().contains("fpga") &&a->objectName().toLower() == "file")
         {
-            propertyEditor->setText("fpga");
+            readTXTdata("fpgaFile");
         }
         else if (a->getType().toLower().contains("firmware") &&a->objectName().toLower() == "file")
         {
-            propertyEditor->setText("firmware");
+            readTXTdata("firmwareFile");
         }
         else if (a->getType().toLower().contains("golden") &&a->objectName().toLower() == "file")
         {
-            propertyEditor->setText("golden file");
+            readTXTdata("goldenFile");
         }
         else if (a->getType().toLower().contains("file") &&a->objectName().toLower() == "file")
         {
-            propertyEditor->setText("file");
+            readTXTdata("file");
         }
         else if (a->getType().toLower().contains("golden reference"))
         {
-            propertyEditor->setText("golden");
+            readTXTdata("golden");
         }
-
-
-
-
 
     ui->scrollArea->setWidget(propertyEditor);
 }
@@ -177,4 +175,21 @@ void helpDialog::resizeEvent(QResizeEvent * event)
 void helpDialog::treeMenu()
 {
 
+}
+
+void helpDialog::readTXTdata(QString txtFile)
+{
+    QString filename = ":/Helptxt/txt/"+txtFile+".txt";
+    QFile file(filename);
+
+    if(file.open(QFile::ReadOnly|QFile::Text))
+    {
+        while(!file.atEnd())
+        {
+            QString line =file.readLine();
+            line.remove("\n");
+            propertyEditor->append(line);
+        }
+        file.close();
+    }
 }

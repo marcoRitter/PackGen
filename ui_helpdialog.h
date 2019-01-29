@@ -58,13 +58,14 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(helpDialog->sizePolicy().hasHeightForWidth());
         helpDialog->setSizePolicy(sizePolicy);
-        helpDialog->setMinimumSize(QSize(500, 500));
+        helpDialog->setMinimumSize(QSize(700, 500));
         QFont font;
         font.setPointSize(10);
         helpDialog->setFont(font);
         QIcon icon;
         icon.addFile(QStringLiteral(":/Images/images/icons8-robot.png"), QSize(), QIcon::Normal, QIcon::Off);
         helpDialog->setWindowIcon(icon);
+
 
         vSplitter = new QSplitter(helpDialog);
         vSplitter->setObjectName(QStringLiteral("vSplitter"));
@@ -82,7 +83,7 @@ public:
         treeView = new QTreeView(vSplitter);
         treeView->setObjectName(QStringLiteral("treeView"));
         QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setHorizontalStretch(40);
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(treeView->sizePolicy().hasHeightForWidth());
         treeView->setSizePolicy(sizePolicy2);
@@ -99,7 +100,7 @@ public:
         scrollArea = new QScrollArea(vSplitter);
         scrollArea->setObjectName(QStringLiteral("scrollArea"));
         QSizePolicy sizePolicy3(QSizePolicy::Fixed, QSizePolicy::Expanding);
-        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setHorizontalStretch(100);
         sizePolicy3.setVerticalStretch(0);
         sizePolicy3.setHeightForWidth(scrollArea->sizePolicy().hasHeightForWidth());
         scrollArea->setSizePolicy(sizePolicy3);
