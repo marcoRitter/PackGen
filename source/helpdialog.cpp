@@ -52,6 +52,7 @@ helpDialog::helpDialog(QWidget *parent) :
     // add node to tree view
     QStandardItem *info = new QStandardItem();
     info->setText("Allgemeines");
+    info->setEnabled(false);
     m_model.appendRow(info);
     m_model.appendRow(p);
 
@@ -59,10 +60,19 @@ helpDialog::helpDialog(QWidget *parent) :
 
     ui->treeView->expandAll();
 
+    propertyEditor = new QTextEdit(ui->scrollArea);
+    //propertyEditor->setHeaderVisible(true);
+    propertyEditor->setReadOnly(true);
+    propertyEditor->setText("text");
+    QFont font;
+    font.setFamily("arial");
+    font.setWeight(1);
+    font.setPixelSize(12);
+    font.setItalic(false);
+    propertyEditor->setFont(font);
 
-    //propertyEditor->setResizeMode(QtTreePropertyBrowser::ResizeMode(0));
-    //propertyEditor->setFactoryForManager(variantManager, variantFactory);
-    //ui->scrollArea->setWidget(propertyEditor);
+
+    ui->scrollArea->setWidget(propertyEditor);
 }
 
 helpDialog::~helpDialog()
@@ -95,128 +105,73 @@ void helpDialog::on_treeView_customContextMenuRequested(const QPoint &pos)
 
 void helpDialog::draw_property_browser()
 {
-    /*QStandardItem *selected = m_model.itemFromIndex(m_model.get_index());
-
-    QtVariantProperty *property;
-    //QtBrowserItem *item;
-
-    Node *n = static_cast<Node *>(selected);
-    m_currentItem = n;
-
-
-    const QMetaObject *meta = n->metaObject();
-    int cnt = meta->propertyCount();
-
     propertyEditor->clear();
 
-    // Property Editor aufbauen
-    for ( int i = 1; i < cnt; i++ ) {
-        QMetaProperty prop = meta->property(i);
+        QStandardItem *selected = m_model.itemFromIndex(m_model.get_index());
+        Node *a = static_cast<Node*>(selected);
 
-        if ( prop.isWritable() ) {
-
-        // only sample. We could separate Set and Enum...
-           QVariant v = prop.read(n);
-           switch ( v.type() ) {
-           case QVariant::String :
-               if(static_cast<QString>(prop.name()) != "object_name")
-               {
-                 property = variantManager->addProperty(QVariant::String, prop.name());
-                 property->setValue(v.toString());
-                 property->setToolTip(setTipForProperty(prop));
-               }
-              if (!((m_currentItem->getType().contains("M86")) && (property->propertyName().contains("description"))))
-                 property->setAttribute("regExp", setRegExpForProperty(prop));
-                 break ;
-           case QVariant::UInt :
-               property = variantManager->addProperty(QVariant::Int, prop.name());
-               property->setAttribute(QLatin1String("minimum"), 0);
-               property->setValue(v.toInt());
-               property->setToolTip(setTipForProperty(prop));
-                 break ;
-           case QVariant::Int :
-               property = variantManager->addProperty(QVariant::Int, prop.name());
-               property->setAttribute(QLatin1String("minimum"), 0);
-               property->setValue(v.toInt());
-               property->setToolTip(setTipForProperty(prop));
-                 break ;
-
-           case QVariant::Bool :
-               property = variantManager->addProperty(QVariant::Bool, prop.name());
-               property->setValue(v.toBool());
-               property->setToolTip(setTipForProperty(prop));
-                 break ;
-
-           case QVariant::UserType :
-               if (strcmp(v.typeName(),"FileString") == 0)
-               {
-                   property = variantManager->addProperty(VariantManager::filePathTypeId(), prop.name());
-                   property->setValue(v);
-                   //property->setToolTip(setTipForProperty(prop));
-               }
-               if (strcmp(v.typeName(),"HexString") == 0)
-               {
-                   property = variantManager->addProperty(QVariant::String, prop.name());
-                   property->setValue(v.value<HexString>().hexstring);
-                   property->setAttribute("regExp", QRegExp("0x[0-9A-Fa-f]{1,8}"));
-                  // property->setToolTip("Enter Address as 0x1324");
-                }
-               if (strcmp(v.typeName(),"FlashSize") == 0)
-               {
-                   property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
-                   property->setAttribute("enumNames",v.value<FlashSize>().memorysize);
-                   property->setValue(v.value<FlashSize>().selectedsize);
-                  // property->setToolTip(setTipForProperty(prop));
-                }
-               if (strcmp(v.typeName(),"DualBoot") == 0)
-               {
-                   property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
-                   property->setAttribute("enumNames",v.value<DualBoot>().dualboot);
-                   property->setValue(v.value<DualBoot>().dualbootena);
-                  // property->setToolTip(setTipForProperty(prop));
-                }
-               if (strcmp(v.typeName(),"FpgaType") == 0 && !m_currentItem->getType().contains("File") && !m_currentItem->getType().contains("Firmware") && !m_currentItem->getType().contains("Golden File"))
-               {
-                   property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
-                   property->setAttribute("enumNames",v.value<FpgaType>().fpgatype);
-                   property->setValue(v.value<FpgaType>().selectedfpga);
-                 //  property->setToolTip(setTipForProperty(prop));
-                }
-               if (strcmp(v.typeName(),"VerState") == 0)
-               {
-                   property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
-                   property->setAttribute("enumNames",v.value<VerState>().verstate);
-                   property->setValue(v.value<VerState>().selectedVersion);
-                  // property->setToolTip(setTipForProperty(prop));
-                }
-               if(strcmp(v.typeName(),"FileType") == 0)
-               {
-                   property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
-                   property->setAttribute("enumNames",v.value<FileType>().filetype);
-                   property->setValue(v.value<FileType>().selectedType);
-                  // property->setToolTip(setTipForProperty(prop));
-               }
-                break;
-           default :
-               break;
-           }
-           propertyEditor->addProperty(property);
+        if(!a->isEnabled())
+        {
+            propertyEditor->setText("allgemein");
         }
-    }*/
+        else if(a->getType().toLower().contains("project"))
+        {
+            propertyEditor->setText("Project");
+        }
+        else if (a->getType().toLower().contains("m86"))
+        {
+            propertyEditor->setText("M86");
+        }
+        else if (a->getType().toLower().contains("fpga") &&a->objectName().toLower() == "fpga")
+        {
+            propertyEditor->setText("FPGA");
+        }
+        else if (a->getType().toLower().contains("firmware") &&a->objectName().toLower() == "firmware")
+        {
+            propertyEditor->setText("FIRMWARE");
+        }
+        else if (a->getType().toLower().contains("masterfile"))
+        {
+            propertyEditor->setText("Masterfile");
+        }
+        else if (a->getType().toLower().contains("fpga") &&a->objectName().toLower() == "file")
+        {
+            propertyEditor->setText("fpga");
+        }
+        else if (a->getType().toLower().contains("firmware") &&a->objectName().toLower() == "file")
+        {
+            propertyEditor->setText("firmware");
+        }
+        else if (a->getType().toLower().contains("golden") &&a->objectName().toLower() == "file")
+        {
+            propertyEditor->setText("golden file");
+        }
+        else if (a->getType().toLower().contains("file") &&a->objectName().toLower() == "file")
+        {
+            propertyEditor->setText("file");
+        }
+        else if (a->getType().toLower().contains("golden reference"))
+        {
+            propertyEditor->setText("golden");
+        }
+
+
+
+
+
+    ui->scrollArea->setWidget(propertyEditor);
 }
 
 void helpDialog::resizeEvent(QResizeEvent * event)
 {
     QDialog::resizeEvent(event);
-
-    //QSize treeViewSize;
-    //QSize propertyViewSize;
     QSize splitterSize;
 
     splitterSize.setHeight(QDialog::height()-65);
     splitterSize.setWidth(QDialog::width()-8);
     ui->vSplitter->resize(splitterSize);
     ui->vSplitter->move(4,1);
+
 }
 
 void helpDialog::treeMenu()

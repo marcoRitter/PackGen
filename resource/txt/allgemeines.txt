@@ -1,0 +1,8 @@
+PackGen Allgemeines:
+mögliche Funktionen:
+-M86 Package Generierung
+-Masterfile erstellen
+-Header für Golden Reference erzeugen und zusammensetzen
+Hinzufügen von Files:
+RTM auf Project, oder auf jede weitere hinzugefügte Komponente
+für genauere Hilfestellung: www.molluaga.at

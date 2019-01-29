@@ -59,7 +59,7 @@ private:
     QtVariantPropertyManager *variantManager;
     QtVariantEditorFactory *variantFactory;
 
-    QtTreePropertyBrowser *propertyEditor;
+    QTextEdit *propertyEditor;
 
     Node *m_currentItem;
     QMenu *pHelpMenu;
