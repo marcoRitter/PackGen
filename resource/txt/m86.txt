@@ -1,1 +1,33 @@
 M86 Package (nur bei M200):
+
+Das M86 Package wird aus einer FPGA und einer Firmware Datei zusammengestelt.
+Weitere dazugehörige Files wie die .ver - Dateien (Versions-File) wird mithilfe
+der ausgefüllten Properties vom PackGen selber erzeugt.
+
+Properties:
+--description		...Beschreibung des Package (wird nicht verwendet)
+--outputFile_location	...Ausgabepfad der generierten Dateien
+--outputFile_name	...Dateiname des generierten Packages (OHNE Dateiendung wie .m86)
+--typecode		...Modultyp für den das Package bestimmt ist
+--variant		...Modulvariante für die das Package bestimmt ist 
+		   (für mehrere Modulvarianten = 0xFF)
+--ver_major		...Major Version des Packeges
+--ver_minor		...Minor Version des Packeges
+--ver_subminor	...Subminor Version des Packeges
+--verstate		...Entwicklungsstand
+
+Beispiel:
+
+description 		= new M86
+outputFile_location 	= C:/PackageGenerator/M86
+outputFile_name 	= test
+typecode 		= 0x70
+variant 		= 0xFF
+ver_major 		= 01
+ver_minor 		= 05
+ver_subminor 	= 01
+verstate 		= Beta
+
+Wenn essentielle Properties vergessen wurden auszufüllen, wird das Package nicht generiert.
+Falls jedoch rein informative Properties nicht ausgefüllt sind, wird eine entsprechende Fehlermeldung
+ausgegeben, das Package jedoch erstellt.

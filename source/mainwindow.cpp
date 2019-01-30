@@ -455,7 +455,7 @@ QString MainWindow::setTipForProperty(const QMetaProperty & prop)
     if (strcmp(prop.name(), "ver_subminor") == 0)
         toolTip = "Minor subversion of project (%d%d, 0-9)";
     if (strcmp(prop.name(), "typecode") == 0)
-        toolTip = "Module type for final package (%d%d, 0-9)";
+        toolTip = "Module type for final package (0x..)";
     if (strcmp(prop.name(), "variant") == 0)
         toolTip = "Module variant for final package (0xff for multiple)";
     if(strcmp(prop.name(), "location") == 0)
@@ -489,7 +489,7 @@ QRegExp MainWindow::setRegExpForProperty(const QMetaProperty &prop)
     if (strcmp(prop.name(), "testversion") == 0 ||
         strcmp(prop.name(), "variant") == 0 ||
         strcmp(prop.name(), "typecode") == 0)
-            regexp.setPattern("[0-9]{0,2}");
+            regexp.setPattern("0x[0-9a-fA-F]{0,2}");
     if(strcmp(prop.name(), "revision") == 0 ||
        strcmp(prop.name(), "ver_major") == 0 ||
        strcmp(prop.name(), "ver_minor") == 0 ||

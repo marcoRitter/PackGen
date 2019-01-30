@@ -1,1 +1,1 @@
-FPGA fuer Masterfile:
+FPGA für Masterfile:

@@ -1,1 +1,1 @@
-FPGA fuer M86:
+FPGA für M86:

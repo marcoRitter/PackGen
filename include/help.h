@@ -46,7 +46,7 @@ public:
 
 private slots:
     void on_treeView_clicked(const QModelIndex &index);
-    void on_treeView_customContextMenuRequested(const QPoint &pos);
+    //void on_treeView_customContextMenuRequested(const QPoint &pos);
     void resizeEvent(QResizeEvent * event);
 
     void treeMenu();

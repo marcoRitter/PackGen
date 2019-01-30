@@ -227,7 +227,7 @@ public:
         actionHelpDialog->setText(QApplication::translate("MainWindow", "Help", Q_NULLPTR));
         actionGenerateFpga->setText(QApplication::translate("MainWindow", "GenerateFpga", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        actionGenerateFpga->setToolTip(QApplication::translate("MainWindow", "Generate new Fga", Q_NULLPTR));
+        actionGenerateFpga->setToolTip(QApplication::translate("MainWindow", "Generate all", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         menuFile->setTitle(QApplication::translate("MainWindow", "File", Q_NULLPTR));
         menuEdit->setTitle(QApplication::translate("MainWindow", "About", Q_NULLPTR));

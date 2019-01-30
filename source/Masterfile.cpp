@@ -111,7 +111,15 @@ void Masterfile::setVer_subminor(QString ver_subminor)
     m_ver_subminor = ver_subminor;
 }
 
+bool Masterfile::bit_reverse()
+{
+    return m_bit_reverse;
+}
 
+void Masterfile::setBit_reverse(bool reverse)
+{
+    m_bit_reverse = reverse;
+}
 
 bool Masterfile::readJson(const QJsonObject *jsonObj)
 {
@@ -119,9 +127,9 @@ bool Masterfile::readJson(const QJsonObject *jsonObj)
 
     jsonVal = jsonObj->value("description");
     setDescription(jsonVal.toString());
-    jsonVal = jsonObj->value("masterfile_name");
+    jsonVal = jsonObj->value("outputFile_name");
     setFilename(jsonVal.toString());
-    jsonVal = jsonObj->value("location");
+    jsonVal = jsonObj->value("outputFile_location");
     setLocation(jsonVal.toString());
     jsonVal = jsonObj->value("ver_major");
     setVer_major(jsonVal.toString());
@@ -133,6 +141,8 @@ bool Masterfile::readJson(const QJsonObject *jsonObj)
     FlashSize f;
     f.selectedsize = static_cast<uint>(jsonVal.toInt());
     setFlash_size(f);
+    jsonVal = jsonObj->value("bit_reverse");
+    setBit_reverse(jsonVal.toBool());
 
     return true;
 }
@@ -141,11 +151,13 @@ bool Masterfile::writeJson(QJsonObject *jsonObj)
 {
     jsonObj->insert("node_type",node_type());
     jsonObj->insert("description",description());
-    jsonObj->insert("filename",filename());
+    jsonObj->insert("outputFile_name",filename());
+    jsonObj->insert("outputFile_location",location().filestring);
     jsonObj->insert("ver_major",ver_major());
     jsonObj->insert("ver_minor",ver_minor());
     jsonObj->insert("ver_subminor",ver_subminor());
     jsonObj->insert("flash_size",static_cast<int>(flash_size().selectedsize));
+    jsonObj->insert("bit_reverse",bit_reverse());
     return true;
 }
 
@@ -283,11 +295,8 @@ bool Masterfile::setSrecParameters()
             {
                 srec_parameters.append("--intel");
             }
-            if(fiLe->object_name() != "Golden Ref" && fiLe->object_name() != "FPGA")
-            { //TODO: bit reverse anpassen
-                srec_parameters.append("--bit-reverse");
-            }
-            else if(fiLe->fpgatype().selectedfpga > 0 && fiLe->file_type().selectedType == 1)
+
+            if(bit_reverse())
             {
                 srec_parameters.append("--bit-reverse");
             }
@@ -360,8 +369,15 @@ bool Masterfile::generate_masterfile()
                     return false;
                 }
                 else {
+                    QFileInfo hexFile;
+                    if(bit_reverse())
+                    {
+                        hexFile = m_location.filestring + "/" + m_filename+"_bitreverse"+".hex";
+                    }
+                    else {
+                        hexFile = m_location.filestring + "/" + m_filename+".hex";
+                    }
 
-                    QFileInfo hexFile = m_location.filestring + "/" + m_filename+".hex";
                     if (!(hexFile.exists() && hexFile.isFile()))
                     {
                         qDebug() << "error by hex file";
@@ -429,7 +445,13 @@ bool Masterfile::fillBlanks()
     }
 
     srec_parameters.append("--o");
-    srec_parameters.append(m_location.filestring + "/" + m_filename+".hex");
+    if(bit_reverse())
+    {
+        srec_parameters.append(m_location.filestring + "/" + m_filename+"_bitreverse"+".hex");
+    }
+    else {
+        srec_parameters.append(m_location.filestring + "/" + m_filename+".hex");
+    }
     srec_parameters.append("--intel");
     srec_parameters.append("--obs=16");
 

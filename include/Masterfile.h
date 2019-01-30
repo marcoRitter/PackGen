@@ -22,6 +22,7 @@ class Masterfile : public Node
     Q_PROPERTY(QString ver_minor READ ver_minor WRITE setVer_minor)
     Q_PROPERTY(QString ver_subminor READ ver_subminor WRITE setVer_subminor)
     Q_PROPERTY(FlashSize flash_size READ flash_size WRITE setFlash_size)
+    Q_PROPERTY(bool bit_reverse READ bit_reverse WRITE setBit_reverse)
 public:
     Masterfile(QObject *parent = nullptr);
     ~Masterfile();
@@ -45,6 +46,9 @@ public:
 
     QString ver_subminor();
     void setVer_subminor(QString ver_subminor);
+
+    bool bit_reverse();
+    void setBit_reverse(bool reverse);
 
     bool setSrecParameters ();
     bool fillBlanks();
@@ -75,6 +79,7 @@ private:
     QString m_ver_minor;
     QString m_ver_subminor;
     FlashSize m_flashsize;
+    bool m_bit_reverse;
 
     QStringList m_srecParameters;
     QString m_processOut;

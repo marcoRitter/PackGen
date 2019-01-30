@@ -88,7 +88,7 @@ void helpDialog::on_treeView_clicked(const QModelIndex &index)
 
     helpDialog::draw_property_browser();
 }
-void helpDialog::on_treeView_customContextMenuRequested(const QPoint &pos)
+/*void helpDialog::on_treeView_customContextMenuRequested(const QPoint &pos)
 {
 
     QTreeView *tree = ui->treeView;
@@ -102,7 +102,7 @@ void helpDialog::on_treeView_customContextMenuRequested(const QPoint &pos)
     pHelpMenu->clear();
     n->node_menue(pHelpMenu);
     pHelpMenu->popup(tree->viewport()->mapToGlobal(pos));
-}
+}*/
 
 
 void helpDialog::draw_property_browser()
@@ -186,7 +186,7 @@ void helpDialog::readTXTdata(QString txtFile)
     {
         while(!file.atEnd())
         {
-            QString line =file.readLine();
+            QString line = QString::fromLatin1(file.readLine());
             line.remove("\n");
             propertyEditor->append(line);
         }

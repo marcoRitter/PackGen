@@ -1,11 +1,17 @@
 PackGen Allgemeines:
 
-moegliche Funktionen:
+mögliche Funktionen:
 --M86 Package Generierung
 --Masterfile erstellen
 --Header fuer Golden Reference erzeugen und zusammensetzen
 
-Hinzufuegen von Files:
-RTM auf "Project", oder auf jede weitere hinzugefuegte Komponente
+Hinzufügen von Files:
+Klick mit rechter Maus Taste auf "Project", oder auf jede weitere 
+hinzugefügte Komponente.
 
-fuer genauere Hilfestellung: bachmann.confluence.at
+--> für alle folgenden Properties bei denen "nicht verwendet" als
+Information hinzugefügt wurde gilt, dass diese nicht zwingend auszufüllen
+sind, sondern rein als Information für den Benutzer verwendet werden.
+
+für genauere Hilfestellung: 
+http://confluence.bachmann.at/display/AU/Package+Generator
