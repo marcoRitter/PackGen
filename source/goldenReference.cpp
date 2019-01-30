@@ -194,8 +194,8 @@ bool goldenReference::setSrecParameters()
 
             srecParameters.append(m_location.filestring+"/"+m_filename+"_header_filled.hex");
             srecParameters.append("--intel");
-            srecParameters.append("--offset");
-            srecParameters.append(jumpCommend_addr);
+            //srecParameters.append("--offset");
+            //srecParameters.append(jumpCommend_addr);
             srecParameters.append(m_goldenRef_file.filestring);
             if(m_file_type.selectedType == 0)
             {

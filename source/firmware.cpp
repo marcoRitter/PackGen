@@ -24,6 +24,17 @@ firmware::~firmware()
     delete pDeleteFirmware;
 }
 
+
+QString firmware::name()
+{
+    return m_name;
+}
+
+void firmware::setName(QString name)
+{
+    m_name = name;
+}
+
 FileString firmware::filename()
 {
     return m_filename;

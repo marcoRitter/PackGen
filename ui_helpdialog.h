@@ -52,13 +52,13 @@ public:
     {
         if (helpDialog->objectName().isEmpty())
             helpDialog->setObjectName(QStringLiteral("Help Dialog"));
-        helpDialog->resize(500, 500);
+        helpDialog->resize(950, 500);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(helpDialog->sizePolicy().hasHeightForWidth());
         helpDialog->setSizePolicy(sizePolicy);
-        helpDialog->setMinimumSize(QSize(950, 500));
+        helpDialog->setMinimumSize(QSize(500, 500));
         QFont font;
         font.setPointSize(10);
         helpDialog->setFont(font);

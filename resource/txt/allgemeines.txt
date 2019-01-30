@@ -13,5 +13,8 @@ hinzugefügte Komponente.
 Information hinzugefügt wurde gilt, dass diese nicht zwingend auszufüllen
 sind, sondern rein als Information für den Benutzer verwendet werden.
 
+--> Wichtig! alle Startadressen mit 3Byte angeben! ansonsten wird der Wert
+nicht übernommen
+
 für genauere Hilfestellung: 
 http://confluence.bachmann.at/display/AU/Package+Generator

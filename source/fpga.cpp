@@ -26,6 +26,16 @@ Fpga::~Fpga()
     delete pDeleteFPGA;
 }
 
+QString Fpga::name()
+{
+    return m_name;
+}
+
+void Fpga::setName(QString name)
+{
+    m_name = name;
+}
+
 FpgaType Fpga::fpgatype()
 {
     return m_fpgatype;

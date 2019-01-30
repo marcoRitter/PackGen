@@ -13,7 +13,7 @@ class file : public Node
 
     Q_OBJECT
 
-    Q_PROPERTY(FileString filename READ filename WRITE setFilename)
+    Q_PROPERTY(FileString inputFile_directory READ filename WRITE setFilename)
     Q_PROPERTY(FileType file_type READ file_type WRITE setFile_type)
     Q_PROPERTY(QString version READ version WRITE setVersion)
     Q_PROPERTY(FpgaType fpgatype READ fpgatype WRITE setFpgatype)

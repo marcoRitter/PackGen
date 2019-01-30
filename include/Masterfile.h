@@ -47,6 +47,8 @@ public:
     QString ver_subminor();
     void setVer_subminor(QString ver_subminor);
 
+    QVariant updateBitReverse();
+
     bool bit_reverse();
     void setBit_reverse(bool reverse);
 
@@ -63,6 +65,7 @@ public:
     void node_menue(QMenu *menu);
 signals:
     void setOutInfo (const QString & textToOut, const QColor & color);
+    void need_redraw(const QString &name, const QVariant a);
 private slots:
     void new_FPGA();
     void new_Firmware();
@@ -79,7 +82,7 @@ private:
     QString m_ver_minor;
     QString m_ver_subminor;
     FlashSize m_flashsize;
-    bool m_bit_reverse;
+    bool m_bit_reverse = false;
 
     QStringList m_srecParameters;
     QString m_processOut;

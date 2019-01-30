@@ -442,12 +442,10 @@ QString MainWindow::setTipForProperty(const QMetaProperty & prop)
     QString toolTip = "default";
     if (strcmp(prop.name(), "description") == 0)
         toolTip = "File description (not used)";
-    if (strcmp(prop.name(), "pkg_name") == 0)
+    if (strcmp(prop.name(), "outputFile_name") == 0)
         toolTip = "Output filename (without type ending)";
-    if (strcmp(prop.name(), "masterfile_name") == 0)
-        toolTip = "Output filename (without type ending)";
-    if (strcmp(prop.name(), "goldenRef_name") == 0)
-        toolTip = "Output filename (without type ending)";
+    if (strcmp(prop.name(), "inputFile_directory") == 0)
+        toolTip = "directory + filename from input file";
     if (strcmp(prop.name(), "ver_major") == 0)
         toolTip = "Major version of project (%d%d, 0-9)";
     if (strcmp(prop.name(), "ver_minor") == 0)
@@ -478,6 +476,8 @@ QString MainWindow::setTipForProperty(const QMetaProperty & prop)
         toolTip = "File version (not used; %d%d, 0-9)";
     if(strcmp(prop.name(), "JadeProject") == 0)
         toolTip = "true = PackGen for Jade \nflase = PackGen for M200";
+    if(strcmp(prop.name(), "bit_reverse") == 0)
+        toolTip = "true = reverse hole masterfile \nflase = don`t reverse Bits from input files";
 
     return toolTip;
 }
@@ -499,11 +499,13 @@ QRegExp MainWindow::setRegExpForProperty(const QMetaProperty &prop)
     if (strcmp(prop.name(), "designnumber") == 0)
         regexp.setPattern("[0-9]{0,4}");
     if (strcmp(prop.name(), "start_addr") == 0)
-        regexp.setPattern("0x[0-9A-Fa-f]{0,8}");
+        regexp.setPattern("0x[0-9A-Fa-f]{6,6}");
     if(strcmp(prop.name(), "masterfile_name") == 0 ||
         strcmp(prop.name(), "goldenRef_name") == 0 ||
         strcmp(prop.name(), "pkg_name") == 0)
         regexp.setPattern("[0-9A-Za-z]{0,100}");
+    if (strcmp(prop.name(), "object_name") == 0)
+        regexp.setPattern("0x[0-9A-Fa-f]{6,6}");
 
     /*if (strcmp(prop.name(),"description") == 0)
         regexp.setPattern("[0-9A-Za-z_-]{1,8}");*/

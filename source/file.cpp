@@ -93,6 +93,7 @@ void file::setFpgatype(FpgaType fpgatype)
     m_fpgatype = fpgatype;
     if(!m_parent->parent()->property("JadeProject").value<bool>())
         need_redraw("start_addr",file::updateStartAddress());
+
 }
 
 QVariant file::updateStartAddress()
@@ -109,7 +110,6 @@ QVariant file::updateStartAddress()
     else if (fpgatype().selectedfpga == 2) {
         setStart_addr("0x000000");
     }
-
     else
     {
         switch (m_flash_size.selectedsize) {

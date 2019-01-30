@@ -16,8 +16,9 @@ class Fpga : public Node
     // property to identify the node type
 //  Q_PROPERTY(QString node_type READ node_type)
 
+    Q_PROPERTY(QString outputFile_name READ name WRITE setName)
+    Q_PROPERTY(FileString inputFile_directory READ filename WRITE setFilename)
     Q_PROPERTY(FpgaType fpgatype READ fpgatype WRITE setFpgatype)
-    Q_PROPERTY(FileString filename READ filename WRITE setFilename)
     Q_PROPERTY(QString designnumber READ designnumber WRITE setDesignnumber)
     Q_PROPERTY(QString revision READ revision WRITE setRevision)
     Q_PROPERTY(QString testversion READ testversion WRITE setTestversion)
@@ -31,6 +32,9 @@ public:
     ~Fpga();
 
 //  QString node_type() {return"FPGA";}
+
+    QString name();
+    void setName(QString name);
 
     FpgaType fpgatype();
     void setFpgatype (FpgaType fpgatype);
@@ -86,9 +90,9 @@ public:
         mchfilenm.append("/");
         mchfilenm.append(fn.filestring.section("/",-1,-1).section(".",0,0).left(8).append(".mch"));
         */
-        QString h86FileName = path + "/" + this->description() + ".h86";
-        QString mchFileName = path + "/" + this->description() + ".mch";
-        QString verFileName = path + "/" + this->description() + ".ver";
+        QString h86FileName = path + "/" + this->name() + ".h86";
+        QString mchFileName = path + "/" + this->name() + ".mch";
+        QString verFileName = path + "/" + this->name() + ".ver";
 
         qDebug() << "h86 file = " << h86FileName;
         qDebug() << "mch file = " << mchFileName;
@@ -143,6 +147,7 @@ signals:
 private:
 //    QFileInfo m_file;
     FpgaType m_fpgatype;
+    QString m_name;
     // input fpga bit file
     FileString m_filename;
     QString m_designnumber = "";

@@ -13,7 +13,8 @@ class firmware : public Node
 {
     Q_OBJECT
 
-    Q_PROPERTY(FileString filename READ filename WRITE setFilename)
+    Q_PROPERTY(QString outputFile_name READ name WRITE setName)
+    Q_PROPERTY(FileString inputFile_directory READ filename WRITE setFilename)
     Q_PROPERTY(QString ver_major READ ver_major WRITE setVer_major)
     Q_PROPERTY(QString ver_minor READ ver_minor WRITE setVer_minor)
     Q_PROPERTY(QString ver_subminor READ ver_subminor WRITE setVer_subminor)
@@ -26,6 +27,9 @@ public:
     ~firmware();
 
     QString node_type() {return"firmware";}
+
+    QString name();
+    void setName(QString name);
 
     FileString filename();
     void setFilename(FileString filename);
@@ -69,8 +73,8 @@ public:
         mchfilenm.append("/");
         mchfilenm.append(fn.filestring.section("/",-1,-1).section(".",0,0).left(8).append(".mch"));
         */
-        QString verFileName = path + "/" + this->description() + ".ver";
-        QString mchFileName = path + "/" + this->description() + ".mch";
+        QString verFileName = path + "/" + this->name() + ".ver";
+        QString mchFileName = path + "/" + this->name() + ".mch";
         m_verFileName = verFileName;
         m_mchFileName = mchFileName;
     }
@@ -104,6 +108,7 @@ private:
     QString m_variant;
     VerState m_verstate;
     QString m_start_addr = "0x000000";
+    QString m_name;
 
     QString m_verFileName;
     QString m_mchFileName;
