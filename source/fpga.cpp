@@ -194,6 +194,10 @@ void Fpga::setSrecParameters()
     parameters.clear();
     parameters.append(m_filename.filestring);
     parameters.append("--binary");
+    if(fpgatype().selectedfpga > 0)
+    {
+        parameters.append("--bitreverse");
+    }
     parameters.append("--offset");
     parameters.append(m_start_addr);
     if (m_fpgatype.selectedfpga)
