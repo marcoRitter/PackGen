@@ -62,7 +62,7 @@ helpDialog::helpDialog(QWidget *parent) :
 
     propertyEditor = new QTextEdit(ui->scrollArea);
     //propertyEditor->setHeaderVisible(true);
-    propertyEditor->setReadOnly(false);
+    propertyEditor->setReadOnly(true);
 
 
     QFont font;
@@ -71,6 +71,10 @@ helpDialog::helpDialog(QWidget *parent) :
     font.setPixelSize(13);
     font.setItalic(false);
     propertyEditor->setFont(font);
+
+    QTextCursor cur;
+    cur.setPosition(0);
+    propertyEditor->setTextCursor(cur);
 
     readTXTdata("allgemeines");
 
@@ -156,6 +160,10 @@ void helpDialog::draw_property_browser()
         {
             readTXTdata("golden");
         }
+
+        QTextCursor cur;
+        cur.setPosition(0);
+        propertyEditor->setTextCursor(cur);
 
     ui->scrollArea->setWidget(propertyEditor);
 }

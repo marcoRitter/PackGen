@@ -1,1 +1,18 @@
-Golden Reference für Masterfile
+Golden Reference für Masterfile:
+
+Das Objekt Golden File ist bis auf die Bezeichnung im TreeView das selbe Objekt wie File.
+
+Properties:
+--description		...Beschreibung der Golden Reference(wird nicht verwendet)
+--inputFile_directory	...Dateipfad zum Eingangsfile
+--file_type		...File Typ des Eingangsfiles
+--version		...Version der Golden Reference(wird nicht verwendet)
+--start_addr		...Startadresse im Flash
+
+Beispiel:
+
+description		= new File
+inputFile_name	= C:\Documents\PackGen\GMP233_GMP233.mcs
+file_type		= intel hex-file
+version		= 01
+start_addr		= 0x000000

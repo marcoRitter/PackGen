@@ -105,35 +105,50 @@ QVariant file::updateStartAddress()
 
     if(fpgatype().selectedfpga == 1)
     {
-        setStart_addr("0x010000");
+        if(m_start_addr == "0x010000" ||m_start_addr == "0x020000" || m_start_addr == "0x040000" ||
+                m_start_addr == "0x080000" || m_start_addr == "0x100000" || m_start_addr == "0x200000"
+                ||m_start_addr == "0x400000" || m_start_addr == "0x800000")
+        {
+            setStart_addr("0x010000");
+        }
     }
     else if (fpgatype().selectedfpga == 2) {
-        setStart_addr("0x000000");
+        if(m_start_addr == "0x010000" ||m_start_addr == "0x020000" || m_start_addr == "0x040000" ||
+                m_start_addr == "0x080000" || m_start_addr == "0x100000" || m_start_addr == "0x200000"
+                ||m_start_addr == "0x400000" || m_start_addr == "0x800000")
+        {
+            setStart_addr("0x000000");
+        }
     }
     else
     {
-        switch (m_flash_size.selectedsize) {
-        case 0:
-            setStart_addr("0x020000");
-            break;
-        case 1:
-            setStart_addr("0x040000");
-            break;
-        case 2:
-            setStart_addr("0x080000");
-            break;
-        case 3:
-            setStart_addr("0x100000");
-            break;
-        case 4:
-            setStart_addr("0x200000");
-            break;
-        case 5:
-            setStart_addr("0x400000");
-            break;
-        case 6:
-            setStart_addr("0x800000");
-            break;
+        if(m_start_addr == "0x010000" ||m_start_addr == "0x020000" || m_start_addr == "0x040000" ||
+                m_start_addr == "0x080000" || m_start_addr == "0x100000" || m_start_addr == "0x200000"
+                ||m_start_addr == "0x400000" || m_start_addr == "0x800000")
+        {
+            switch (m_flash_size.selectedsize) {
+            case 0:
+                setStart_addr("0x020000");
+                break;
+            case 1:
+                setStart_addr("0x040000");
+                break;
+            case 2:
+                setStart_addr("0x080000");
+                break;
+            case 3:
+                setStart_addr("0x100000");
+                break;
+            case 4:
+                setStart_addr("0x200000");
+                break;
+            case 5:
+                setStart_addr("0x400000");
+                break;
+            case 6:
+                setStart_addr("0x800000");
+                break;
+            }
         }
     }
 

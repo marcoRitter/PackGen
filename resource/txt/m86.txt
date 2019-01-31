@@ -4,10 +4,12 @@ Das M86 Package wird aus einer FPGA und einer Firmware Datei zusammengestelt.
 Weitere dazugehörige Files wie die .ver - Dateien (Versions-File) wird mithilfe
 der ausgefüllten Properties vom PackGen selber erzeugt.
 
+--> Ausgangsfile Formate: .h86, .mbs, .mch, .m86, .ver
+
 Properties:
 --description		...Beschreibung des Package (wird nicht verwendet)
 --outputFile_location	...Ausgabepfad der generierten Dateien
---outputFile_name	...Dateiname des generierten Packages (OHNE Dateiendung wie .m86)
+--outputFile_name	...Dateiname des generierten Packages
 --typecode		...Modultyp für den das Package bestimmt ist
 --variant		...Modulvariante für die das Package bestimmt ist 
 		   (für mehrere Modulvarianten = 0xFF)

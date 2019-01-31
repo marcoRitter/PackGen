@@ -153,20 +153,45 @@ QVariant Fpga::updateStartAddress()
     HexString temp;
     if (m_dualboot.dualbootena && m_fpgatype.selectedfpga == 0)// && m_fpgatype.selectedfpga)
     {
-        switch (m_flashsize.selectedsize)
+        if(m_start_addr == "0x020000" || m_start_addr == "0x040000" || m_start_addr == "0x080000" ||
+                m_start_addr == "0x100000" || m_start_addr == "0x200000" ||m_start_addr == "0x400000" ||
+                m_start_addr == "0x800000" || m_start_addr == "0x000000" )
         {
-            case 0: m_start_addr = "0x020000"; break;
-            case 1: m_start_addr = "0x040000"; break;
-            case 2: m_start_addr = "0x080000"; break;
-            case 3: m_start_addr = "0x100000"; break;
-            case 4: m_start_addr = "0x200000"; break;
-            case 5: m_start_addr = "0x400000"; break;
-            case 6: m_start_addr = "0x800000"; break;
+            switch (m_flashsize.selectedsize)
+            {
+                case 0:
+                    m_start_addr = "0x020000";
+                    break;
+                case 1:
+                    m_start_addr = "0x040000";
+                    break;
+                case 2:
+                    m_start_addr = "0x080000";
+                    break;
+                case 3:
+                    m_start_addr = "0x100000";
+                    break;
+                case 4:
+                    m_start_addr = "0x200000";
+                    break;
+                case 5:
+                    m_start_addr = "0x400000";
+                    break;
+                case 6:
+                    m_start_addr = "0x800000";
+                    break;
+            }
         }
     }
     else if(m_dualboot.dualbootena)
     {
-      m_start_addr = "0x000000";
+        if(m_start_addr == "0x020000" || m_start_addr == "0x040000" || m_start_addr == "0x080000" ||
+                m_start_addr == "0x100000" || m_start_addr == "0x200000" ||m_start_addr == "0x400000" ||
+                m_start_addr == "0x800000")
+        {
+            m_start_addr = "0x000000";
+        }
+
     }
 //      m_start_addr = temp.get_offset(m_flashsize.selectedsize);
 //  else

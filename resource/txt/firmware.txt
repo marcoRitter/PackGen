@@ -8,15 +8,17 @@ Properties:
 --inputFile_directory	...Dateipfad zum Hexfile der Firmware (wichtig: Hexfile!)
 --ver_major		...Major Version der Firmware
 --ver_minor		...Minor Version der Firmware
---ver_subminor		...Subminor Version der Firmware
+--ver_subminor	...Subminor Version der Firmware
 --verstate		...Entwicklungsstand
+--start_addr		...Startadresse im Flash
 
 Beispiel:
 
 description		= new Firmware
-outputFile_name		= SAI205_FW
+outputFile_name	= SAI205_FW
 inputFile_directory	= C:\Documents\PackGen\A_BIOS_SAI205.h86
 ver_major		= 01
 ver_minor		= 05
 ver_subminor		= 01
 verstate		= Alpha
+start_addr		= 0x0F0000

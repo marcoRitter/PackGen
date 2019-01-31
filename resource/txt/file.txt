@@ -1,1 +1,22 @@
 File für Masterfile:
+
+Theoretisch kann jede Datei des Masterfiles mithilfe des Objektes "File" hinzugefügt werden.
+Um jedoch eine bessere Übersicht für den Benutzer zu erreichen wird der Objektname zusätzlich 
+mit FPGA, Firmware und Golden File bezeichnet.
+Mithilfe von File können beliebige Files (.bin und .hex) Dateien dem Masterfile hinzugefügt 
+werden. Für .txt Dateien das Dateiformat Intel Hex wählen.
+
+Properties:
+--description		...Beschreibung des Files(wird nicht verwendet)
+--inputFile_directory	...Dateipfad zum Eingangsfile
+--file_type		...File Typ des Eingangsfiles
+--version		...Version des Files(wird nicht verwendet)
+--start_addr		...Startadresse des Workincodes im Flash
+
+Beispiel:
+
+description		= new File
+inputFile_name	= C:\Documents\PackGen\info.hex
+file_type		= intel hex-file
+version		= 01
+start_addr		= 0x001000

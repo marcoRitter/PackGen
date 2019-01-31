@@ -10,11 +10,18 @@ Klick mit rechter Maus Taste auf "Project", oder auf jede weitere
 hinzugefügte Komponente.
 
 --> für alle folgenden Properties bei denen "nicht verwendet" als
-Information hinzugefügt wurde gilt, dass diese nicht zwingend auszufüllen
-sind, sondern rein als Information für den Benutzer verwendet werden.
+     Information hinzugefügt wurde gilt, dass diese nicht zwingend 
+     auszufüllen sind, sondern rein als Information für den Benutzer 
+     verwendet werden.
 
---> Wichtig! alle Startadressen mit 3Byte angeben! ansonsten wird der Wert
-nicht übernommen
+--> Vorschläge für Startadressen sind verwendete Default, oder im
+     Fall von Lattice vorgegebene Werte
+
+--> alle Startadressen mit 3Byte angeben! ansonsten wird der Wert
+     nicht übernommen!
+
+--> alle "outputFile_name" Properties ohne Typendung! Typendung wird vom
+     Programm selbst angehängt!
 
 für genauere Hilfestellung: 
 http://confluence.bachmann.at/display/AU/Package+Generator

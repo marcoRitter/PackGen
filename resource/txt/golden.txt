@@ -1,2 +1,32 @@
 Golden Reference:
-ä
+
+Mithilfe des Objektes Golden Reference, wird der Golden Reference Code auf die 
+Startadresse im Flash gebracht. Zusätzlich wird je nach FPGA Typ ein Header oder 
+ein JumpCommant im Code hinzugefügt. Der Header wird je nach konfiguration des 
+FPGAs an eine Vorgegebene Adresse gesetzt.(ECP2 und Spartan6 auf 0x000000, bei
+ECP5 auf die letzten 256 Bits des Speichers)
+-->Das Ausgangsfile ist im Intel-Hex Format (.hex)
+	-->Im Fall von Lattice ist das Ausgangsfile gedreht!
+
+Properties:
+--description		...Beschreibung des Files(wird nicht verwendet)
+--outputFile_location	...Ausgabepfad der generierten Datei
+--outputFile_name	...Name des generierten Ausgabefiles
+--inputFile_directory	...Dateipfad zum Eingangsfile
+--file_type		...File Typ des Eingangsfiles
+--version		...Version des Files(wird nicht verwendet)
+--flash_size		...Größe des Config-Flash
+--fpgatype		...Verwendeter FPGA Hersteller bzw. Produktfamilie
+--start_addr		...Startadresse im Flash
+
+Beispiel:
+
+description		= new Golden Reference
+outputFile_location	= C:\Documents\PackGen\GoldenRefernces
+outputFile_name	= GMP232_golden
+inputFile_directory	= C:\Documents\PackGen\GoldenRefernces\golden.bin
+file_type		= binary-file
+version		= 10
+flash_size		= 4Mbit
+fpgatype		= Lattice ECP5
+start_addr		= 0x001000

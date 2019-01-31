@@ -1,1 +1,18 @@
 Firmware für Masterfile:
+
+Das Objekt Firmware ist bis auf die Bezeichnung im TreeView das selbe Objekt wie File.
+
+Properties:
+--description		...Beschreibung der Firmware(wird nicht verwendet)
+--inputFile_directory	...Dateipfad zum Eingangsfile
+--file_type		...File Typ des Eingangsfiles
+--version		...Version der Firmware(wird nicht verwendet)
+--start_addr		...Startadresse im Flash
+
+Beispiel:
+
+description		= new File
+inputFile_name	= C:\Documents\PackGen\RS204_org.hex
+file_type		= intel hex-file
+version		= 01
+start_addr		= 0x400000
