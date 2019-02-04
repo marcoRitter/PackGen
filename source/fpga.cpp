@@ -204,13 +204,15 @@ QVariant Fpga::updateStartAddress()
 
 QString Fpga::getVerString()
 {
+    QString design1 = designnumber();
+    QString design2 = designnumber();
     QString ver = "";
     ver.append("\"V");
-    ver.append(designnumber());
+    ver.append(design1.remove(2,2));
+    ver.append(".");
+    ver.append(design2.remove(0,2));
     ver.append(".");
     ver.append(revision());
-    ver.append(".");
-    ver.append(testversion());
     ver.append('"');
     return ver;
 }
@@ -234,9 +236,9 @@ void Fpga::setSrecParameters()
     else
     {
         parameters.append("--intel");
+        parameters.append("--obs=32");
     }
 
-    parameters.append("--obs=32");
 
     m_srecParameters = parameters;
 //  runSrec();

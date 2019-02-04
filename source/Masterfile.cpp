@@ -66,6 +66,20 @@ void Masterfile::setFilename(QString name)
     m_filename = name;
 }
 
+FpgaType Masterfile::fpgatype()
+{
+    return m_fpgatype;
+}
+void Masterfile::setFpgatype(FpgaType fpgatype)
+{
+    m_fpgatype = fpgatype;
+    if(m_fpgatype.selectedfpga == 0)
+    {
+        QVariant a = false;
+        need_redraw("bit_reverse",a);
+    }
+}
+
 FlashSize Masterfile::flash_size()
 {
     return m_flashsize;
@@ -125,21 +139,12 @@ void Masterfile::setBit_reverse(bool reverse)
 {
     m_bit_reverse = reverse;
 
-    QObjectList objectsMasterfile = this->children();
-    for(int i = 0; i < this->children().length(); i++)
+    if(m_fpgatype.selectedfpga == 0)
     {
-        if(objectsMasterfile[i]->inherits("file"))
-        {
-            file *fiLe = static_cast<file*>(objectsMasterfile[i]);
-            if(fiLe->getType().toLower() == "fpga" && fiLe->fpgatype().selectedfpga == 0)
-            {
-                m_bit_reverse = false;
-            }
-        }
+        QVariant a = false;
+        need_redraw("bit_reverse",a);
     }
-    QVariant a;
-    a.setValue(m_bit_reverse);
-    need_redraw("bit_reverse",a);
+
 }
 
 bool Masterfile::readJson(const QJsonObject *jsonObj)
@@ -311,7 +316,7 @@ bool Masterfile::setSrecParameters()
             if(fiLe->file_type().selectedType == 1)
             {
                 srec_parameters.append("--binary");
-                if(fiLe->getType().toLower().contains("golden") || fiLe->getType().toLower().contains("fpga"))
+                if(m_bit_reverse)
                 {
                     srec_parameters.append("--bit-reverse");
                 }
@@ -320,11 +325,10 @@ bool Masterfile::setSrecParameters()
             else if(fiLe->file_type().selectedType == 0)
             {
                 srec_parameters.append("--intel");
-            }
-
-            if(fiLe->getType().toLower() == "file" || fiLe->getType().toLower() == "firmware")
-            {
-                srec_parameters.append("--bit-reverse");
+                if(m_bit_reverse && (fiLe->getType().toLower() == "file" || fiLe->getType().toLower() == "firmware"))
+                {
+                    srec_parameters.append("--bit-reverse");
+                }
             }
 
             srec_parameters.append("--offset");
@@ -443,7 +447,7 @@ bool Masterfile::fillBlanks()
 
     srec_parameters.append(m_location.filestring + "/" + m_filename+"_notfilled"+".hex");
     srec_parameters.append("--intel");
-    if(!bit_reverse())
+    if(!m_bit_reverse)
         srec_parameters.append("--bit-reverse");
     srec_parameters.append("--fill");
     srec_parameters.append("0xFF");

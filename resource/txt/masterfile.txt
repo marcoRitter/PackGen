@@ -16,6 +16,7 @@ Properties:
 --ver_major		...Major Version des Masterfiles(wird nicht verwendet)
 --ver_minor		...Minor Version des Masterfiles(wird nicht verwendet)
 --ver_subminor	...Subminor Version des Masterfiles(wird nicht verwendet)
+--fpgatype		...Verwendeter FPGA Hersteller bzw. Produktfamilie
 --flash_size		...Größe des Config-Flash
 --bit_reverse		...Hex Datei "gedreht" zu bin Datei erstellen (nur bei Lattice
 		   möglich) 
@@ -28,6 +29,7 @@ outputFile_name	= TestMasterfile
 ver_major		= 01
 ver_minor		= 05
 ver_subminor		= 01
+fpgatype		= Xilinx Spartan6
 flash_size		= 64Mbit
 bit_reverse		= false
 

@@ -1,15 +1,14 @@
 FPGA für Masterfile:
 
 Das Objekt FPGA ist das einzige Objekt von Masterfile, welches sich von den anderen unterscheidet.
-Durch ein zusätzliches Propertie "fpgatype" kann mithilfe der Flash Größe aus Masterfile ein 
-Vorschlag für die start_addr gemacht werden.
+Durch die Properties "fpgatype" und "flash_size" aus dem Objekt Masterfile kann ein Vorschlag für 
+die start_addr gemacht werden.
 
 Properties:
 --description		...Beschreibung des FPGA Files(wird nicht verwendet)
 --inputFile_directory	...Dateipfad zum Eingangsfile
 --file_type		...File Typ des Eingangsfiles
 --version		...Version des FPGA Files(wird nicht verwendet)
---fpgatype		...Verwendeter FPGA Hersteller bzw. Produktfamilie
 --start_addr		...Startadresse des Workincodes im Flash
 
 Beispiel:
@@ -18,5 +17,4 @@ description		= new File
 inputFile_name	= C:\Documents\PackGen\rs204_fpga_1400.bin
 file_type		= binary-file
 version		= 01
-fpgatype		= Xilinx Spartan6
 start_addr		= 0x080000

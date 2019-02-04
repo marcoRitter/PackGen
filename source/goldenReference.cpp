@@ -166,7 +166,7 @@ bool goldenReference::setSrecParameters()
                 srecParameters.append("--binary");
             }
             srecParameters.append("--offset");
-            srecParameters.append("0x10000");
+            srecParameters.append(m_start_addr);
             srecParameters.append("--o");
             srecParameters.append(m_location.filestring+"/"+m_filename+".hex");
             srecParameters.append("--intel");
