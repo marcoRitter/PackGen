@@ -73,7 +73,7 @@ public:
         mchfilenm.append("/");
         mchfilenm.append(fn.filestring.section("/",-1,-1).section(".",0,0).left(8).append(".mch"));
         */
-        QString verFileName = path + "/" + this->name() + ".ver";
+        QString verFileName = path + "/" + this->name() +"_FW"+ ".ver";
         QString mchFileName = path + "/" + this->name() + ".mch";
         m_verFileName = verFileName;
         m_mchFileName = mchFileName;

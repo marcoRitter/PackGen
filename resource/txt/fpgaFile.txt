@@ -20,8 +20,3 @@ file_type		= binary-file
 version		= 01
 fpgatype		= Xilinx Spartan6
 start_addr		= 0x080000
-
-Die Vorgeschlagenen Adressen müssen nicht zwingend verwendet werden. Nachdem sie einmal überschrieben
-wurden werden keine neuen Vorschläge gemacht (sofern der Überschriebene Wert nicht einem der möglich
-vorgeschlagenen Werte entspricht). Falls dies jedoch der Fall währe (Bsp. Vorgeschlagener Wert 0x020000,
-SOLL Wert 0x040000) ist die einfachste Alternative das FPGA File mit dem Objekt File einzulesen. 

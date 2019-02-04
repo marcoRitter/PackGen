@@ -53,6 +53,16 @@ M86_Spartan6::~M86_Spartan6()
     delete pDelete;
 }
 
+ModuleType M86_Spartan6::module_type()
+{
+    return m_module_type;
+}
+
+void M86_Spartan6::setModule_type(ModuleType module)
+{
+    m_module_type = module;
+}
+
 FileString M86_Spartan6::location()
 {
     return m_location;
@@ -187,7 +197,7 @@ bool M86_Spartan6::generate_package()
 
 
 
-    setLocation(this->property("location").value<FileString>().filestring);
+    setLocation(this->property("outputFile_location").value<FileString>().filestring);
     this->setVerFileName();
     this->setScrFileName();
 
@@ -343,24 +353,25 @@ bool M86_Spartan6::generate_package()
             }
             setOutInfo("FPGA Ver file created:", m_infoColor);
             setOutInfo(fpga->getVerFileName(), m_normalColor);
-            if (!fpga->runSrec())
-            {
-                setOutInfo(fpga->getProcessOut(),m_infoColor);
-                QFileInfo hexFile = fpga->getHexFileName();
-                if (hexFile.exists() && hexFile.isFile())
+
+                if (!fpga->runSrec())
                 {
-                    setOutInfo("FPGA bin to hex converted successfully:", m_infoColor);
-                    setOutInfo(fpga->getHexFileName(), m_normalColor);
-                    fpga->runLogichdr();
-                    hexFile = fpga->getMchFileName();
                     setOutInfo(fpga->getProcessOut(),m_infoColor);
+                    QFileInfo hexFile = fpga->getHexFileName();
                     if (hexFile.exists() && hexFile.isFile())
                     {
-                        setOutInfo("FPGA mch file created:", m_infoColor);
-                        setOutInfo(fpga->getMchFileName(), m_normalColor);
+                        setOutInfo("FPGA bin to hex converted successfully:", m_infoColor);
+                        setOutInfo(fpga->getHexFileName(), m_normalColor);
+                        fpga->runLogichdr();
+                        hexFile = fpga->getMchFileName();
+                        setOutInfo(fpga->getProcessOut(),m_infoColor);
+                        if (hexFile.exists() && hexFile.isFile())
+                        {
+                            setOutInfo("FPGA mch file created:", m_infoColor);
+                            setOutInfo(fpga->getMchFileName(), m_normalColor);
+                        }
                     }
                 }
-            }
 
             scriptFileCreate(this->getScrFileName(), "ObjectType = LOGIC\n", false);
             QString fpgaScriptLine = "Version = \"";

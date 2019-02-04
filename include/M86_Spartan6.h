@@ -6,6 +6,7 @@
 #include "node.h"
 #include "fpga.h"
 #include "firmware.h"
+#include "customtype.h"
 
 /*
 
@@ -23,6 +24,7 @@ class M86_Spartan6 : public Node
     Q_OBJECT
     // property to identify the node type
 //  Q_PROPERTY(QString node_type READ node_type)
+    Q_PROPERTY(ModuleType module_type READ module_type WRITE setModule_type)
     Q_PROPERTY(FileString outputFile_location READ location WRITE setLocation)
     Q_PROPERTY(QString outputFile_name READ pkgName WRITE setPkgName)
     Q_PROPERTY(QString typecode READ typecode WRITE setTypeCode)
@@ -37,6 +39,9 @@ public:
     ~M86_Spartan6();
 
     QString node_type() {return"M86";}
+
+    ModuleType module_type();
+    void setModule_type(ModuleType module);
 
     FileString location();
     void setLocation(FileString foldername);
@@ -127,6 +132,7 @@ private:
     VerState m_verstate;
     QString m_verFileName;
     QString m_scriptFileName;
+    ModuleType m_module_type;
 
     // menu Actions
     QAction * pGenerate;

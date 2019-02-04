@@ -14,14 +14,25 @@ hinzugefügte Komponente.
      auszufüllen sind, sondern rein als Information für den Benutzer 
      verwendet werden.
 
---> Vorschläge für Startadressen sind verwendete Default, oder im
-     Fall von Lattice vorgegebene Werte
+--> Vorschläge für Startadressen sind verwendete Default Werte, oder 
+     im Fall von Lattice, vorgegebene Werte
 
 --> alle Startadressen mit 3Byte angeben! ansonsten wird der Wert
      nicht übernommen!
 
 --> alle "outputFile_name" Properties ohne Typendung! Typendung wird vom
      Programm selbst angehängt!
+
+--> Die Vorgeschlagenen Adressen müssen nicht zwingend verwendet werden. 
+     Nachdem sie einmal überschrieben wurden werden keine neuen Vorschläge 
+     gemacht (sofern der Überschriebene Wert nicht einem der möglich
+     vorgeschlagenen Werte entspricht). Falls dies jedoch der Fall währe 
+     (Bsp. Vorgeschlagener Wert 0x020000, SOLL Wert 0x040000) ist die 
+     einfachste Alternative das FPGA File mit dem Objekt File (nur bei 
+     Masterfile) einzulesen. Bei einem FPGA für ein Package soll nach 
+     eigener Eingabe der Startadresse darauf geachtet werden, dass das
+     Propertie Fenster nicht mehr aktualisiert werden muss. Ansonsten 
+     wird wieder ein Wert vorgeschlagen.
 
 für genauere Hilfestellung: 
 http://confluence.bachmann.at/display/AU/Package+Generator

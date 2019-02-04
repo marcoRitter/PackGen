@@ -9,5 +9,6 @@ void CustomType::setup()
     CustomTypeFile = qRegisterMetaType<FpgaType>("FpgaType");
     CustomTypeFile = qRegisterMetaType<VerState>("VerState");
     CustomTypeFile = qRegisterMetaType<FileType>("FileType");
+    CustomTypeFile = qRegisterMetaType<ModuleType>("ModuleType");
 }
 

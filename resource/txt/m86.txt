@@ -8,6 +8,7 @@ der ausgefüllten Properties vom PackGen selber erzeugt.
 
 Properties:
 --description		...Beschreibung des Package (wird nicht verwendet)
+--module_type		...Art des Moduls(CPU oder I/O)
 --outputFile_location	...Ausgabepfad der generierten Dateien
 --outputFile_name	...Dateiname des generierten Packages
 --typecode		...Modultyp für den das Package bestimmt ist
@@ -21,6 +22,7 @@ Properties:
 Beispiel:
 
 description 		= new M86
+module_type		= CPU
 outputFile_location 	= C:/PackageGenerator/M86
 outputFile_name 	= test
 typecode 		= 0x70

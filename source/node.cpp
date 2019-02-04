@@ -128,6 +128,14 @@ bool Node::readJson(const QJsonObject *jsonObj)
                         a.setValue<FileType>(d);
                         this->setProperty(key.toLatin1().data(),a);
                 }
+                if(strcmp(v.typeName(),"ModuleType") == 0)
+                {
+                        ModuleType d;
+                        d.selectedmodultype = static_cast<uint>(jsonVal.toInt());
+                        QVariant a;
+                        a.setValue<ModuleType>(d);
+                        this->setProperty(key.toLatin1().data(),a);
+                }
 
             }
             else
@@ -183,6 +191,11 @@ bool Node::writeJson(QJsonObject *jsonObj)
             if (strcmp(v.typeName(), "FileType") == 0)
             {
                 QVariant x = v.value<FileType>().selectedType;
+                jsonObj->insert(prop.name(),x.toInt());
+            }
+            if (strcmp(v.typeName(), "ModuleType") == 0)
+            {
+                QVariant x = v.value<ModuleType>().selectedmodultype;
                 jsonObj->insert(prop.name(),x.toInt());
             }
 

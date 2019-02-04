@@ -90,9 +90,17 @@ public:
         mchfilenm.append("/");
         mchfilenm.append(fn.filestring.section("/",-1,-1).section(".",0,0).left(8).append(".mch"));
         */
-        QString h86FileName = path + "/" + this->name() + ".h86";
+        QString h86FileName;
+
+        if(m_parent->property("module_type").value<ModuleType>().selectedmodultype == 0)
+        {
+            h86FileName = path + "/" + this->name() + ".h86";
+        }
+        else {
+            h86FileName = path + "/" + this->name() + ".bin";
+        }
         QString mchFileName = path + "/" + this->name() + ".mch";
-        QString verFileName = path + "/" + this->name() + ".ver";
+        QString verFileName = path + "/" + this->name() +"_FPGA"+ ".ver";
 
         qDebug() << "h86 file = " << h86FileName;
         qDebug() << "mch file = " << mchFileName;

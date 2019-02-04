@@ -224,6 +224,14 @@ void MainWindow::handleValueChanged(QtProperty *property, const QVariant &val)
                 a.setValue<FileType>(filetype);
                 m_currentItem->setProperty(property->propertyName().toStdString().c_str(),a);
             }
+            if(strcmp(v.typeName(),"ModuleType") == 0)
+            {
+                QVariant a;
+                ModuleType modultype;
+                modultype.selectedmodultype = val.toUInt();
+                a.setValue<ModuleType>(modultype);
+                m_currentItem->setProperty(property->propertyName().toStdString().c_str(),a);
+            }
 
         }
         else
@@ -338,6 +346,13 @@ void MainWindow::draw_property_browser()
                    property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
                    property->setAttribute("enumNames",v.value<FileType>().filetype);
                    property->setValue(v.value<FileType>().selectedType);
+                  // property->setToolTip(setTipForProperty(prop));
+               }
+               if(strcmp(v.typeName(),"ModuleType") == 0)
+               {
+                   property = variantManager->addProperty(QtVariantPropertyManager::enumTypeId(), prop.name());
+                   property->setAttribute("enumNames",v.value<ModuleType>().modultype);
+                   property->setValue(v.value<ModuleType>().selectedmodultype);
                   // property->setToolTip(setTipForProperty(prop));
                }
                 break;
@@ -486,18 +501,18 @@ QRegExp MainWindow::setRegExpForProperty(const QMetaProperty &prop)
 {
     QRegExp regexp;
     regexp.setPattern(".*");
-    if (strcmp(prop.name(), "testversion") == 0 ||
-        strcmp(prop.name(), "variant") == 0 ||
+    if (strcmp(prop.name(), "variant") == 0 ||
         strcmp(prop.name(), "typecode") == 0)
             regexp.setPattern("0x[0-9a-fA-F]{0,2}");
-    if(strcmp(prop.name(), "revision") == 0 ||
+    if(strcmp(prop.name(), "testversion") == 0 ||
+       strcmp(prop.name(), "revision") == 0 ||
        strcmp(prop.name(), "ver_major") == 0 ||
        strcmp(prop.name(), "ver_minor") == 0 ||
        strcmp(prop.name(), "version") == 0 ||
        strcmp(prop.name(), "ver_subminor") == 0)
-            regexp.setPattern("[0-9]{0,2}");
+            regexp.setPattern("[0-9]{2,2}");
     if (strcmp(prop.name(), "designnumber") == 0)
-        regexp.setPattern("[0-9]{0,4}");
+        regexp.setPattern("[0-9]{4,4}");
     if (strcmp(prop.name(), "start_addr") == 0)
         regexp.setPattern("0x[0-9A-Fa-f]{6,6}");
     if(strcmp(prop.name(), "masterfile_name") == 0 ||

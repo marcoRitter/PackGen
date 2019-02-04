@@ -47,6 +47,15 @@ public:
     DualBoot(const uint &value) :dualbootena(value){}
 };
 
+class ModuleType
+{
+public:
+    QStringList modultype = {"I/O Module", "CPU Module"};
+    uint selectedmodultype = 0 ;
+    ModuleType(){ }
+    ModuleType(const uint &value) : selectedmodultype(value){}
+};
+
 class FlashSize
 {
 public:
@@ -91,6 +100,7 @@ Q_DECLARE_METATYPE(DualBoot)
 Q_DECLARE_METATYPE(FpgaType)
 Q_DECLARE_METATYPE(VerState)
 Q_DECLARE_METATYPE(FileType)
+Q_DECLARE_METATYPE(ModuleType)
 
 
 

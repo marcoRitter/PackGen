@@ -9,8 +9,8 @@ integriert.
 Propterties:
 --descripion		...Beschreibung der FPGA Datei (wird nicht verwendet)
 --outputFile_name	...Name folgender generierter Dateien: "h86", "mch", "ver"
---fpgatype		...Verwendeter FPGA Hersteller bzw. Produktfamilie
 --inputFile_directory	...Dateipfad zum Binärfile der Logik (wichtig: Binärdatei!)
+--fpgatype		...Verwendeter FPGA Hersteller bzw. Produktfamilie
 --designnumber	...Designnummer der Logik laut Logikreferenzliste
 --revision		...Hauptversion der Logik
 --testversion		...Testversion der Logik
@@ -36,3 +36,7 @@ Der Name der "mch"-Datei wird beim Öffnen der Package-Datei im SolutionCenter
 angezeigt. Deshalb sollte hier der Name der entsprechenden Komponente angegeben 
 werden (bei Logik: der selbe Name, wie die "bin"-Datei zusammengestellt aus 
 Designnummer, Hauptversion und Testversion)
+
+->Bei CPU Modul darf der Name NICHT der selbe wie der des Eingangsfiles sein 
+(wenn sie im selben Ordner angelegt werden). Ansonsten wird das Ursprüngliche 
+File Überschrieben!

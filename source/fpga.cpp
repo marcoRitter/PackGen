@@ -2,6 +2,8 @@
 #include "mainwindow.h"
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <bits/stdc++.h>
+using namespace std;
 
 Fpga::Fpga(QObject *parent) :
     Node(parent,"FPGA")
@@ -206,9 +208,9 @@ QString Fpga::getVerString()
     ver.append("\"V");
     ver.append(designnumber());
     ver.append(".");
-    ver.append(designnumber());
-    ver.append(".");
     ver.append(revision());
+    ver.append(".");
+    ver.append(testversion());
     ver.append('"');
     return ver;
 }
@@ -219,17 +221,22 @@ void Fpga::setSrecParameters()
     parameters.clear();
     parameters.append(m_filename.filestring);
     parameters.append("--binary");
-    if(fpgatype().selectedfpga > 0)
-    {
-        parameters.append("--bitreverse");
-    }
     parameters.append("--offset");
     parameters.append(m_start_addr);
     if (m_fpgatype.selectedfpga)
         parameters.append("--bit_reverse");
     parameters.append("--output");
     parameters.append(m_hexFileName);
-    parameters.append("--intel");
+    if(m_hexFileName.contains(".bin"))
+    {
+        parameters.append("--binary");
+    }
+    else
+    {
+        parameters.append("--intel");
+    }
+
+    parameters.append("--obs=32");
 
     m_srecParameters = parameters;
 //  runSrec();
@@ -270,16 +277,33 @@ int Fpga::runSrec()
 
 int Fpga::runLogichdr()
 {
+    /*stringstream sstream1;
+    sstream1.clear();
+    sstream1 << hex << m_designnumber.toInt();
+    string design = sstream1.str();
+    QString designNum = "0x"+QString::fromStdString(design);
+
+    stringstream sstream2;
+    sstream2 << hex << m_revision.toInt();
+    string rev = sstream2.str();
+    QString revision = "0x"+QString::fromStdString(rev);
+
+    stringstream sstream3;
+    sstream3 << hex << m_testversion.toInt();
+    string test = sstream3.str();
+    QString testver = "0x"+QString::fromStdString(test);*/
+
     QString logichdr = m_parent->parent()->property("logichdr").value<FileString>().filestring;
     qDebug() << "logichdr EXE = " << logichdr;
     QStringList parameters;
     parameters.clear();
+
     parameters << "-i" << m_hexFileName << "-o" << m_mchFileName;
     parameters << "-c" << m_typecode;
     parameters << "-v" << m_variant;
-    parameters << "-d" << m_designnumber;
-    parameters << "-r" << m_revision;
-    parameters << "-t" << m_testversion;
+    parameters << "-d" << "0x"+m_designnumber;
+    parameters << "-r" << "0x"+m_revision;
+    parameters << "-t" << "0x"+m_testversion;
     parameters << "-f" << "MCS";
     parameters << "-e" << "FPGA";
     qDebug() << "logichdr parameters = \n" << parameters;
