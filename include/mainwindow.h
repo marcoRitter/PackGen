@@ -44,6 +44,7 @@ public:
     Node *getMCurrent () {return m_currentItem;}
 
     void node_menue(QMenu *menu);
+
 signals:
     void generateFpga();
 private slots:
@@ -86,7 +87,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QString Project_FileName = "";
-    QString m_winTitle = "Package Generator";
+    QString m_winTitle = "Package Generator v1.0.0 Beta";
 
     QtVariantPropertyManager *variantManager;
     QtVariantEditorFactory *variantFactory;

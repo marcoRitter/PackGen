@@ -48,7 +48,6 @@ public:
     void retranslateUi(QDialog *aboutDialog)
     {
         aboutDialog->setWindowTitle(QApplication::translate("aboutDialog", "Dialog", Q_NULLPTR));
-        label->setText(QApplication::translate("aboutDialog", "Package Generator v0.41 beta", Q_NULLPTR));
     } // retranslateUi
 
 };

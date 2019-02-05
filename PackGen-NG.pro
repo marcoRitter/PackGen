@@ -89,10 +89,8 @@ HEADERS  += include/mainwindow.h \
     include/aboutdialog.h \
     include/version_file.h \
     include/firmware.h \
-    include/firmware.h \
     include/file.h\
     include/output.h \
-    resource/output.h \
     include/goldenReference.h \
     include/help.h \
     ui_helpdialog.h \
@@ -105,3 +103,4 @@ FORMS    += resource/mainwindow.ui \
 RESOURCES += \
     resource/resources.qrc \
     resource/helptxt.qrc
+RC_FILE = PackGen-NG.rc

@@ -6,6 +6,8 @@ aboutDialog::aboutDialog(QWidget *parent) :
     ui(new Ui::aboutDialog)
 {
     ui->setupUi(this);
+
+    ui->label->setText(QApplication::translate("aboutDialog", "Package Generator v1.0.0 Beta", Q_NULLPTR));
 }
 
 aboutDialog::~aboutDialog()
