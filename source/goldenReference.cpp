@@ -141,7 +141,7 @@ bool goldenReference::setSrecParameters()
         srecParameters.append("--fill");
         srecParameters.append("0x00");
         srecParameters.append("0x00");
-        srecParameters.append("0x10000");
+        srecParameters.append(m_start_addr);
         srecParameters.append("--o");
         srecParameters.append(m_location.filestring+"/"+m_filename+"_header_filled.hex");
         srecParameters.append("--intel");
@@ -621,7 +621,7 @@ QVariant goldenReference::updateStartAddress()
 
     if(fpgatype().selectedfpga == 0)
     {
-        setStart_addr("0x001000");
+        setStart_addr("0x010000");
     }
 
     else

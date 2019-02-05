@@ -41,11 +41,15 @@ void file::setFilename(FileString filename)
 FileType file::file_type()
 {
     return m_file_type;
+    if(getType().toLower().contains("fpga"))
+            need_redraw("start_addr", file::updateStartAddress());
 }
 
 void file::setFile_type(FileType file_type)
 {
     m_file_type = file_type;
+    if(getType().toLower().contains("fpga"))
+            need_redraw("start_addr", file::updateStartAddress());
 }
 
 QString file::version()
@@ -56,8 +60,6 @@ QString file::version()
 void file::setVersion(QString version)
 {
     m_version = version;
-    if(getType().contains("fpga"))
-            need_redraw("start_addr", file::updateStartAddress());
 }
 
 QString file::start_addr()

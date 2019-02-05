@@ -236,7 +236,7 @@ void Fpga::setSrecParameters()
     else
     {
         parameters.append("--intel");
-        parameters.append("--obs=32");
+        parameters.append("--obs=16");
     }
 
 

@@ -169,6 +169,10 @@ bool Masterfile::readJson(const QJsonObject *jsonObj)
     setFlash_size(f);
     jsonVal = jsonObj->value("bit_reverse");
     setBit_reverse(jsonVal.toBool());
+    jsonVal = jsonObj->value("fpgatype");
+    FpgaType fp;
+    fp.selectedfpga = static_cast<uint>(jsonVal.toInt());
+    setFpgatype(fp);
 
     return true;
 }
@@ -184,6 +188,7 @@ bool Masterfile::writeJson(QJsonObject *jsonObj)
     jsonObj->insert("ver_subminor",ver_subminor());
     jsonObj->insert("flash_size",static_cast<int>(flash_size().selectedsize));
     jsonObj->insert("bit_reverse",bit_reverse());
+    jsonObj->insert("fpgatype",static_cast<int>(fpgatype().selectedfpga));
     return true;
 }
 
@@ -316,7 +321,7 @@ bool Masterfile::setSrecParameters()
             if(fiLe->file_type().selectedType == 1)
             {
                 srec_parameters.append("--binary");
-                if(m_bit_reverse)
+                if(m_fpgatype.selectedfpga)
                 {
                     srec_parameters.append("--bit-reverse");
                 }
@@ -325,7 +330,7 @@ bool Masterfile::setSrecParameters()
             else if(fiLe->file_type().selectedType == 0)
             {
                 srec_parameters.append("--intel");
-                if(m_bit_reverse && (fiLe->getType().toLower() == "file" || fiLe->getType().toLower() == "firmware"))
+                if(m_fpgatype.selectedfpga && (fiLe->getType().toLower() == "file" || fiLe->getType().toLower() == "firmware"))
                 {
                     srec_parameters.append("--bit-reverse");
                 }
@@ -447,7 +452,7 @@ bool Masterfile::fillBlanks()
 
     srec_parameters.append(m_location.filestring + "/" + m_filename+"_notfilled"+".hex");
     srec_parameters.append("--intel");
-    if(!m_bit_reverse)
+    if(!m_bit_reverse && m_fpgatype.selectedfpga)
         srec_parameters.append("--bit-reverse");
     srec_parameters.append("--fill");
     srec_parameters.append("0xFF");
