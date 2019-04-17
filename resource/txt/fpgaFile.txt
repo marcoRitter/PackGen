@@ -9,7 +9,7 @@ Properties:
 --inputFile_directory	...Dateipfad zum Eingangsfile
 --file_type		...File Typ des Eingangsfiles
 --version		...Version des FPGA Files(wird nicht verwendet)
---start_addr		...Startadresse des Workincodes im Flash
+--start_addr		...Startadresse des Working Codes im Flash
 
 Beispiel:
 

@@ -1,6 +1,6 @@
 Firmware für Masterfile:
 
-Das Objekt Firmware ist bis auf die Bezeichnung im TreeView das selbe Objekt wie File.
+Das Objekt Firmware ist bis auf die Bezeichnung im TreeView dasselbe Objekt wie File.
 
 Properties:
 --description		...Beschreibung der Firmware(wird nicht verwendet)

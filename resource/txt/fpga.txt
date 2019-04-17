@@ -3,7 +3,7 @@ FPGA für M86 Package:
 Mit dem Objekt "FPGA" wird eine FPGA Datei zum aktuellen Package hinzugefügt. 
 Zusätzlich zum File müssen Information zum FPGA selber (dualboot, type,..) ausgefüllt
 werden. Diese werden zum einem für mögliche Hilfestellungen wie bei der Startadresse
-verwendet (default Adresse wird selber eingefügt). Aber auch direkt in das Package 
+verwendet (Default Adresse wird selber eingefügt). Aber auch direkt in das Package 
 integriert.
 
 Propterties:
@@ -15,8 +15,8 @@ Propterties:
 --revision		...Hauptversion der Logik
 --testversion		...Testversion der Logik
 --dualboot		...Auswahl der Dualboot-Funktion
---flash_size		...Größe des Config-Flash
---start_addr		...Startadresse des working codes im Flash 
+--flash_size		...Größe des Config-Flashs
+--start_addr		...Startadresse des Working Codes im Flash 
 		   (Bei Lattice vorgegeben!)
 
 Beispiel:
@@ -34,9 +34,9 @@ start_addr		= 0x010000
 
 Der Name der "mch"-Datei wird beim Öffnen der Package-Datei im SolutionCenter 
 angezeigt. Deshalb sollte hier der Name der entsprechenden Komponente angegeben 
-werden (bei Logik: der selbe Name, wie die "bin"-Datei zusammengestellt aus 
+werden (bei Logik: derselbe Name, wie die "bin"-Datei zusammengestellt aus 
 Designnummer, Hauptversion und Testversion)
 
-->Bei CPU Modul darf der Name NICHT der selbe wie der des Eingangsfiles sein 
+->Bei CPU Modul darf der Name NICHT derselbe wie der des Eingangsfiles sein 
 (wenn sie im selben Ordner angelegt werden). Ansonsten wird das Ursprüngliche 
 File Überschrieben!

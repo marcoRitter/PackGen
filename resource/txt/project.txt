@@ -8,9 +8,9 @@ Properties:
 --description		...Beschreibung des Projektes (wird nicht verwendet)
 --name		...Name des Projektes (wird nicht verwendet)
 --JadeProject		...Unterscheidung zwischen Jade und M200 Projekt (true->Jade; false->M200)
---srec_cat		...Dateipfad zu srec_cat.exe (Zugrifsrechte beachten!)
---logichdr		...Dateipfad zu logichdr.exe (Zugrifsrechte beachten!)
---mbind		...Dateipfad zu mbind.exe (Zugrifsrechte beachten!)
+--srec_cat		...Dateipfad zu srec_cat.exe (Zugriffsrechte beachten!)
+--logichdr		...Dateipfad zu logichdr.exe (Zugriffsrechte beachten!)
+--mbind		...Dateipfad zu mbind.exe (Zugriffsrechte beachten!)
 
 Unterschied Jade und M200 Projekt:
 Bei einem M200 Projekt werden, wenn möglich, Startadressen bei Auswahl des FPGAs und Flashgröße

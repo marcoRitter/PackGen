@@ -225,7 +225,7 @@ void Fpga::setSrecParameters()
     parameters.append("--binary");
     parameters.append("--offset");
     parameters.append(m_start_addr);
-    if (m_fpgatype.selectedfpga)
+    if (m_fpgatype.selectedfpga && !m_hexFileName.contains(".bin"))
         parameters.append("--bit_reverse");
     parameters.append("--output");
     parameters.append(m_hexFileName);

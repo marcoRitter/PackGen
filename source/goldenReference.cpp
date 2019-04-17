@@ -437,7 +437,7 @@ bool goldenReference::creatHeader()
         }
     }
 
-    else {
+    else if(jumpCommend_addr == "0x000000"){
         /*QString header_dummy[] = {"0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF"};
         const uint8_t header_dumy_length = 16;
         QString header_preamble[] = {"0xBD", "0xB3"};
@@ -537,6 +537,96 @@ bool goldenReference::creatHeader()
             return false;
         }
 
+    }
+    else {
+        QString row1[] = {"0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF"};
+        const uint8_t row1_length = 16;
+        QString row2[] = {"0xFF","0xFF","0xBD", "0xB3", "0xFF", "0xFF", "0xFF", "0xFF", "0x7E", "0x00", "0x00", "0x00", "0x03", m_start_addr.remove("0000"), "0x00","0x00"};
+        const uint8_t row2_length = 16;
+        QString row3[] = {"0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF","0xFF"};
+        const uint8_t row3_length = 16;
+        QString row4[] = {"0xFF","0xFF"};
+        const uint8_t row4_length = 2;
+
+        QString filenameHeader = m_location.filestring + "/" + m_filename + "_header.hex";
+        QFile file(filenameHeader);
+
+        if(file.open(QFile::WriteOnly|QFile::Text))
+        {
+            QTextStream stream(&file);
+
+            stream << ":10000000";
+            for(int i = 0; i < row1_length; i++)
+            {
+                stream << row1[i].remove("0x");
+            }
+
+            stream << "00";
+            stream << "\n";
+            stream << ":10001000";
+
+
+            for(int i = 0; i < row2_length; i++)
+            {
+                stream << row2[i].remove("0x");
+            }
+
+            if(m_start_addr.contains("0x00"))
+            {
+                stream << "F5";
+            }
+
+            if(m_start_addr.contains("0x02"))
+            {
+                stream << "F3";
+            }
+            else if(m_start_addr.contains("0x04"))
+            {
+                stream << "F1";
+            }
+            else if(m_start_addr.contains("0x08"))
+            {
+                stream << "ED";
+            }
+            else if(m_start_addr.contains("0x10"))
+            {
+                stream << "E5";
+            }
+            else if(m_start_addr.contains("0x20"))
+            {
+                stream << "D5";
+            }
+            else if(m_start_addr.contains("0x40"))
+            {
+                stream << "B5";
+            }
+            else if(m_start_addr.contains("0x80"))
+            {
+                stream << "75";
+            }
+
+            stream << "\n";
+            stream << ":10002000";
+
+            for(int i = 0; i < row3_length; i++)
+            {
+                stream << row3[i].remove("0x");
+            }
+
+            stream << "E0";
+            stream << "\n";
+            stream << ":02003000";
+
+            for(int i = 0; i < row4_length; i++)
+            {
+                stream << row4[i].remove("0x");
+            }
+
+            stream << "D0";
+            file.flush();
+            file.close();
+            return true;
+    }
     }
 
 }

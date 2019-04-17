@@ -1,6 +1,6 @@
 M86 Package (nur bei M200):
 
-Das M86 Package wird aus einer FPGA und einer Firmware Datei zusammengestelt.
+Das M86 Package wird aus einer FPGA und einer Firmware Datei zusammengestellt.
 Weitere dazugehörige Files wie die .ver - Dateien (Versions-File) wird mithilfe
 der ausgefüllten Properties vom PackGen selber erzeugt.
 

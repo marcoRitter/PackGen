@@ -3,7 +3,7 @@ PackGen Allgemeines:
 mögliche Funktionen:
 --M86 Package Generierung
 --Masterfile erstellen
---Header fuer Golden Reference erzeugen und zusammensetzen
+--Header für Golden Reference erzeugen und zusammensetzen
 
 Hinzufügen von Files:
 Klick mit rechter Maus Taste auf "Project", oder auf jede weitere 
@@ -31,7 +31,7 @@ hinzugefügte Komponente.
      einfachste Alternative das FPGA File mit dem Objekt File (nur bei 
      Masterfile) einzulesen. Bei einem FPGA für ein Package soll nach 
      eigener Eingabe der Startadresse darauf geachtet werden, dass das
-     Propertie Fenster nicht mehr aktualisiert werden muss. Ansonsten 
+     Property Fenster nicht mehr aktualisiert werden muss. Ansonsten 
      wird wieder ein Wert vorgeschlagen.
 
 für genauere Hilfestellung: 

@@ -1,10 +1,10 @@
 Masterfile:
 
-Das Masterfile ist als direkter abzug des Speichers definiert. Dieser kann sich aus
+Das Masterfile ist als direkter Abzug des Speichers definiert. Dieser kann sich aus
 FPGA-, Firmware-, Golden Reference- oder auch sonstigen Dateien zusammensetzten. Da 
 die Files gleichwertig zu einem Masterfile kombiniert werden, ändern sich die Properties 
 zueinander nicht. Ausgenommen hiervon ist das FPGA File, welches als zusätzliches
-Propertie die FPGA Type besitzt, um einen Adressvorschlag zu generieren.
+Property die FPGA Type besitzt, um einen Adressvorschlag zu generieren.
 
 -->Das Ausgangsfile ist im Intel-Hex Format (.hex)
 	-->Die Datenlücken des Ausgangsfiles werden mit 0xFF aufgefüllt
@@ -17,7 +17,7 @@ Properties:
 --ver_minor		...Minor Version des Masterfiles(wird nicht verwendet)
 --ver_subminor	...Subminor Version des Masterfiles(wird nicht verwendet)
 --fpgatype		...Verwendeter FPGA Hersteller bzw. Produktfamilie
---flash_size		...Größe des Config-Flash
+--flash_size		...Größe des Config-Flashs
 --bit_reverse		...Hex Datei "gedreht" zu bin Datei erstellen (nur bei Lattice
 		   möglich) 
 
@@ -34,7 +34,7 @@ flash_size		= 64Mbit
 bit_reverse		= false
 
 Bei Lattice verlangt der Programmer eine gedrehte Hex Datei (MSB und LSB eines jeden 
-Bytes zur .bin datei vertauscht). Somit besteht die möglichkeit bei einem Masterfile 
+Bytes zur .bin Datei vertauscht). Somit besteht die Möglichkeit bei einem Masterfile 
 für Lattice ein "normales" und ein "gedrehtes" File zu erstellen.
 --> "normales File" für direkte Programmierung des Speichers
 --> "gedrehtes File" für Programmierung mittels Lattice Programmer
