@@ -16,11 +16,8 @@ class Masterfile : public Node
     // property to identify the node type
     Q_PROPERTY(QString node_type READ node_type)
 
-    Q_PROPERTY(FileString outputFile_location READ location WRITE setLocation)
-    Q_PROPERTY(QString outputFile_name READ filename WRITE setFilename)
-    Q_PROPERTY(QString ver_major READ ver_major WRITE setVer_major)
-    Q_PROPERTY(QString ver_minor READ ver_minor WRITE setVer_minor)
-    Q_PROPERTY(QString ver_subminor READ ver_subminor WRITE setVer_subminor)
+    Q_PROPERTY(QString output_file_directory READ location WRITE setLocation)
+    Q_PROPERTY(QString output_file_name READ filename WRITE setFilename)
     Q_PROPERTY(FpgaType fpgatype READ fpgatype WRITE setFpgatype)
     Q_PROPERTY(FlashSize flash_size READ flash_size WRITE setFlash_size)
     Q_PROPERTY(bool bit_reverse READ bit_reverse WRITE setBit_reverse)
@@ -30,8 +27,10 @@ public:
 
     QString node_type() {return "Masterfile";}
 
-    FileString location();
-    void setLocation(FileString foldername);
+    QString location();
+    void setLocation(QString foldername);
+
+    QString get_location();
 
     FlashSize flash_size();
     void setFlash_size(FlashSize flashsize);
@@ -41,15 +40,6 @@ public:
 
     QString filename();
     void setFilename(QString filename);
-
-    QString ver_major();
-    void setVer_major(QString ver_major);
-
-    QString ver_minor();
-    void setVer_minor(QString ver_minor);
-
-    QString ver_subminor();
-    void setVer_subminor(QString ver_subminor);
 
     QVariant updateBitReverse();
 
@@ -82,10 +72,7 @@ private slots:
 private:
 //    QFileInfo m_file;
     QString m_filename;
-    FileString m_location;
-    QString m_ver_major;
-    QString m_ver_minor;
-    QString m_ver_subminor;
+    QString m_location = static_cast<QString>("xHOME/masterfile/");
     FlashSize m_flashsize;
     bool m_bit_reverse = false;
     FpgaType m_fpgatype;

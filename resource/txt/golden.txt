@@ -9,12 +9,11 @@ ECP5 auf die letzten 256 Bits des Speichers)
 	-->Im Fall von Lattice ist das Ausgangsfile gedreht!
 
 Properties:
---description		...Beschreibung des Files(wird nicht verwendet)
---outputFile_location	...Ausgabepfad der generierten Datei
---outputFile_name	...Name des generierten Ausgabefiles
---inputFile_directory	...Dateipfad zum Eingangsfile
+--description		...Beschreibung des Files(fuer README.txt)
+--output_file_directory	...Ausgabepfad der generierten Datei
+--output_file_name	...Name des generierten Ausgabefiles
+--input_file		...Dateipfad zum Eingangsfile
 --file_type		...File Typ des Eingangsfiles
---version		...Version des Files(wird nicht verwendet)
 --flash_size		...Größe des Config-Flashs
 --fpgatype		...Verwendeter FPGA Hersteller bzw. Produktfamilie
 --start_addr		...Startadresse im Flash
@@ -22,11 +21,10 @@ Properties:
 Beispiel:
 
 description		= new Golden Reference
-outputFile_location	= C:\Documents\PackGen\GoldenRefernces
-outputFile_name	= GMP232_golden
-inputFile_directory	= C:\Documents\PackGen\GoldenRefernces\golden.bin
+output_file_directory	= xHOME\PackGen\GoldenRefernces
+output_file_name	= GMP232_golden
+input_file		= xHOME\PackGen\GoldenRefernces\golden.bin
 file_type		= binary-file
-version		= 10
 flash_size		= 4Mbit
 fpgatype		= Lattice ECP5
 start_addr		= 0x001000

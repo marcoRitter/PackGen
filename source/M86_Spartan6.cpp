@@ -6,6 +6,7 @@
 #include <QProcess>
 #include <output.h>
 #include "version_file.h"
+#include <QDir>
 
 
 M86_Spartan6::M86_Spartan6(QObject *parent) :
@@ -15,6 +16,8 @@ M86_Spartan6::M86_Spartan6(QObject *parent) :
     QIcon GenerateIcon;
     QIcon NewFpgaIcon;
     QIcon DeleteIcon;
+
+    this->setObjectName("m86");
 
     GenerateIcon.addFile(":/Images/icons8-robot.png",QSize(25,25));
     pGenerate = new QAction(tr("Generate"), this);
@@ -46,7 +49,7 @@ M86_Spartan6::~M86_Spartan6()
     disconnect(pDelete, &QAction::triggered, this, &Node::delete_node);
     disconnect(m_parent->parent(), SIGNAL (generateFpga()), this, SLOT(generate_package()));
     disconnect(this,SIGNAL(setOutInfo(QString, QColor)),m_parent->parent(), SLOT(printOutInfo(QString, QColor)));
-//  qDebug()<< "M86_Spartan object removed";
+
     delete pGenerate;
     delete pNewFirmware;
     delete pNewFPGA;
@@ -63,12 +66,12 @@ void M86_Spartan6::setModule_type(ModuleType module)
     m_module_type = module;
 }
 
-FileString M86_Spartan6::location()
+QString M86_Spartan6::location()
 {
     return m_location;
 }
 
-void M86_Spartan6::setLocation(FileString foldername)
+void M86_Spartan6::setLocation(QString foldername)
 {
     m_location = foldername;
 }
@@ -136,6 +139,19 @@ VerState M86_Spartan6::verstate()
     return m_verstate;
 }
 
+QString M86_Spartan6::getlocation()
+{
+    QString temp = m_location;
+
+    if(temp.remove("xHOME/") == "")
+    {
+        return m_parent->property("working_directory").value<FileString>().filestring;
+    }
+    else {
+        return m_parent->property("working_directory").value<FileString>().filestring + "/" + temp.remove("xHOME/");
+    }
+}
+
 QString M86_Spartan6::getVerString()
 {
     QString ver = "";
@@ -152,6 +168,27 @@ QString M86_Spartan6::getVerString()
     ver.append(verstate().verstate.takeAt(static_cast<int>(verstate().selectedVersion)));
     ver.append('"');
     return ver;
+}
+
+void M86_Spartan6::setScrFileName()
+{
+    FileString fn = getlocation() + "/" + "temp";
+    QString filenm = "";
+    filenm.append(fn.filestring);
+    filenm.append("/");
+    filenm.append(pkgName());
+    filenm.append(".mbs");
+    m_scriptFileName = filenm;
+}
+
+void M86_Spartan6::setVerFileName()
+{
+    FileString fn = getlocation() + "/" + "temp";
+    QString filenm = (fn.filestring);
+    filenm.append("/");
+    filenm.append(pkgName());
+    filenm.append(".ver");
+    m_verFileName = filenm;
 }
 
 void M86_Spartan6::setVerstate(VerState verstate)
@@ -195,11 +232,27 @@ bool M86_Spartan6::generate_package()
 {
     QStringList parameters;
 
+    QDir dir(getlocation());
+    QDir dir_temp(getlocation()+"/temp");
+    if(dir.exists())
+    {
+    }
+    else {
+        dir.mkpath(getlocation());
+    }
+    if(dir_temp.exists())
+    {
+        dir_temp.removeRecursively();
+        dir_temp.mkpath(getlocation()+"/temp");
+    }
+    else {
+        dir_temp.mkpath(getlocation()+"/temp");
+    }
 
 
-    setLocation(this->property("outputFile_location").value<FileString>().filestring);
-    this->setVerFileName();
-    this->setScrFileName();
+   // setLocation(this->property("outputFile_location").value<FileString>().filestring);
+    setVerFileName();
+    setScrFileName();
 
     if(m_pkgName.isEmpty())
     {
@@ -216,11 +269,11 @@ bool M86_Spartan6::generate_package()
         setOutInfo("M86 Property pkgName has an invalid value", m_errorColor);
         return false;
     }
-    if(m_location.filestring.isEmpty())
-    {
-        setOutInfo("M86 Property location has no value", m_errorColor);
-        return false;
-    }
+    //if(m_location.isEmpty())
+    //{
+    //    setOutInfo("M86 Property location has no value", m_errorColor);
+    //    return false;
+   // }
     if(m_typecode.isEmpty())
     {
         setOutInfo("M86 Property typecode has no value", m_errorColor);
@@ -249,12 +302,21 @@ bool M86_Spartan6::generate_package()
         if(objectsM86[i]->inherits("firmware"))
         {
             firmware *firm = static_cast<firmware*>(objectsM86[i]);
+            QString temp_file = firm->filename();
+            QFileInfo  dir_file = m_parent->property("working_directory").value<FileString>().filestring + "/" + temp_file.remove("xHOME/");
 
-            if(firm->filename().filestring.isEmpty())
+            if(firm->filename().isEmpty())
             {
                 setOutInfo("Firmware Property filename has no value (M86)", m_errorColor);
                 return false;
             }
+
+            if(!dir_file.exists())
+            {
+                setOutInfo("Firmware Property inputFile_directory doesn`t exist (M86)", m_errorColor);
+                return false;
+            }
+
             if(firm->ver_major().isEmpty())
             {
                 setOutInfo("Firmware Property ver_major has no value (M86)", m_errorColor);
@@ -279,10 +341,17 @@ bool M86_Spartan6::generate_package()
         else if(objectsM86[i]->inherits("Fpga"))
         {
             Fpga *fpga = static_cast<Fpga*>(objectsM86[i]);
-
-            if(fpga->filename().filestring.isEmpty())
+            QString temp_file = fpga->filename();
+            QFileInfo  dir_file = m_parent->property("working_directory").value<FileString>().filestring + "/" + temp_file.remove("xHOME/");
+            if(fpga->filename().isEmpty())
             {
                 setOutInfo("FPGA Property filename has no value (M86)", m_errorColor);
+                return false;
+            }
+
+            if(!dir_file.exists())
+            {
+                setOutInfo("FPGA Property inputFile_directory doesn`t exist (M86)", m_errorColor);
                 return false;
             }
             if(fpga->designnumber().isEmpty())
@@ -309,7 +378,7 @@ bool M86_Spartan6::generate_package()
     }
 
 
-    if (!versionFileCreate(this->getVerFileName(), this->getVerString()))
+    if (!versionFileCreate(getVerFileName(), getVerString()))
     {
         setOutInfo("Package Ver file was not created:", m_errorColor);
         return 0;
@@ -318,7 +387,7 @@ bool M86_Spartan6::generate_package()
         setOutInfo(this->getVerFileName(), m_normalColor);
     }
 
-    if (!scriptFileCreate(this->getScrFileName(), "ModuleType = IOFW\n", true))
+    if (!scriptFileCreate(getScrFileName(), "ModuleType = IOFW\n", true))
     {
         setOutInfo("Script file was not created:", m_errorColor);
         return 0;
@@ -326,11 +395,11 @@ bool M86_Spartan6::generate_package()
 
     QString scriptLine = "Version = ";
     scriptLine.append('"');
-    scriptLine.append(this->getVerFileName());
+    scriptLine.append(getVerFileName());
     scriptLine.append('"');
     scriptLine.append("\n");
 
-    if(!scriptFileCreate(this->getScrFileName(), scriptLine, false))
+    if(!scriptFileCreate(getScrFileName(), scriptLine, false))
     {
         setOutInfo("Error by script file creating", m_errorColor);
         return 0;
@@ -342,10 +411,11 @@ bool M86_Spartan6::generate_package()
         if (childsOfM86->objectName()=="FPGA")
         {
             Fpga *fpga = static_cast<Fpga*>(childsOfM86);
-            fpga->setHexFileName(m_location.filestring);
+            QString temp_hex = getlocation();
+            fpga->setHexFileName(temp_hex);
             fpga->setSrecParameters();
-            fpga->setVariant(this->variant());
-            fpga->setTypecode(this->typecode());
+            fpga->setVariant(variant());
+            fpga->setTypecode(typecode());
             if (!versionFileCreate(fpga->getVerFileName(),fpga->getVerString()))
             {
                 setOutInfo("Error by FPGA Ver file creating", m_errorColor);
@@ -388,7 +458,8 @@ bool M86_Spartan6::generate_package()
         if (childsOfM86->objectName()=="firmware")
         {
             firmware *fw = static_cast<firmware*>(childsOfM86);
-            fw->setVerFileName(m_location.filestring);
+            QString temp_fw = getlocation();
+            fw->setVerFileName(temp_fw);
             fw->setVariant(this->variant());
             fw->setTypecode(this->typecode());
             if (!versionFileCreate(fw->getVerFileName(),fw->getVerString()))
@@ -434,7 +505,7 @@ int M86_Spartan6::runMbind()
     qDebug() << "path to mbind" << mbindExe;
 
     QString outfilename = "";
-    outfilename.append(m_location.filestring + "/");
+    outfilename.append(getlocation() + "/");
     outfilename.append(m_pkgName);
     QStringList parameters;
     QString scritFile = "";

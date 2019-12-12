@@ -6,10 +6,12 @@
 #include <QProcess>
 #include <output.h>
 #include "version_file.h"
-
+#include <QDir>
+#include <QDateTime>
 Masterfile::Masterfile(QObject *parent) :
     Node(parent,"Masterfile")
 {
+    this->setObjectName("master");
 
     pGenerate = new QAction(tr("Generate"), this);
     connect(pGenerate, SIGNAL(triggered()), this, SLOT(generate_masterfile()));
@@ -90,45 +92,25 @@ void Masterfile::setFlash_size(FlashSize flashsize)
     m_flashsize = flashsize;
 }
 
-FileString Masterfile::location()
+QString Masterfile::location()
 {
     return m_location;
 }
 
-void Masterfile::setLocation(FileString foldername)
+void Masterfile::setLocation(QString foldername)
 {
-    m_location = foldername;
+    int pos = foldername.lastIndexOf(QChar('/'));
+    int pos2 = foldername.length();
+
+    if(pos+1 == pos2)
+    {
+        m_location = foldername.left(pos);
+    }
+    else {
+        m_location = foldername;
+    }
 }
 
-QString Masterfile::ver_major()
-{
-    return m_ver_major;
-}
-
-void Masterfile::setVer_major(QString ver_major)
-{
-    m_ver_major = ver_major;
-}
-
-QString Masterfile::ver_minor()
-{
-    return m_ver_minor;
-}
-
-void Masterfile::setVer_minor(QString ver_minor)
-{
-    m_ver_minor = ver_minor;
-}
-
-QString Masterfile::ver_subminor()
-{
-    return m_ver_subminor;
-}
-
-void Masterfile::setVer_subminor(QString ver_subminor)
-{
-    m_ver_subminor = ver_subminor;
-}
 
 bool Masterfile::bit_reverse()
 {
@@ -153,16 +135,10 @@ bool Masterfile::readJson(const QJsonObject *jsonObj)
 
     jsonVal = jsonObj->value("description");
     setDescription(jsonVal.toString());
-    jsonVal = jsonObj->value("outputFile_name");
+    jsonVal = jsonObj->value("output_file_name");
     setFilename(jsonVal.toString());
-    jsonVal = jsonObj->value("outputFile_location");
+    jsonVal = jsonObj->value("output_file_directory");
     setLocation(jsonVal.toString());
-    jsonVal = jsonObj->value("ver_major");
-    setVer_major(jsonVal.toString());
-    jsonVal = jsonObj->value("ver_minor");
-    setVer_minor(jsonVal.toString());
-    jsonVal = jsonObj->value("ver_subminor");
-    setVer_subminor(jsonVal.toString());
     jsonVal = jsonObj->value("flash_size");
     FlashSize f;
     f.selectedsize = static_cast<uint>(jsonVal.toInt());
@@ -181,11 +157,8 @@ bool Masterfile::writeJson(QJsonObject *jsonObj)
 {
     jsonObj->insert("node_type",node_type());
     jsonObj->insert("description",description());
-    jsonObj->insert("outputFile_name",filename());
-    jsonObj->insert("outputFile_location",location().filestring);
-    jsonObj->insert("ver_major",ver_major());
-    jsonObj->insert("ver_minor",ver_minor());
-    jsonObj->insert("ver_subminor",ver_subminor());
+    jsonObj->insert("output_file_name",filename());
+    jsonObj->insert("output_file_directory",location());
     jsonObj->insert("flash_size",static_cast<int>(flash_size().selectedsize));
     jsonObj->insert("bit_reverse",bit_reverse());
     jsonObj->insert("fpgatype",static_cast<int>(fpgatype().selectedfpga));
@@ -248,6 +221,20 @@ void Masterfile::new_Golden()
     this->setChild(this->rowCount(),m);
 }
 
+QString Masterfile::get_location()
+{
+    QString temp = m_location;
+    if(temp.remove("xHOME/") == "")
+    {
+       return m_parent->property("working_directory").value<FileString>().filestring;
+    }
+    else {
+       return m_parent->property("working_directory").value<FileString>().filestring + "/" + temp.remove("xHOME/");
+    }
+
+}
+
+
 bool Masterfile::setSrecParameters()
 {
     QStringList srec_parameters;
@@ -270,22 +257,10 @@ bool Masterfile::setSrecParameters()
         setOutInfo("Masterfile Property filename has an invalid value", m_errorColor);
         return false;
     }
-    if(m_location.filestring.isEmpty())
+    if(m_location.isEmpty())
     {
         setOutInfo("Masterfile Property location has no value", m_errorColor);
         return false;
-    }
-    if(m_ver_major.isEmpty())
-    {
-        setOutInfo("Masterfile Property ver_major has no value", m_errorColor);
-    }
-    if(m_ver_minor.isEmpty())
-    {
-        setOutInfo("Masterfile Property ver_minor has no value", m_errorColor);
-    }
-    if(m_ver_subminor.isEmpty())
-    {
-        setOutInfo("Masterfile Property ver_subminor has no value", m_errorColor);
     }
     if(m_flashsize.memorysize.isEmpty())
     {
@@ -300,24 +275,32 @@ bool Masterfile::setSrecParameters()
         if(objectsMasterfile[i]->inherits("file"))
         {
             file *fiLe = static_cast<file*>(objectsMasterfile[i]);
-
-            if(fiLe->filename().filestring.isEmpty())
+            QString temp_file = fiLe->filename();
+            QFileInfo  dir_file = m_parent->property("working_directory").value<FileString>().filestring + "/" + temp_file.remove("xHOME/");
+            if(temp_file.remove("xHOME/") == "")
             {
-                setOutInfo(fiLe->object_name()+" Property filename has no value", m_errorColor);
+                setOutInfo("Masterfile Property: " + fiLe->object_name() + ":" +" Property filename has no value", m_errorColor);
                 return false;
             }
-            if(fiLe->version().isEmpty())
+            if(!dir_file.exists())
             {
-                setOutInfo(fiLe->object_name()+" Property version has no value", m_errorColor);
+                setOutInfo("Masterfile Property: " + fiLe->object_name() + ":" +" Input file doesn`t exist", m_errorColor);
+                return false;
             }
             if(fiLe->start_addr().isEmpty())
             {
-                setOutInfo(fiLe->object_name()+" Property start_addr has no value", m_errorColor);
+                setOutInfo("Masterfile Property: " + fiLe->object_name() + ":" +" Property start_addr has no value", m_errorColor);
                 return false;
             }
 
+            //if(temp_file.remove("xHOME/") == 0)
+           // {
+           //     srec_parameters.append(m_parent->property("project_directory").value<FileString>().filestring);
+           // }
+           // else {
+                srec_parameters.append(m_parent->property("working_directory").value<FileString>().filestring + "/" + temp_file.remove("xHOME/"));
+          //  }
 
-            srec_parameters.append(fiLe->filename().filestring);
             if(fiLe->file_type().selectedType == 1)
             {
                 srec_parameters.append("--binary");
@@ -343,7 +326,7 @@ bool Masterfile::setSrecParameters()
 
 
     srec_parameters.append("--o");
-    srec_parameters.append(m_location.filestring + "/" + m_filename+"_notfilled"+".hex");
+    srec_parameters.append(get_location() + "/" + "temp" + "/" + m_filename+"_notfilled"+".hex");
     srec_parameters.append("--intel");
 
     srec_parameters.append("--obs=16");
@@ -380,6 +363,23 @@ int Masterfile::runSrec()
 
 bool Masterfile::generate_masterfile()
 {
+    //QFileInfo check = get_location();
+    QDir dir(get_location());
+    QDir dir_temp(get_location()+"/temp");
+    if(dir.exists())
+    {
+    }
+    else {
+        dir.mkpath(get_location());
+    }
+    if(dir_temp.exists())
+    {
+        dir_temp.removeRecursively();
+        dir_temp.mkpath(get_location()+"/temp");
+    }
+    else {
+        dir_temp.mkpath(get_location()+"/temp");
+    }
     if(setSrecParameters())
     {
         if(runSrec())
@@ -389,7 +389,7 @@ bool Masterfile::generate_masterfile()
         else {
 
 
-            QFileInfo hexFile = m_location.filestring + "/" + m_filename + "_notfilled" + ".hex";
+            QFileInfo hexFile = get_location() + "/" + "temp" + "/" + m_filename + "_notfilled" + ".hex";
             if (!(hexFile.exists() && hexFile.isFile()))
             {
                 qDebug() << "error by hex file";
@@ -407,10 +407,10 @@ bool Masterfile::generate_masterfile()
                     QFileInfo hexFile;
                     if(bit_reverse())
                     {
-                        hexFile = m_location.filestring + "/" + m_filename+"_bitreverse"+".hex";
+                        hexFile = get_location() + "/" + m_filename+"_bitreverse"+".hex";
                     }
                     else {
-                        hexFile = m_location.filestring + "/" + m_filename+".hex";
+                        hexFile = get_location() + "/" + m_filename+".hex";
                     }
 
                     if (!(hexFile.exists() && hexFile.isFile()))
@@ -421,9 +421,9 @@ bool Masterfile::generate_masterfile()
                     }
                     else {
                         setOutInfo("Created Masterfile successfully:", m_infoColor);
-                        setOutInfo(m_location.filestring + "/" + m_filename+".hex", m_normalColor);
-                        QFile file(m_location.filestring + "/" + m_filename + "_notfilled" + ".hex");
-                        file.remove();
+                        setOutInfo(get_location() + "/" + m_filename+".hex", m_normalColor);
+                        //QFile file(get_location() + "/" + "temp" + "/" + m_filename + "_notfilled" + ".hex");
+                        //file.remove();
 
                     }
 
@@ -441,6 +441,7 @@ bool Masterfile::generate_masterfile()
     }
     return true;
 
+
 }
 
 
@@ -450,7 +451,7 @@ bool Masterfile::fillBlanks()
 
     srec_parameters.clear();
 
-    srec_parameters.append(m_location.filestring + "/" + m_filename+"_notfilled"+".hex");
+    srec_parameters.append(get_location() + "/" + "temp" + "/" + m_filename+"_notfilled"+".hex");
     srec_parameters.append("--intel");
     if(!m_bit_reverse && m_fpgatype.selectedfpga)
         srec_parameters.append("--bit-reverse");
@@ -484,10 +485,10 @@ bool Masterfile::fillBlanks()
     srec_parameters.append("--o");
     if(bit_reverse())
     {
-        srec_parameters.append(m_location.filestring + "/" + m_filename+"_bitreverse"+".hex");
+        srec_parameters.append(get_location() + "/" + m_filename+"_bitreverse"+".hex");
     }
     else {
-        srec_parameters.append(m_location.filestring + "/" + m_filename+".hex");
+        srec_parameters.append(get_location() + "/" + m_filename+".hex");
     }
     srec_parameters.append("--intel");
     srec_parameters.append("--obs=16");

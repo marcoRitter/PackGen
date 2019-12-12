@@ -6,8 +6,8 @@ Properties zugreifen.
 
 Properties:
 --description		...Beschreibung des Projektes (wird nicht verwendet)
---name		...Name des Projektes (wird nicht verwendet)
 --JadeProject		...Unterscheidung zwischen Jade und M200 Projekt (true->Jade; false->M200)
+--working_directory	...Globales working Verzeichneis; Ausgangspunkt für relative Pfade (später xHOME)
 --srec_cat		...Dateipfad zu srec_cat.exe (Zugriffsrechte beachten!)
 --logichdr		...Dateipfad zu logichdr.exe (Zugriffsrechte beachten!)
 --mbind		...Dateipfad zu mbind.exe (Zugriffsrechte beachten!)

@@ -11,11 +11,10 @@ class goldenReference : public Node
     Q_OBJECT
 
     //TODO Properties anpassen (Namensgebung, entfernene,..)
-    Q_PROPERTY(FileString outputFile_location READ location WRITE setLocation)
-    Q_PROPERTY(QString outputFile_name READ filename WRITE setFilename)
-    Q_PROPERTY(FileString inputFile_directory READ goldenRef_file WRITE setGoldenRef_file)
+    Q_PROPERTY(QString output_file_directory READ location WRITE setLocation)
+    Q_PROPERTY(QString output_file_name READ filename WRITE setFilename)
+    Q_PROPERTY(QString input_file READ goldenRef_file WRITE setGoldenRef_file)
     Q_PROPERTY(FileType inputFile_type READ file_type WRITE setFile_type)
-    Q_PROPERTY(QString version READ version WRITE setVersion)
     Q_PROPERTY(FlashSize flash_size READ flash_size WRITE setFlash_size)
     Q_PROPERTY(FpgaType fpgatype READ fpgatype WRITE setFpgatype)
     Q_PROPERTY(QString start_addr READ start_addr WRITE setStart_addr)
@@ -34,20 +33,17 @@ public:
     FpgaType fpgatype();
     void setFpgatype (FpgaType fpgatype);
 
-    FileString goldenRef_file();
-    void setGoldenRef_file(FileString file);
+    QString goldenRef_file();
+    void setGoldenRef_file(QString file);
 
     QString filename();
     void setFilename(QString filename);
 
-    FileString location();
-    void setLocation(FileString location);
+    QString location();
+    void setLocation(QString location);
 
     FileType file_type();
     void setFile_type(FileType filetype);
-
-    QString version();
-    void setVersion(QString version);
 
     FlashSize flash_size();
     void setFlash_size(FlashSize flashsize);
@@ -58,6 +54,9 @@ public:
     QVariant updateStartAddress();
     void node_menue(QMenu *menu);
 
+    QString getInPath();
+    QString getOutPath();
+
     bool setSrecParameters ();
     int runSrec();
     bool creatHeader();
@@ -67,11 +66,10 @@ signals:
     void need_redraw(const QString &name, const QVariant a);
 
 private:
-    FileString m_goldenRef_file;
+    QString m_goldenRef_file = static_cast<QString>("xHOME/");
     QString m_filename;
-    FileString m_location;
+    QString m_location = static_cast<QString>("xHOME/golden/");
     FileType m_file_type;
-    QString m_version;
     FlashSize m_flash_size;
     FpgaType m_fpgatype;
     QString m_start_addr = "0x000000";

@@ -7,16 +7,14 @@ Mithilfe von File können beliebige Files (.bin und .hex) Dateien dem Masterfile 
 werden. Für .txt Dateien das Dateiformat Intel Hex wählen.
 
 Properties:
---description		...Beschreibung des Files(wird nicht verwendet)
---inputFile_directory	...Dateipfad zum Eingangsfile
+--description		...Beschreibung des Files(fuer README.txt)
+--input_file		...Dateipfad zum Eingangsfile
 --file_type		...File Typ des Eingangsfiles
---version		...Version des Files(wird nicht verwendet)
 --start_addr		...Startadresse des Working Codes im Flash
 
 Beispiel:
 
 description		= new File
-inputFile_name	= C:\Documents\PackGen\info.hex
+input_file		= xHOME\PackGen\info.hex
 file_type		= intel hex-file
-version		= 01
 start_addr		= 0x001000

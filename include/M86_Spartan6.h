@@ -25,8 +25,8 @@ class M86_Spartan6 : public Node
     // property to identify the node type
 //  Q_PROPERTY(QString node_type READ node_type)
     Q_PROPERTY(ModuleType module_type READ module_type WRITE setModule_type)
-    Q_PROPERTY(FileString outputFile_location READ location WRITE setLocation)
-    Q_PROPERTY(QString outputFile_name READ pkgName WRITE setPkgName)
+    Q_PROPERTY(QString output_file_directory READ location WRITE setLocation)
+    Q_PROPERTY(QString output_file_name READ pkgName WRITE setPkgName)
     Q_PROPERTY(QString typecode READ typecode WRITE setTypeCode)
     Q_PROPERTY(QString variant READ variant WRITE setVariant)
     Q_PROPERTY(QString ver_major READ ver_major WRITE setVer_major)
@@ -43,8 +43,8 @@ public:
     ModuleType module_type();
     void setModule_type(ModuleType module);
 
-    FileString location();
-    void setLocation(FileString foldername);
+    QString location();
+    void setLocation(QString foldername);
 
     QString pkgName();
     void setPkgName (QString pkgname);
@@ -67,6 +67,7 @@ public:
     VerState verstate();
     void setVerstate (VerState verstate);
 
+    QString getlocation();
 /*
     VER_STATE ver_state();
     void setVer_state(VER_STATE ver_state);
@@ -78,31 +79,14 @@ public:
     }
 
     QString getVerString();
-    void setVerFileName()
-    {
-        FileString fn = location();
-        QString filenm = (fn.filestring);
-        filenm.append("/");
-        filenm.append(pkgName());
-        filenm.append(".ver");
-        m_verFileName = filenm;
-    }
+    void setVerFileName();
 
     QString getScrFileName ()
     {
         return m_scriptFileName;
     }
 
-    void setScrFileName()
-    {
-        FileString fn = location();
-        QString filenm = "";
-        filenm.append(fn.filestring);
-        filenm.append("/");
-        filenm.append(pkgName());
-        filenm.append(".mbs");
-        m_scriptFileName = filenm;
-    }
+    void setScrFileName();
 
     void node_menue(QMenu *menu);
     int runMbind ();
@@ -123,7 +107,7 @@ private:
 
     QString m_pkgName;
     QString m_outPkgName;
-    FileString m_location;
+    QString m_location= static_cast<QString>("xHOME/m86/");
     QString m_ver_major = "";
     QString m_ver_minor = "";
     QString m_ver_subminor = "";

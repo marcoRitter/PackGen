@@ -24,7 +24,6 @@ firmware::~firmware()
     delete pDeleteFirmware;
 }
 
-
 QString firmware::name()
 {
     return m_name;
@@ -35,14 +34,23 @@ void firmware::setName(QString name)
     m_name = name;
 }
 
-FileString firmware::filename()
+QString firmware::filename()
 {
     return m_filename;
 }
 
-void firmware::setFilename(FileString filename)
+void firmware::setFilename(QString filename)
 {
-    m_filename = filename;
+    int pos = filename.lastIndexOf(QChar('/'));
+    int pos2 = filename.length();
+
+    if(pos+1 == pos2)
+    {
+        m_filename = filename.left(pos);
+    }
+    else {
+        m_filename = filename;
+    }
 }
 
 QString firmware::ver_major()
@@ -125,13 +133,12 @@ int firmware::runLogichdr()
     qDebug() << "logichdr EXE = " << logichdr;
     QStringList parameters;
     parameters.clear();
-    parameters << "-i" << m_filename.filestring << "-o" << m_mchFileName;
+    QString temp = m_filename;
+    parameters << "-i" << m_parent->parent()->property("working_directory").value<FileString>().filestring + "/" + temp.remove("xHOME/") << "-o" << m_mchFileName;
     parameters << "-c" << m_typecode;
     parameters << "-v" << m_variant;
-    QString ver_major_tmp = m_ver_major;
-    ver_major_tmp.append(m_ver_minor.section("x",1,1));
-    parameters << "-d" << ver_major_tmp;
-    parameters << "-r" << m_ver_subminor;
+    parameters << "-d" << "0x"+m_ver_major+m_ver_minor;
+    parameters << "-r" << "0x"+m_ver_subminor;
     parameters << "-t" << "0x01";
     parameters << "-f" << "H86";
     parameters << "-e" << "FW1";
@@ -145,7 +152,6 @@ int firmware::runLogichdr()
         qDebug() << "srec_cat failed";
     m_processOut = process->readAllStandardOutput();
 
-//  qDebug() <<"srec returned " << process->errorString();
     delete process;
     return 0;
 }

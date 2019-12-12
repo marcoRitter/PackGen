@@ -28,12 +28,12 @@ file::~file()
            m_parent->parent()->parent(),SLOT(changeProperty ( QString  ,QVariant )));
 }
 
-FileString file::filename()
+QString file::filename()
 {
     return m_filename;
 }
 
-void file::setFilename(FileString filename)
+void file::setFilename(QString filename)
 {
     m_filename = filename;
 }
@@ -52,15 +52,6 @@ void file::setFile_type(FileType file_type)
             need_redraw("start_addr", file::updateStartAddress());
 }
 
-QString file::version()
-{
-    return m_version;
-}
-
-void file::setVersion(QString version)
-{
-    m_version = version;
-}
 
 QString file::start_addr()
 {
@@ -91,7 +82,7 @@ QVariant file::updateStartAddress()
 {
     QVariant a;
     HexString temp;
-        //QString srecExe = m_parent->property("srec_cat").value<FileString>().filestring;
+        //QString srecExe = m_parent->property("srec_cat").value<QString>().QString;
     m_flash_size = m_parent->property("flash_size").value<FlashSize>();
 
     if(m_parent->property("fpgatype").value<FpgaType>().selectedfpga == 1)

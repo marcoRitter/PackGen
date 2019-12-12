@@ -5,16 +5,14 @@ Durch die Properties "fpgatype" und "flash_size" aus dem Objekt Masterfile kann 
 die start_addr gemacht werden.
 
 Properties:
---description		...Beschreibung des FPGA Files(wird nicht verwendet)
---inputFile_directory	...Dateipfad zum Eingangsfile
+--description		...Beschreibung des FPGA Files(fuer README.txt)
+--input_file		...Dateipfad zum Eingangsfile
 --file_type		...File Typ des Eingangsfiles
---version		...Version des FPGA Files(wird nicht verwendet)
 --start_addr		...Startadresse des Working Codes im Flash
 
 Beispiel:
 
 description		= new File
-inputFile_name	= C:\Documents\PackGen\rs204_fpga_1400.bin
+input_file		= xHOME\PackGen\rs204_fpga_1400.bin
 file_type		= binary-file
-version		= 01
 start_addr		= 0x080000

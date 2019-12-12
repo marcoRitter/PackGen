@@ -13,8 +13,8 @@ class firmware : public Node
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString outputFile_name READ name WRITE setName)
-    Q_PROPERTY(FileString inputFile_directory READ filename WRITE setFilename)
+    Q_PROPERTY(QString output_file_name READ name WRITE setName)
+    Q_PROPERTY(QString input_file READ filename WRITE setFilename)
     Q_PROPERTY(QString ver_major READ ver_major WRITE setVer_major)
     Q_PROPERTY(QString ver_minor READ ver_minor WRITE setVer_minor)
     Q_PROPERTY(QString ver_subminor READ ver_subminor WRITE setVer_subminor)
@@ -31,8 +31,8 @@ public:
     QString name();
     void setName(QString name);
 
-    FileString filename();
-    void setFilename(FileString filename);
+    QString filename();
+    void setFilename(QString filename);
 
     QString designnumber();
     void setDesignnumber(QString filename);
@@ -73,8 +73,8 @@ public:
         mchfilenm.append("/");
         mchfilenm.append(fn.filestring.section("/",-1,-1).section(".",0,0).left(8).append(".mch"));
         */
-        QString verFileName = path + "/" + this->name() +"_FW"+ ".ver";
-        QString mchFileName = path + "/" + this->name() + ".mch";
+        QString verFileName = path + "/" +"temp/"+ this->name() +"_FW"+ ".ver";
+        QString mchFileName = path + "/" +"temp/"+ this->name() + ".mch";
         m_verFileName = verFileName;
         m_mchFileName = mchFileName;
     }
@@ -100,7 +100,7 @@ public:
 
 private:
 
-    FileString m_filename;
+    QString m_filename= static_cast<QString>("xHOME/");
     QString m_ver_major = "";
     QString m_ver_minor = "";
     QString m_ver_subminor = "";

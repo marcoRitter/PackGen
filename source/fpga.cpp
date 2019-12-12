@@ -49,14 +49,34 @@ void Fpga::setFpgatype(FpgaType fpgatype)
     need_redraw("start_addr",Fpga::updateStartAddress());
 }
 
-FileString Fpga::filename()
+FileType Fpga::file_type()
+{
+    return m_file_type;
+}
+
+void Fpga::setFile_type(FileType filetype)
+{
+    m_file_type = filetype;
+}
+
+QString Fpga::filename()
 {
     return m_filename;
 }
 
-void Fpga::setFilename(FileString filename)
+void Fpga::setFilename(QString filename)
 {
-    m_filename = filename;
+    int pos = filename.lastIndexOf(QChar('/'));
+    int pos2 = filename.length();
+
+    if(pos+1 == pos2)
+    {
+        m_filename = filename.left(pos);
+    }
+    else {
+        m_filename = filename;
+    }
+    //m_filename = filename;
 }
 
 QString Fpga::designnumber()
@@ -221,28 +241,79 @@ void Fpga::setSrecParameters()
 {
     QStringList parameters;
     parameters.clear();
-    parameters.append(m_filename.filestring);
-    parameters.append("--binary");
-    parameters.append("--offset");
-    parameters.append(m_start_addr);
-    if (m_fpgatype.selectedfpga && !m_hexFileName.contains(".bin"))
-        parameters.append("--bit_reverse");
-    parameters.append("--output");
-    parameters.append(m_hexFileName);
-    if(m_hexFileName.contains(".bin"))
+    QString temp = m_filename;
+    parameters.append(m_parent->parent()->property("working_directory").value<FileString>().filestring + "/" + temp.remove("xHOME/"));
+
+    if(m_parent->property("module_type").value<int>() == 0)
     {
-        parameters.append("--binary");
+        if (m_fpgatype.selectedfpga)
+        {
+            if(m_file_type.selectedType == 0)
+            {
+                parameters.append("-intel");
+            }
+            else
+            {
+                parameters.append("-binary");
+                parameters.append("--bit_reverse");
+            }
+        }
+        else {
+            if(m_file_type.selectedType == 0)
+            {
+                parameters.append("-intel");
+            }
+            else
+            {
+                parameters.append("-binary");
+            }
+        }
+
+        parameters.append("--offset");
+        parameters.append(m_start_addr);
+
+        parameters.append("--output");
+        parameters.append(m_hexFileName);
+
+         parameters.append("--intel");
+         parameters.append("--obs=16");
+
     }
-    else
-    {
-        parameters.append("--intel");
-        parameters.append("--obs=16");
-    }
+    else {
+            if (m_fpgatype.selectedfpga)
+            {
+                if(m_file_type.selectedType == 0)
+                {
+                    parameters.append("--intel");
+                    parameters.append("--bit_reverse");
+                }
+                else
+                {
+                    parameters.append("-binary");
+                }
+            }
+            else {
+                if(m_file_type.selectedType == 0)
+                {
+                    parameters.append("-intel");
+                }
+                else
+                {
+                    parameters.append("-binary");
+                }
+            }
+
+            parameters.append("--offset");
+            parameters.append(m_start_addr);
+
+            parameters.append("--output");
+            parameters.append(m_hexFileName);
+
+            parameters.append("--binary");
 
 
+    }
     m_srecParameters = parameters;
-//  runSrec();
-//  qDebug() << "fpga srec parameters = " << m_srecParameters;
 }
 
 int Fpga::runSrec()

@@ -16,8 +16,9 @@ class Fpga : public Node
     // property to identify the node type
 //  Q_PROPERTY(QString node_type READ node_type)
 
-    Q_PROPERTY(QString outputFile_name READ name WRITE setName)
-    Q_PROPERTY(FileString inputFile_directory READ filename WRITE setFilename)
+    Q_PROPERTY(QString output_file_name READ name WRITE setName)
+    Q_PROPERTY(QString input_file READ filename WRITE setFilename)
+    Q_PROPERTY(FileType file_type READ file_type WRITE setFile_type)
     Q_PROPERTY(FpgaType fpgatype READ fpgatype WRITE setFpgatype)
     Q_PROPERTY(QString designnumber READ designnumber WRITE setDesignnumber)
     Q_PROPERTY(QString revision READ revision WRITE setRevision)
@@ -39,8 +40,11 @@ public:
     FpgaType fpgatype();
     void setFpgatype (FpgaType fpgatype);
 
-    FileString filename();
-    void setFilename(FileString filename);
+    QString filename();
+    void setFilename(QString filename);
+
+    FileType file_type();
+    void setFile_type(FileType filetype);
 
     QString designnumber();
     void setDesignnumber(QString filename);
@@ -94,13 +98,13 @@ public:
 
         if(m_parent->property("module_type").value<ModuleType>().selectedmodultype == 0)
         {
-            h86FileName = path + "/" + this->name() + ".h86";
+            h86FileName = path + "/" +"temp/"+ this->name() + "_edit" + ".h86";
         }
         else {
-            h86FileName = path + "/" + this->name() + ".bin";
+            h86FileName = path + "/" +"temp/"+ this->name() + "_edit" + ".bin";
         }
-        QString mchFileName = path + "/" + this->name() + ".mch";
-        QString verFileName = path + "/" + this->name() +"_FPGA"+ ".ver";
+        QString mchFileName = path + "/" +"temp/"+ this->name() + ".mch";
+        QString verFileName = path + "/" +"temp/"+ this->name() +"_FPGA"+ ".ver";
 
         qDebug() << "h86 file = " << h86FileName;
         qDebug() << "mch file = " << mchFileName;
@@ -157,7 +161,7 @@ private:
     FpgaType m_fpgatype;
     QString m_name;
     // input fpga bit file
-    FileString m_filename;
+    QString m_filename= static_cast<QString>("xHOME/");
     QString m_designnumber = "";
     QString m_revision = "";
     QString m_testversion = "";
@@ -168,7 +172,7 @@ private:
     FlashSize m_flashsize;
 //  bool m_with_golden_reference;
     DualBoot m_dualboot;
-
+    FileType m_file_type;
     // version file name to create
     QString m_verFileName;
     // output file name for srec

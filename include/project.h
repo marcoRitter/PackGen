@@ -9,6 +9,11 @@
 #include "Masterfile.h"
 #include "goldenReference.h"
 #include "model.h"
+#include <QFileInfo>
+#include <QMenu>
+#include "firmware.h"
+#include "fpga.h"
+#include "file.h"
 
 
 class Project : public Node
@@ -18,8 +23,8 @@ class Project : public Node
 //  Q_PROPERTY(QString node_type READ node_type WRITE setNode_type)
 
     // Properties for this node
-    Q_PROPERTY(QString name READ name WRITE setName)
     Q_PROPERTY(bool JadeProject READ jade WRITE setJade)
+    Q_PROPERTY(FileString working_directory READ project_directory WRITE setProject_directory)
     Q_PROPERTY(FileString srec_cat READ srec_cat WRITE setSrec_cat)
     Q_PROPERTY(FileString logichdr READ logichdr WRITE setLogichdr)
     Q_PROPERTY(FileString mbind READ mbind WRITE setMbind)
@@ -38,11 +43,11 @@ public:
 //
 //  };
 
-    QString name();
-    void setName(QString name);
-
     bool jade();
     void setJade(bool jade);
+
+    FileString project_directory();
+    void setProject_directory(FileString filename);
 
     FileString srec_cat();
     void setSrec_cat(FileString filename);
@@ -58,18 +63,21 @@ public:
 
     void node_menue(QMenu *menu);
 
+
 private slots:
     void new_M86_Spartan6();
     void new_Masterfile();
     void new_goldenRef();
+    void readme_all();
+
     /*
     void new_JADE_Package();  
     */
 
 private:
     QString projectName;
-    QString m_name;
     bool m_jade = false;
+    FileString m_project_directory;
     FileString m_srecCat = static_cast<QString>("//pc011/tools/utils/srec_cat.exe");
     FileString m_logichdr =static_cast<QString>("//pc011/tools/utils/logichdr.exe");
     FileString m_mbind =static_cast<QString>("//pc011/tools/utils/mbind.exe");

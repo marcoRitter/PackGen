@@ -454,13 +454,26 @@ void MainWindow::clearOut()
 }
 QString MainWindow::setTipForProperty(const QMetaProperty & prop)
 {
+    QString dir;
+    QObjectList objectsProject = this->children();
+    for(int i = 0; i < this->children().length(); i++)
+    {
+        if(QLatin1String(objectsProject[i]->metaObject()->className()) == "Project")
+        {
+            Project *item = static_cast<Project*>(objectsProject[i]);
+            dir = item->project_directory().filestring;
+        }
+    }
+
     QString toolTip = "default";
     if (strcmp(prop.name(), "description") == 0)
-        toolTip = "File description (not used)";
-    if (strcmp(prop.name(), "outputFile_name") == 0)
+        toolTip = "File description (for README.txt)";
+    if (strcmp(prop.name(), "output_file_name") == 0)
         toolTip = "Output filename (without type ending)";
-    if (strcmp(prop.name(), "inputFile_directory") == 0)
-        toolTip = "directory + filename from input file";
+    if (strcmp(prop.name(), "input_file") == 0)
+        toolTip = dir +"/relativ Path ($HOME/...)";
+    if (strcmp(prop.name(), "output_file_directory") == 0)
+        toolTip = dir +"/relativ Path ($HOME/...)";
     if (strcmp(prop.name(), "ver_major") == 0)
         toolTip = "Major version of project (%d%d, 0-9)";
     if (strcmp(prop.name(), "ver_minor") == 0)
@@ -472,7 +485,7 @@ QString MainWindow::setTipForProperty(const QMetaProperty & prop)
     if (strcmp(prop.name(), "variant") == 0)
         toolTip = "Module variant for final package (0xff for multiple)";
     if(strcmp(prop.name(), "location") == 0)
-        toolTip = "final folder for generated files";
+        toolTip = dir +"/relativ Path ($HOME/...)";
     if(strcmp(prop.name(), "verstate") == 0)
         toolTip = "development status";
     if(strcmp(prop.name(), "filename") == 0)
@@ -521,6 +534,10 @@ QRegExp MainWindow::setRegExpForProperty(const QMetaProperty &prop)
         regexp.setPattern("[0-9A-Za-z]{0,100}");
     if (strcmp(prop.name(), "object_name") == 0)
         regexp.setPattern("0x[0-9A-Fa-f]{6,6}");
+    if (strcmp(prop.name(), "inputFile_directory") == 0 ||
+            strcmp(prop.name(), "outputFile_location") == 0)
+        regexp.setPattern("xHOME/[0-9A-Za-z,!,§,$,%,&,/,?,ß,+,*,~,.,(,),;,:,_,-]{0,50}");
+
 
     /*if (strcmp(prop.name(),"description") == 0)
         regexp.setPattern("[0-9A-Za-z_-]{1,8}");*/

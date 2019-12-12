@@ -10,12 +10,9 @@ Property die FPGA Type besitzt, um einen Adressvorschlag zu generieren.
 	-->Die Datenlücken des Ausgangsfiles werden mit 0xFF aufgefüllt
 
 Properties:
---description		...Beschreibung des Masterfiles(wird nicht verwendet)
---outputFile_location	...Ausgabepfad der generierten Datei
---outputFile_name	...Name des generierten Ausgabefiles
---ver_major		...Major Version des Masterfiles(wird nicht verwendet)
---ver_minor		...Minor Version des Masterfiles(wird nicht verwendet)
---ver_subminor	...Subminor Version des Masterfiles(wird nicht verwendet)
+--description		...Beschreibung des Masterfiles(fuer README.txt)
+--output_file_directory	...Ausgabepfad der generierten Datei
+--output_file_name	...Name des generierten Ausgabefiles
 --fpgatype		...Verwendeter FPGA Hersteller bzw. Produktfamilie
 --flash_size		...Größe des Config-Flashs
 --bit_reverse		...Hex Datei "gedreht" zu bin Datei erstellen (nur bei Lattice
@@ -24,11 +21,8 @@ Properties:
 Beispiel:
 
 description		= new Masterfile
-outputFile_location	= C:\Documents\PackGen\Masterfiles
-outputFile_name	= TestMasterfile
-ver_major		= 01
-ver_minor		= 05
-ver_subminor		= 01
+output_file_directory	= xHOME\PackGen\Masterfiles
+output_file_name	= TestMasterfile
 fpgatype		= Xilinx Spartan6
 flash_size		= 64Mbit
 bit_reverse		= false

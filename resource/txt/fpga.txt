@@ -7,9 +7,10 @@ verwendet (Default Adresse wird selber eingefügt). Aber auch direkt in das Packa
 integriert.
 
 Propterties:
---descripion		...Beschreibung der FPGA Datei (wird nicht verwendet)
---outputFile_name	...Name folgender generierter Dateien: "h86", "mch", "ver"
---inputFile_directory	...Dateipfad zum Binärfile der Logik (wichtig: Binärdatei!)
+--descripion		...Beschreibung der FPGA Datei (fuer README.txt)
+--output_file_name	...Name folgender generierter Dateien: "h86", "mch", "ver"
+--input_file		...Dateipfad zum File der Logik
+--file_type		...Eingangsfileformat
 --fpgatype		...Verwendeter FPGA Hersteller bzw. Produktfamilie
 --designnumber	...Designnummer der Logik laut Logikreferenzliste
 --revision		...Hauptversion der Logik
@@ -22,9 +23,10 @@ Propterties:
 Beispiel:
 
 description		= new FPGA
-outputFile_name	= 14800501
+output_file_name	= 14800501
 fpgatype		= Lattice ECP2
-inputFile_directory	= C:\Documents\PackGen\SAI205_v19_working.bit
+input_file		= xHOME\PackGen\SAI205_v19_working.bit
+file_type		= binary
 designnumber	= 1480
 revision		= 05
 testversion		= 01

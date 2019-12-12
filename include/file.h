@@ -13,9 +13,8 @@ class file : public Node
 
     Q_OBJECT
 
-    Q_PROPERTY(FileString inputFile_directory READ filename WRITE setFilename)
+    Q_PROPERTY(QString input_file READ filename WRITE setFilename)
     Q_PROPERTY(FileType file_type READ file_type WRITE setFile_type)
-    Q_PROPERTY(QString version READ version WRITE setVersion)
     Q_PROPERTY(QString start_addr READ start_addr WRITE setStart_addr)
     Q_PROPERTY(QString object_name READ object_name WRITE setObject_name)
 
@@ -26,14 +25,12 @@ public:
 
     QString node_type() {return"File";}
 
-    FileString filename();
-    void setFilename(FileString filename);
+    QString filename();
+    void setFilename(QString filename);
 
     FileType file_type();
     void setFile_type(FileType file_type);
 
-    QString version();
-    void setVersion(QString version);
 
     QString object_name();
     void setObject_name(QString object_name);
@@ -49,10 +46,9 @@ signals:
 
 private:
 
-    FileString m_filename;
+    QString m_filename= static_cast<QString>("xHOME/");
     FileType m_file_type;
     QString m_description;
-    QString m_version;
     QString m_start_addr = "0x000000";
     FlashSize m_flash_size;
 

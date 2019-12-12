@@ -70,12 +70,12 @@ void FileEdit::buttonClicked()
     if(pMainWindow->getMCurrent()->node_type() == "goldenReference")
     {
         goldenReference *goldRef = static_cast<goldenReference*>(pMainWindow->getMCurrent());
-        if(goldRef->goldenRef_file().filestring.isEmpty() && goldRef->location().filestring.isEmpty())
+        if(goldRef->goldenRef_file().isEmpty() && goldRef->location().isEmpty())
         {
             file = false;
         }
     }
-    if (pMainWindow->getMCurrent()->node_type() != "M86" && pMainWindow->getMCurrent()->node_type() != "Masterfile" && file) {
+    if (pMainWindow->getMCurrent()->node_type() != "M86" && pMainWindow->getMCurrent()->node_type() != "Masterfile" && file && pMainWindow->getMCurrent()->node_type() != "Project") {
         filePath = QFileDialog::getOpenFileName(this, tr("Choose a file"), mySettings.value(DEFAULT_M86_DIR).toString());//theLineEdit->text(), theFilter);
         if (!filePath.isNull())
             mySettings.setValue(DEFAULT_M86_DIR,CurrentDir.absoluteFilePath(filePath));

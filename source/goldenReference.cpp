@@ -8,9 +8,12 @@
 #include "version_file.h"
 #include <iostream>
 #include <fstream>
+#include <QDir>
+#include <QDateTime>
 
 goldenReference::goldenReference(QObject *parent) : Node(parent, "goldenReference")
 {
+    this->setObjectName("golden");
 
     pGenerate = new QAction(tr("Generate"), this);
     connect(pGenerate, SIGNAL(triggered()), this, SLOT(generate_goldenRef()));
@@ -41,12 +44,12 @@ goldenReference::~goldenReference()
     delete pDelete;
 }
 
-FileString goldenReference::goldenRef_file()
+QString goldenReference::goldenRef_file()
 {
     return m_goldenRef_file;
 }
 
-void goldenReference::setGoldenRef_file(FileString file)
+void goldenReference::setGoldenRef_file(QString file)
 {
     m_goldenRef_file = file;
 }
@@ -60,13 +63,22 @@ void goldenReference::setFilename(QString filename)
     m_filename = filename;
 }
 
-FileString goldenReference::location()
+QString goldenReference::location()
 {
     return m_location;
 }
-void goldenReference::setLocation(FileString location)
+void goldenReference::setLocation(QString location)
 {
-    m_location = location;
+    int pos = location.lastIndexOf(QChar('/'));
+    int pos2 = location.length();
+
+    if(pos+1 == pos2)
+    {
+        m_location = location.left(pos);
+    }
+    else {
+        m_location = location;
+    }
 }
 
 FileType goldenReference::file_type()
@@ -78,14 +90,6 @@ void goldenReference::setFile_type(FileType filetype)
     m_file_type = filetype;
 }
 
-QString goldenReference::version()
-{
-    return m_version;
-}
-void goldenReference::setVersion(QString version)
-{
-    m_version = version;
-}
 
 FlashSize goldenReference::flash_size()
 {
@@ -127,6 +131,26 @@ void goldenReference::node_menue(QMenu *menu)
     menu->addAction(pDelete);
 }
 
+QString goldenReference::getInPath()
+{
+    QString temp = m_goldenRef_file;
+
+    return (m_parent->property("working_directory").value<FileString>().filestring + "/" + temp.remove("xHOME/"));
+}
+
+QString goldenReference::getOutPath()
+{
+    QString temp = m_location;
+
+    if(temp.remove("xHOME/") == "")
+    {
+        return (m_parent->property("working_directory").value<FileString>().filestring);
+    }
+    else {
+        return (m_parent->property("working_directory").value<FileString>().filestring + "/" + temp.remove("xHOME/"));
+    }
+}
+
 bool goldenReference::setSrecParameters()
 {
     QStringList srecParameters;
@@ -134,7 +158,7 @@ bool goldenReference::setSrecParameters()
 
     if(jumpCommend_addr.isEmpty())
     {
-        srecParameters.append(m_location.filestring+"/"+m_filename+"_header.hex");
+        srecParameters.append(getOutPath()+"/"+"temp"+"/"+m_filename+"_header.hex");
         srecParameters.append("--intel");
         srecParameters.append("--offset");
         srecParameters.append("0x0");
@@ -143,7 +167,7 @@ bool goldenReference::setSrecParameters()
         srecParameters.append("0x00");
         srecParameters.append(m_start_addr);
         srecParameters.append("--o");
-        srecParameters.append(m_location.filestring+"/"+m_filename+"_header_filled.hex");
+        srecParameters.append(getOutPath()+"/"+"temp"+"/"+m_filename+"_header_filled.hex");
         srecParameters.append("--intel");
         srecParameters.append("--obs=16");
 
@@ -152,11 +176,11 @@ bool goldenReference::setSrecParameters()
         {
             srecParameters.clear();
 
-            srecParameters.append(m_location.filestring+"/"+m_filename+"_header_filled.hex");
+            srecParameters.append(getOutPath()+"/"+"temp"+"/"+m_filename+"_header_filled.hex");
             srecParameters.append("--intel");
             srecParameters.append("--offset");
             srecParameters.append("0x0");
-            srecParameters.append(m_goldenRef_file.filestring);
+            srecParameters.append(getInPath());
             if(m_file_type.selectedType == 0)
             {
                 srecParameters.append("--intel");
@@ -168,7 +192,7 @@ bool goldenReference::setSrecParameters()
             srecParameters.append("--offset");
             srecParameters.append(m_start_addr);
             srecParameters.append("--o");
-            srecParameters.append(m_location.filestring+"/"+m_filename+".hex");
+            srecParameters.append(getOutPath()+"/"+m_filename+".hex");
             srecParameters.append("--intel");
             srecParameters.append("--obs=16");
 
@@ -177,13 +201,13 @@ bool goldenReference::setSrecParameters()
         }
     }
     else {
-        srecParameters.append(m_location.filestring+"/"+m_filename+"_header.hex");
+        srecParameters.append(getOutPath()+"/"+"temp"+"/"+m_filename+"_header.hex");
         srecParameters.append("--intel");
         srecParameters.append("--bit-reverse");
         srecParameters.append("--offset");
         srecParameters.append(jumpCommend_addr);
         srecParameters.append("--o");
-        srecParameters.append(m_location.filestring+"/"+m_filename+"_header_filled.hex");
+        srecParameters.append(getOutPath()+"/"+"temp"+"/"+m_filename+"_header_filled.hex");
         srecParameters.append("--intel");
         srecParameters.append("--obs=16");
 
@@ -192,11 +216,11 @@ bool goldenReference::setSrecParameters()
         {
             srecParameters.clear();
 
-            srecParameters.append(m_location.filestring+"/"+m_filename+"_header_filled.hex");
+            srecParameters.append(getOutPath()+"/"+"temp"+"/"+m_filename+"_header_filled.hex");
             srecParameters.append("--intel");
             //srecParameters.append("--offset");
             //srecParameters.append(jumpCommend_addr);
-            srecParameters.append(m_goldenRef_file.filestring);
+            srecParameters.append(getInPath());
             if(m_file_type.selectedType == 0)
             {
                 srecParameters.append("--intel");
@@ -210,7 +234,7 @@ bool goldenReference::setSrecParameters()
             srecParameters.append(start_addr()+"0000");
 
             srecParameters.append("--o");
-            srecParameters.append(m_location.filestring+"/"+m_filename+".hex");
+            srecParameters.append(getOutPath()+"/"+m_filename+".hex");
             srecParameters.append("--intel");
             srecParameters.append("--obs=16");
 
@@ -255,14 +279,18 @@ bool goldenReference::creatHeader()
         setOutInfo("goldenReference Property filename has no value", m_errorColor);
         return false;
     }
-    if(m_location.filestring.isEmpty())
+    if(getOutPath() == "")
     {
         setOutInfo("goldenReference Property location has no value", m_errorColor);
         return false;
     }
-    if(m_version.isEmpty())
+    QString tempfile = m_goldenRef_file;
+    QFileInfo  dir_file = m_parent->property("working_directory").value<FileString>().filestring + "/" + tempfile.remove("xHOME/");
+
+    if(!dir_file.exists())
     {
-        setOutInfo("goldenReference Property version has no value", m_errorColor);
+        setOutInfo("goldenReference Property goldenRef_file doesn`t exist", m_errorColor);
+        return false;
     }
 
     if(jumpCommend_addr.isEmpty())
@@ -308,7 +336,7 @@ bool goldenReference::creatHeader()
         QString NOP_8[] = { "0x20", "0x00", "0x20", "0x00", "0x20", "0x00", "0x20", "0x00" };			// 5*NOP
         const uint8_t NOP_8_lenght = 8;
 
-        QString filenameHeader = m_location.filestring + "/" + m_filename + "_header.hex";
+        QString filenameHeader = getOutPath() + "/" + "temp" + "/" + m_filename + "_header.hex";
         QFile file(filenameHeader);
 
         if(file.open(QFile::WriteOnly|QFile::Text))
@@ -458,7 +486,7 @@ bool goldenReference::creatHeader()
         QString row4[] = {"0xFF","0xFF"};
         const uint8_t row4_length = 2;
 
-        QString filenameHeader = m_location.filestring + "/" + m_filename + "_header.hex";
+        QString filenameHeader = getOutPath() + "/" + "temp" + "/" + m_filename + "_header.hex";
         QFile file(filenameHeader);
 
         if(file.open(QFile::WriteOnly|QFile::Text))
@@ -548,7 +576,7 @@ bool goldenReference::creatHeader()
         QString row4[] = {"0xFF","0xFF"};
         const uint8_t row4_length = 2;
 
-        QString filenameHeader = m_location.filestring + "/" + m_filename + "_header.hex";
+        QString filenameHeader = getOutPath() + "/" + "temp" + "/" + m_filename + "_header.hex";
         QFile file(filenameHeader);
 
         if(file.open(QFile::WriteOnly|QFile::Text))
@@ -633,6 +661,24 @@ bool goldenReference::creatHeader()
 
 bool goldenReference::generate_goldenRef()
 {
+    QDir dir(getOutPath());
+    QDir dir_temp(getOutPath()+"/temp");
+
+    if(dir.exists())
+    {
+    }
+    else {
+        dir.mkpath(getOutPath());
+    }
+    if(dir_temp.exists())
+    {
+        dir_temp.removeRecursively();
+        dir_temp.mkpath(getOutPath()+"/temp");
+    }
+    else {
+        dir_temp.mkpath(getOutPath()+"/temp");
+    }
+
 
     if(m_fpgatype.selectedfpga == 0)
     {
@@ -685,7 +731,7 @@ bool goldenReference::generate_goldenRef()
 
     setSrecParameters();
 
-    QFileInfo hexFile = m_location.filestring+"/"+m_filename+".hex";
+    QFileInfo hexFile = getOutPath()+"/"+m_filename+".hex";
     if (!(hexFile.exists() && hexFile.isFile()))
     {
         qDebug() << "error by hex file";
@@ -694,11 +740,11 @@ bool goldenReference::generate_goldenRef()
     }
     else {
         setOutInfo("Created Golden Reference successfully:", m_infoColor);
-        setOutInfo(m_location.filestring+"/"+m_filename+".hex", m_normalColor);
-        QFile fileHeader(m_location.filestring + "/" + m_filename + "_header.hex");
-        fileHeader.remove();
-        QFile headerfilled(m_location.filestring+"/"+m_filename+"_header_filled.hex");
-        headerfilled.remove();
+        setOutInfo(getOutPath()+"/"+m_filename+".hex", m_normalColor);
+//        QFile fileHeader(getOutPath() + "/" + m_filename + "_header.hex");
+//        fileHeader.remove();
+//        QFile headerfilled(getOutPath()+"/"+m_filename+"_header_filled.hex");
+//        headerfilled.remove();
     }
     return  true;
 }

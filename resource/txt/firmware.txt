@@ -3,9 +3,9 @@ Firmware für M86:
 Mit dem Objekt "Firmware" wird eine Firmware Datei zum aktuellen Package hinzugefügt.
 
 Properties:
---description		...Beschreibung der Firmware Datei (wird nicht verwendet)
---outputFile_name	...Name folgender generierter Dateien: "mch", "ver"
---inputFile_directory	...Dateipfad zum Hex File der Firmware (wichtig: Hexfile!)
+--description		...Beschreibung der Firmware Datei (fuer README.txt)
+--output_file_name	...Name folgender generierter Dateien: "mch", "ver"
+--input_file		...Dateipfad zum File der Firmware (wird 1:1 in m86 File gelegt)
 --ver_major		...Major Version der Firmware
 --ver_minor		...Minor Version der Firmware
 --ver_subminor	...Subminor Version der Firmware
@@ -16,7 +16,7 @@ Beispiel:
 
 description		= new Firmware
 outputFile_name	= SAI205_FW
-inputFile_directory	= C:\Documents\PackGen\A_BIOS_SAI205.h86
+inputFile_directory	= xHOME\PackGen\A_BIOS_SAI205.h86
 ver_major		= 01
 ver_minor		= 05
 ver_subminor		= 01
