@@ -139,6 +139,16 @@ VerState M86_Spartan6::verstate()
     return m_verstate;
 }
 
+QString M86_Spartan6::required_driver_version()
+{
+    return m_required_driver_version;
+}
+
+void M86_Spartan6::setRequired_driver_version(QString required_driver_version)
+{
+    m_required_driver_version = required_driver_version;
+}
+
 QString M86_Spartan6::getlocation()
 {
     QString temp = m_location;
@@ -277,10 +287,12 @@ bool M86_Spartan6::generate_package()
     if(m_typecode.isEmpty())
     {
         setOutInfo("M86 Property typecode has no value", m_errorColor);
+        return false;
     }
     if(m_variant.isEmpty())
     {
         setOutInfo("M86 Property variant has no value", m_errorColor);
+        return false;
     }
     if(m_ver_major.isEmpty())
     {
@@ -294,12 +306,53 @@ bool M86_Spartan6::generate_package()
     {
         setOutInfo("M86 Property ver_minor has no value", m_errorColor);
     }
-
+    if(m_required_driver_version.isEmpty())
+    {
+        setOutInfo("M86 Property required_driver_version has no value", m_errorColor);
+        return false;
+    }
 
     QObjectList objectsM86 = this->children();
     for(int i = 0; i < this->children().length(); i++)
     {
-        if(objectsM86[i]->inherits("firmware"))
+        if(objectsM86[i]->inherits("Fpga"))
+        {
+            Fpga *fpga = static_cast<Fpga*>(objectsM86[i]);
+            QString temp_file = fpga->filename();
+            QFileInfo  dir_file = m_parent->property("working_directory").value<FileString>().filestring + "/" + temp_file.remove("xHOME/");
+            if(fpga->filename().isEmpty())
+            {
+                setOutInfo("FPGA Property filename has no value (M86)", m_errorColor);
+                return false;
+            }
+
+            if(!dir_file.exists())
+            {
+                setOutInfo("FPGA Property inputFile_directory doesn`t exist (M86)", m_errorColor);
+                return false;
+            }
+            if(fpga->designnumber().isEmpty())
+            {
+                setOutInfo("File Property designnumber has no value (M86)", m_errorColor);
+                return false;
+            }
+            if(fpga->revision().isEmpty())
+            {
+                setOutInfo("File Property revision has no value (M86)", m_errorColor);
+                return false;
+            }
+            if(fpga->testversion().isEmpty())
+            {
+                setOutInfo("File Property testversion has no value (M86)", m_errorColor);
+                return false;
+            }
+            if(fpga->start_addr().isEmpty())
+            {
+                setOutInfo("FPGA Property start_addr has no value (M86)", m_errorColor);
+                return false;
+            }
+        }
+        else if(objectsM86[i]->inherits("firmware"))
         {
             firmware *firm = static_cast<firmware*>(objectsM86[i]);
             QString temp_file = firm->filename();
@@ -338,43 +391,6 @@ bool M86_Spartan6::generate_package()
                 return false;
             }
         }
-        else if(objectsM86[i]->inherits("Fpga"))
-        {
-            Fpga *fpga = static_cast<Fpga*>(objectsM86[i]);
-            QString temp_file = fpga->filename();
-            QFileInfo  dir_file = m_parent->property("working_directory").value<FileString>().filestring + "/" + temp_file.remove("xHOME/");
-            if(fpga->filename().isEmpty())
-            {
-                setOutInfo("FPGA Property filename has no value (M86)", m_errorColor);
-                return false;
-            }
-
-            if(!dir_file.exists())
-            {
-                setOutInfo("FPGA Property inputFile_directory doesn`t exist (M86)", m_errorColor);
-                return false;
-            }
-            if(fpga->designnumber().isEmpty())
-            {
-                setOutInfo("File Property designnumber has no value (M86)", m_errorColor);
-                return false;
-            }
-            if(fpga->revision().isEmpty())
-            {
-                setOutInfo("File Property revision has no value (M86)", m_errorColor);
-                return false;
-            }
-            if(fpga->testversion().isEmpty())
-            {
-                setOutInfo("File Property testversion has no value (M86)", m_errorColor);
-                return false;
-            }
-            if(fpga->start_addr().isEmpty())
-            {
-                setOutInfo("FPGA Property start_addr has no value (M86)", m_errorColor);
-                return false;
-            }
-        }
     }
 
 
@@ -405,6 +421,10 @@ bool M86_Spartan6::generate_package()
         return 0;
     }
 
+    bool fpga_exists = false;
+    bool fw_exists = false;
+
+    QString fpga_ver_file_name, fpga_mch_file_name, fw_ver_file_name, fw_mch_file_name;
 
     for (auto const & childsOfM86 : this->children())
     {
@@ -442,18 +462,9 @@ bool M86_Spartan6::generate_package()
                         }
                     }
                 }
-
-            scriptFileCreate(this->getScrFileName(), "ObjectType = LOGIC\n", false);
-            QString fpgaScriptLine = "Version = \"";
-            fpgaScriptLine.append(fpga->getVerFileName());
-            fpgaScriptLine.append('"');
-            fpgaScriptLine.append("\n");
-            scriptFileCreate(this->getScrFileName(),fpgaScriptLine,false);
-            fpgaScriptLine = "ObjectName = \"";
-            fpgaScriptLine.append(fpga->getMchFileName());
-            fpgaScriptLine.append('"');
-            fpgaScriptLine.append("\n");
-            scriptFileCreate(this->getScrFileName(),fpgaScriptLine,false);
+            fpga_exists = true;
+            fpga_ver_file_name = fpga->getVerFileName();
+            fpga_mch_file_name = fpga->getMchFileName();
         }
         if (childsOfM86->objectName()=="firmware")
         {
@@ -476,20 +487,42 @@ bool M86_Spartan6::generate_package()
                 setOutInfo("Firmware mch file created:", m_infoColor);
                 setOutInfo(fw->getMchFileName(), m_normalColor);
             }
-
-            scriptFileCreate(this->getScrFileName(), "ObjectType = FIRMWARE\n", false);
-            QString sfirmware = "Version = \"";
-            sfirmware.append(fw->getVerFileName());
-            sfirmware.append('"');
-            sfirmware.append("\n");
-            scriptFileCreate(this->getScrFileName(),sfirmware,false);
-            sfirmware = "ObjectName = \"";
-            sfirmware.append(fw->getMchFileName());
-            sfirmware.append('"');
-            sfirmware.append("\n");
-            scriptFileCreate(this->getScrFileName(),sfirmware,false);
+            fw_exists = true;
+            fw_ver_file_name = fw->getVerFileName();
+            fw_mch_file_name = fw->getMchFileName();
         }
     }
+
+    if(fw_exists)
+    {
+        scriptFileCreate(this->getScrFileName(), "ObjectType = FIRMWARE\n", false);
+        QString sfirmware = "Version = \"";
+        sfirmware.append(fw_ver_file_name);
+        sfirmware.append('"');
+        sfirmware.append("\n");
+        scriptFileCreate(this->getScrFileName(),sfirmware,false);
+        sfirmware = "ObjectName = \"";
+        sfirmware.append(fw_mch_file_name);
+        sfirmware.append('"');
+        sfirmware.append("\n");
+        scriptFileCreate(this->getScrFileName(),sfirmware,false);
+    }
+
+
+    if(fpga_exists)
+    {
+        scriptFileCreate(this->getScrFileName(), "ObjectType = LOGIC\n", false);
+        QString fpgaScriptLine = "Version = \"";
+        fpgaScriptLine.append(fpga_ver_file_name);
+        fpgaScriptLine.append('"');
+        fpgaScriptLine.append("\n");
+        scriptFileCreate(this->getScrFileName(),fpgaScriptLine,false);
+        fpgaScriptLine = "ObjectName = \"";
+        fpgaScriptLine.append(fpga_mch_file_name);
+        fpgaScriptLine.append('"');
+        fpgaScriptLine.append("\n");
+        scriptFileCreate(this->getScrFileName(),fpgaScriptLine,false);
+     }
 
     setOutInfo("Script file created:", m_infoColor);
     setOutInfo(this->getScrFileName(), m_normalColor);

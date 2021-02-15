@@ -34,7 +34,7 @@ void saveTreeNode(QStandardItem * pItem, QJsonObject *jsonObj)
     QJsonArray jsonArray;
     int nKids = pItem->rowCount();
 
-    for ( int nKid = 0; nKid < nKids; ++nKid )
+    for ( int nKid = 0; nKid < nKids; nKid++ )
     {
         QJsonObject new_jsonObj;    // new json object for next children
         saveTreeNode(pItem->child(nKid),&new_jsonObj);

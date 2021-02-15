@@ -7,17 +7,18 @@ der ausgefüllten Properties vom PackGen selber erzeugt.
 --> Ausgangsfile Formate: .h86, .mbs, .mch, .m86, .ver
 
 Properties:
---description		...Beschreibung des Package (fuer README.txt)
---module_type	...Art des Moduls(CPU oder I/O)
---output_file_directory	...Ausgabepfad der generierten Dateien
---output_file_name	...Dateiname des generierten Packages
---typecode		...Modultyp für den das Package bestimmt ist
---variant		...Modulvariante für die das Package bestimmt ist 
-		   (für mehrere Modulvarianten = 0xFF)
---ver_major		...Major Version des Packeges
---ver_minor		...Minor Version des Packeges
---ver_subminor	...Subminor Version des Packeges
---verstate		...Entwicklungsstand
+--description                   ...Beschreibung des Package (fuer README.txt)
+--module_type                ...Art des Moduls(CPU oder I/O)
+--output_file_directory      ...Ausgabepfad der generierten Dateien
+--output_file_name          ...Dateiname des generierten Packages
+--typecode                      ...Modultyp für den das Package bestimmt ist
+--variant                          ...Modulvariante für die das Package bestimmt ist
+                                        (für mehrere Modulvarianten = 0xFF)
+--ver_major                     ...Major Version des Packeges
+--ver_minor                     ...Minor Version des Packeges
+--ver_subminor                ...Subminor Version des Packeges
+--verstate                        ...Entwicklungsstand
+--required_driver_version   ...Mindest Treiber Version
 
 Beispiel:
 
@@ -31,6 +32,7 @@ ver_major 		= 01
 ver_minor 		= 05
 ver_subminor 	= 01
 verstate 		= Beta
+required_driver_version     = V0.00.00 Beta
 
 Wenn essentielle Properties vergessen wurden auszufüllen, wird das Package nicht generiert.
 Falls jedoch rein informative Properties nicht ausgefüllt sind, wird eine entsprechende Fehlermeldung

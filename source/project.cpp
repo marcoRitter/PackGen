@@ -141,7 +141,7 @@ void Project::readme_all()
         QString date = QDateTime().currentDateTime().date().toString();
         QString time = QDateTime().currentDateTime().time().toString();
 
-        stream << "Package Generator v1.00.04 Beta\n\n";
+        stream << "Package Generator v1.00.05 Beta\n\n";
         stream << "Build start time: " + date + " " + time +"\n\n";
 
         //Project
@@ -161,15 +161,16 @@ void Project::readme_all()
             {
                 M86_Spartan6 *item = static_cast<M86_Spartan6*>(objectsProject[i]);
                 stream << "\n\n M86: " + item->description() + "\n";
-                stream << "     module_type         = " + ModuleType().modultype[static_cast<int>(item->module_type().selectedmodultype)] + "\n";
-                stream << "     outputFile_location = " + item->location() + "\n";
-                stream << "     outputFile_name     = " + item->pkgName() + "\n";
-                stream << "     typecode            = " + item->typecode() + "\n";
-                stream << "     variant             = " + item->variant() + "\n";
-                stream << "     ver_major           = " + item->ver_major() + "\n";
-                stream << "     ver_minor           = "  + item->ver_minor() + "\n";
-                stream << "     ver_subminor        = " + item->ver_subminor() + "\n";
-                stream << "     verstate            = " + VerState().verstate[static_cast<int>(item->verstate().selectedVersion)] + "\n\n";
+                stream << "     module_type             = " + ModuleType().modultype[static_cast<int>(item->module_type().selectedmodultype)] + "\n";
+                stream << "     outputFile_location     = " + item->location() + "\n";
+                stream << "     outputFile_name         = " + item->pkgName() + "\n";
+                stream << "     typecode                = " + item->typecode() + "\n";
+                stream << "     variant                 = " + item->variant() + "\n";
+                stream << "     ver_major               = " + item->ver_major() + "\n";
+                stream << "     ver_minor               = "  + item->ver_minor() + "\n";
+                stream << "     ver_subminor            = " + item->ver_subminor() + "\n";
+                stream << "     verstate                = " + VerState().verstate[static_cast<int>(item->verstate().selectedVersion)] + "\n";
+                stream << "     required_driver_version = " + item->required_driver_version() + "\n\n";
 
                 QObjectList itemchilds = item->children();
                 for(int i = 0; i < item->children().length(); i++)

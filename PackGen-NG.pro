@@ -94,6 +94,10 @@ HEADERS  += include/mainwindow.h \
     include/goldenReference.h \
     include/help.h \
     ui_helpdialog.h \
+    ui_aboutdialog.h \
+    ui_helpdialog.h \
+    ui_mainwindow.h \
+    ui_output.h
 
 FORMS    += resource/mainwindow.ui \
     resource/aboutdialog.ui \

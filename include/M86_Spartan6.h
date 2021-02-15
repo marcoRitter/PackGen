@@ -29,10 +29,12 @@ class M86_Spartan6 : public Node
     Q_PROPERTY(QString output_file_name READ pkgName WRITE setPkgName)
     Q_PROPERTY(QString typecode READ typecode WRITE setTypeCode)
     Q_PROPERTY(QString variant READ variant WRITE setVariant)
+    Q_PROPERTY(QString required_driver_version READ required_driver_version WRITE setRequired_driver_version)
     Q_PROPERTY(QString ver_major READ ver_major WRITE setVer_major)
     Q_PROPERTY(QString ver_minor READ ver_minor WRITE setVer_minor)
     Q_PROPERTY(QString ver_subminor READ ver_subminor WRITE setVer_subminor)
     Q_PROPERTY(VerState verstate READ verstate WRITE setVerstate)
+
 //    Q_PROPERTY(VER_STATE ver_state READ ver_state WRITE setVer_state)
 public:
     M86_Spartan6(QObject *parent = nullptr);
@@ -48,6 +50,9 @@ public:
 
     QString pkgName();
     void setPkgName (QString pkgname);
+
+    QString required_driver_version();
+    void setRequired_driver_version (QString required_driver_version);
 
     QString ver_major();
     void setVer_major(QString ver_major);
@@ -66,6 +71,7 @@ public:
 
     VerState verstate();
     void setVerstate (VerState verstate);
+
 
     QString getlocation();
 /*
@@ -117,6 +123,7 @@ private:
     QString m_verFileName;
     QString m_scriptFileName;
     ModuleType m_module_type;
+    QString m_required_driver_version = static_cast<QString>("V0.00.00 Alpha");
 
     // menu Actions
     QAction * pGenerate;

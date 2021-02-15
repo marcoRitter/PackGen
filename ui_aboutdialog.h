@@ -33,7 +33,7 @@ public:
         aboutDialog->setMaximumSize(QSize(257, 143));
         label = new QLabel(aboutDialog);
         label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(50, 50, 151, 31));
+        label->setGeometry(QRect(50, 50, 200, 31));
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);

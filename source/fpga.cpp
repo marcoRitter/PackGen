@@ -46,6 +46,7 @@ FpgaType Fpga::fpgatype()
 void Fpga::setFpgatype(FpgaType fpgatype)
 {
     m_fpgatype = fpgatype;
+    updateStartAddress();
     need_redraw("start_addr",Fpga::updateStartAddress());
 }
 
@@ -127,6 +128,8 @@ FlashSize Fpga::flash_size()
 void Fpga::setFlash_size(FlashSize flashsize)
 {
     m_flashsize = flashsize;
+    updateStartAddress();
+    need_redraw("start_addr",Fpga::updateStartAddress());
     /*
     QVariant a;
     HexString temp;
@@ -138,7 +141,7 @@ void Fpga::setFlash_size(FlashSize flashsize)
     this->setProperty("start_addr",a);
     need_redraw("start_addr",a.value<HexString>().hexstring);
     */
-    need_redraw("start_addr",Fpga::updateStartAddress());
+    //need_redraw("start_addr",Fpga::updateStartAddress());
 
 }
 
@@ -161,7 +164,9 @@ void Fpga::setDualBoot(DualBoot dualboot)
     this->setProperty("start_addr",a);
     need_redraw("start_addr",a.value<HexString>().hexstring);
     */
+    updateStartAddress();
     need_redraw("start_addr",Fpga::updateStartAddress());
+
 }
 
 void Fpga::node_menue(QMenu *menu)
@@ -173,12 +178,9 @@ QVariant Fpga::updateStartAddress()
 {
     QVariant a;
     HexString temp;
+
     if (m_dualboot.dualbootena && m_fpgatype.selectedfpga == 0)// && m_fpgatype.selectedfpga)
     {
-        if(m_start_addr == "0x020000" || m_start_addr == "0x040000" || m_start_addr == "0x080000" ||
-                m_start_addr == "0x100000" || m_start_addr == "0x200000" ||m_start_addr == "0x400000" ||
-                m_start_addr == "0x800000" || m_start_addr == "0x000000" )
-        {
             switch (m_flashsize.selectedsize)
             {
                 case 0:
@@ -203,22 +205,20 @@ QVariant Fpga::updateStartAddress()
                     m_start_addr = "0x800000";
                     break;
             }
-        }
     }
-    else if(m_dualboot.dualbootena)
-    {
-        if(m_start_addr == "0x020000" || m_start_addr == "0x040000" || m_start_addr == "0x080000" ||
-                m_start_addr == "0x100000" || m_start_addr == "0x200000" ||m_start_addr == "0x400000" ||
-                m_start_addr == "0x800000")
-        {
-            m_start_addr = "0x000000";
-        }
 
+    else if(m_dualboot.dualbootena && m_fpgatype.selectedfpga == 1)
+    {
+        m_start_addr = "0x010000";
     }
-//      m_start_addr = temp.get_offset(m_flashsize.selectedsize);
-//  else
-//      m_start_addr = "0x0";//temp.get_offset(255);
+
+    else
+    {
+        m_start_addr = "0x000000";
+    }
+
     a.setValue(m_start_addr);
+
     return a;
 }
 
@@ -244,7 +244,7 @@ void Fpga::setSrecParameters()
     QString temp = m_filename;
     parameters.append(m_parent->parent()->property("working_directory").value<FileString>().filestring + "/" + temp.remove("xHOME/"));
 
-    if(m_parent->property("module_type").value<int>() == 0)
+    if(m_parent->property("module_type").value<ModuleType>().selectedmodultype == 0)
     {
         if (m_fpgatype.selectedfpga)
         {
@@ -275,8 +275,8 @@ void Fpga::setSrecParameters()
         parameters.append("--output");
         parameters.append(m_hexFileName);
 
-         parameters.append("--intel");
-         parameters.append("--obs=16");
+        parameters.append("--intel");
+        parameters.append("--obs=16");
 
     }
     else {
@@ -379,6 +379,7 @@ int Fpga::runLogichdr()
     parameters << "-t" << "0x"+m_testversion;
     parameters << "-f" << "MCS";
     parameters << "-e" << "FPGA";
+    parameters << "-m" << m_parent->property("required_driver_version").value<QString>();
     qDebug() << "logichdr parameters = \n" << parameters;
 
     QProcess *process = new QProcess(nullptr);

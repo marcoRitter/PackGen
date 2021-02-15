@@ -142,6 +142,7 @@ int firmware::runLogichdr()
     parameters << "-t" << "0x01";
     parameters << "-f" << "H86";
     parameters << "-e" << "FW1";
+    parameters << "-m" << m_parent->property("required_driver_version").value<QString>();
     qDebug() << "logichdr parameters = \n" << parameters;
 
     QProcess *process = new QProcess(nullptr);
